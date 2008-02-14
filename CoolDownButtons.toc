@@ -1,0 +1,18 @@
+## Interface: 20300
+## Title: CoolDown Buttons |cff6f0303-Ace3-|r
+## Author: Dodge
+## Notes: Shows simple Buttons for you Cooldowns :)
+## eMail: kujanssen@gmail.com
+
+## SavedVariables: CoolDownButtonsDB
+## DefaultState: Enabled
+## OptionalDeps: Ace3
+## X-Embeds: Ace3
+
+embeds.xml
+template.xml
+
+locale.lua
+core.lua
+itemgroups.lua
+config.lua
