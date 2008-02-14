@@ -3,6 +3,10 @@
 ## Author: Dodge
 ## Notes: Shows simple Buttons for you Cooldowns :)
 ## eMail: kujanssen@gmail.com
+## Version: $Rev$
+## X-ReleaseDate: "$Date$"
+## X-Category: Interface Enhancements
+## X-Website: http://www.wowace.com/wiki/CoolDownButtons
 
 ## SavedVariables: CoolDownButtonsDB
 ## DefaultState: Enabled
