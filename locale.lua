@@ -61,7 +61,7 @@ L["Raidwarning"] = true
 L["Battleground"] = true
 L["Yell"] = true
 L["Custom Channel"] = true
-L["Note: Click on a Cooldown Button to post the remaining time to the above selectet Chats."]
+L["Note: Click on a Cooldown Button to post the remaining time to the above selectet Chats."] = true
 
 L["Default"] = true
 L["Char:"] = true
