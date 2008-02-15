@@ -9,7 +9,7 @@ CoolDownButtonAnchor:SetScript("OnMouseDown", function(self) self:StartMoving() 
 CoolDownButtonAnchor:SetScript("OnMouseUp",   function(self) self:StopMovingOrSizing(); CoolDownButtons:SaveAnchorPos(self) end)
 CoolDownButtonAnchor:SetScript("OnDragStop",  function(self) self:StopMovingOrSizing(); end)
 CoolDownButtonAnchor:SetScript("OnLeave",     function() GameTooltip:Hide()                         end)
-CoolDownButtonAnchor:SetScript("OnEnter",     function() GameTooltip:SetOwner(this, "ANCHOR_CURSOR"); GameTooltip:SetText(L["ClicktoMove"]) end)
+CoolDownButtonAnchor:SetScript("OnEnter",     function() GameTooltip:SetOwner(this, "ANCHOR_CURSOR"); GameTooltip:SetText(L["Click to Move"]) end)
 CoolDownButtonAnchor:SetClampedToScreen(true)
 CoolDownButtonAnchor:SetFrameStrata("HIGH")
 

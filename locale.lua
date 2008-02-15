@@ -1,7 +1,7 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("CoolDown Buttons","enUS",true)
 
 -- core.lua
-L["ClicktoMove"] = "Click to Move"
+L["Click to Move"] = true
 L["RemainingCoolDown"] = "Cooldown on $spell active for $time."
 
 L["Spellgroup: Shocks"] = true
@@ -61,6 +61,7 @@ L["Raidwarning"] = true
 L["Battleground"] = true
 L["Yell"] = true
 L["Custom Channel"] = true
+L["Note: Click on a Cooldown Button to post the remaining time to the above selectet Chats."]
 
 L["Default"] = true
 L["Char:"] = true

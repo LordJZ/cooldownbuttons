@@ -86,7 +86,12 @@ options.args.posting = {
             arg = "chatPost",
         },
         chatPostList = {}, -- Later :)
-    },
+        desc1 = {
+            order = 2,
+            type = "description",
+            name = L["Note: Click on a Cooldown Button to post the remaining time to the above selectet Chats."],
+        },
+    }
 }
 
 options.args.posting.args.chatPostList = {

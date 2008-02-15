@@ -1,8 +1,7 @@
-## Interface: 20300
+## Interface: 20400
 ## Title: CoolDown Buttons |cff6f0303-Ace3-|r
 ## Author: Dodge
-## Notes: Shows simple Buttons for you Cooldowns :)
-## eMail: kujanssen@gmail.com
+## Notes: Shows simple Buttons for your Cooldowns :)
 ## Version: $Rev$
 ## X-ReleaseDate: "$Date$"
 ## X-Category: Interface Enhancements
