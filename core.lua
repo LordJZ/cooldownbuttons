@@ -264,16 +264,11 @@ function CoolDownButtons:BAG_UPDATE_COOLDOWN()
                         buttonID  = freeindex,    -- assign to button #?
                         order     = 0,            -- display position
                     }
-                    --self:Print("Item: "..name.." assigned to button: "..freeindex)
                     self.cdbtns[freeindex].used = true
                 end
             end
         end
 	end
--- GET ITEM ID
---/dump string.find("|cffffffff|Hitem:22829:0:0:0:0:0:0:770444764|h[Super Healing Potion]|h|r", "item:(%d+):") 
--- item name
---/dump string.find("|cffffffff|Hitem:22829:0:0:0:0:0:0:770444764|h[Super Healing Potion]|h|r", "Hitem[^|]+|h%[([^[]+)%]")
 	for i=0,4 do
 		local slots = GetContainerNumSlots(i)
 		for j=1,slots do
@@ -308,13 +303,6 @@ function CoolDownButtons:BAG_UPDATE_COOLDOWN()
 		end
 	end
     self:sortButtons()
-end
-
-function asd(i)
-    return CoolDownButtons:getItemGroup(i)
-end
-function asda(a)
-    return CoolDownButtons:getItemGroupTexture(a)
 end
 
 function CoolDownButtons:getItemGroup(itemid)
@@ -395,7 +383,7 @@ end
 
 function CoolDownButtons:createButton(i)
     local button = CreateFrame("Button", "CoolDownButton"..i, UIParent, "CoolDownButtonTemplate")
-    button:SetWidth(45); button:SetHeight(45); button:SetID(1)
+    button:SetWidth(45); button:SetHeight(45); button:SetID(i)
     button:EnableMouse(true)
     button:SetParent("UIParent")
     button:SetScript("OnLeave", function() GameTooltip:Hide() end)
@@ -541,14 +529,6 @@ function CoolDownButtons:sortButtons()
         if type(cooldown) == "table" then
             cooldown["order"] = i
             i = i + 1
-        end
-    end
-end
-
-function dumporder()
-for key, cooldown in pairs(cooldowns) do
-        if type(cooldown) == "table" then
-            DEFAULT_CHAT_FRAME:AddMessage(cooldown["name"].." "..cooldown["order"])
         end
     end
 end
