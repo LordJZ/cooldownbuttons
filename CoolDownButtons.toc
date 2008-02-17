@@ -15,7 +15,14 @@
 embeds.xml
 template.xml
 
-locale.lua
+locales/enUS.lua
+locales/deDE.lua
+locales/esES.lua
+locales/frFR.lua
+#locales/koKR.lua
+#locales/zhCN.lua
+#locales/zhTW.lua
+
 core.lua
 itemgroups.lua
 config.lua
