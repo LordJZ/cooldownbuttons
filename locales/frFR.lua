@@ -1,4 +1,5 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("CoolDown Buttons","frFR")
+if not L then return end
 
 -- core.lua
 L["Click to Move"] = true

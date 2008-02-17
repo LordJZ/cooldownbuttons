@@ -15,10 +15,10 @@
 embeds.xml
 template.xml
 
-locales/enUS.lua
-locales/deDE.lua
-locales/esES.lua
-locales/frFR.lua
+locales\enUS.lua
+locales\deDE.lua
+locales\esES.lua
+locales\frFR.lua
 
 core.lua
 itemgroups.lua
