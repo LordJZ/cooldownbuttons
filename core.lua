@@ -204,10 +204,10 @@ function CoolDownButtons:SPELL_UPDATE_COOLDOWN()
                 if duration > 3 and enable == 1 and cooldowns[start*duration] == nil then
                 -- continue only if duration > GCD AND cooldown started AND cooldown not registred yet
                     local freeindex, nextindex = self:getFreeFrame()
-                    if freeindex == nil and not (nextindex == nil) then
+                    if freeindex == nil and nextindex then
                         self.cdbtns[nextindex] = self:createButton(nextindex)
                         self.numcooldownbuttons = self.numcooldownbuttons + 1
-                    elseif not (freeindex == nil) then
+                    elseif freeindex then
                         cooldowns[start*duration] = {
                             cdtype    = "spell",       -- "item" or "spell"
                             id        = spellIndex,    -- itemid or spellid
@@ -243,10 +243,10 @@ function CoolDownButtons:BAG_UPDATE_COOLDOWN()
             local name = select(3, string.find(link, "Hitem[^|]+|h%[([^[]+)%]"))
             if cooldowns[name] == nil then
                 local freeindex, nextindex = self:getFreeFrame()
-                if freeindex == nil and not (nextindex == nil) then
+                if freeindex == nil and nextindex then
                     self.cdbtns[nextindex] = self:createButton(nextindex)
                     self.numcooldownbuttons = self.numcooldownbuttons + 1
-                elseif not (freeindex == nil) then
+                elseif freeindex then
                     local itemTexture = GetInventoryItemTexture("player", i)
                     cooldowns[name] = {
                         cdtype    = "eq_item",    -- "item" or "spell"
@@ -274,10 +274,10 @@ function CoolDownButtons:BAG_UPDATE_COOLDOWN()
                 local name = self:getItemGroup(itemID) or select(3, string.find(link, "Hitem[^|]+|h%[([^[]+)%]"))
                 if cooldowns[name] == nil then
                     local freeindex, nextindex = self:getFreeFrame()
-                    if freeindex == nil and not (nextindex == nil) then
+                    if freeindex == nil and nextindex then
                         self.cdbtns[nextindex] = self:createButton(nextindex)
                         self.numcooldownbuttons = self.numcooldownbuttons + 1
-                    elseif not (freeindex == nil) then
+                    elseif freeindex then
                         local itemTexture = self:getItemGroupTexture(name) or select(1, GetContainerItemInfo(i,j)	)
                         cooldowns[name] = {
                             cdtype    = "bag_item",   -- "item" or "spell"
@@ -313,7 +313,7 @@ function CoolDownButtons:getItemGroup(itemid)
 end
 
 function CoolDownButtons:getItemGroupTexture(itemgroup)
-    if not (self.itemgroups[itemgroup] == nil) then
+    if self.itemgroups[itemgroup] then
         return self.itemgroups[itemgroup].texture
     end
     return nil
@@ -352,7 +352,7 @@ end
 
 function CoolDownButtons:checkSpell(index)
     for i = 1, self.numcooldownbuttons do
-        if not (self.cdbtns[i].curspell == -1) then
+        if self.cdbtns[i].curspell ~= -1 then
             local spell, _ = self:myGetSpellName(index)
             local curspell, _ = self:myGetSpellName(CoolDownButtons.cdbtns[i].curspell)
             if spell == curspell then
@@ -466,7 +466,7 @@ function CoolDownButtons:createButton(i)
                                                 end
                                                 for i = 5, 10 do
                                                     local channame = tostring(select(2,GetChannelName(i)))
-                                                    if postto["channel"..i] and not (channame == "nil") then
+                                                    if postto["channel"..i] and channame ~= "nil" then
                                                         SendChatMessage(chatmsg, "CHANNEL", GetDefaultLanguage("player"), i)
                                                     end
                                                 end
