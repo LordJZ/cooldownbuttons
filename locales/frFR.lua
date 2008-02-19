@@ -10,11 +10,11 @@ L["Earth Shock"] = "Horion de terre"
 L["Flame Shock"] = "Horion de flammes"
 L["Frost Shock"] = "Horion de givre"
 L["Spellgroup: Traps"] = true
-L["Freezing Trap"] = "Piège givrant"
-L["Frost Trap"] = "Piège de givre"
-L["Immolation Trap"] = "Piège d'immolation"
-L["Snake Trap"] = "Piège à serpent"
-L["Explosive Trap"] = "Piège explosif"
+L["Freezing Trap"] = "Pi\195\168ge givrant"
+L["Frost Trap"] = "Pi\195\168ge de givre"
+L["Immolation Trap"] = "Pi\195\168ge d'immolation"
+L["Snake Trap"] = "Pi\195\168ge \195\160 serpent"
+L["Explosive Trap"] = "Pi\195\168ge explosif"
 
 
 -- config.lua

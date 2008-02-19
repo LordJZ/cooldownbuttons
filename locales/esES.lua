@@ -12,7 +12,7 @@ L["Frost Shock"] = "Choque de Escarcha"
 L["Spellgroup: Traps"] = true
 L["Freezing Trap"] = "Trampa congelante"
 L["Frost Trap"] = "Trampa de Escarcha"
-L["Immolation Trap"] = "Trampa de inmolación"
+L["Immolation Trap"] = "Trampa de inmolaci\195\179n"
 L["Snake Trap"] = "Trampa con culebras"
 L["Explosive Trap"] = "Trampa explosiva"
 
