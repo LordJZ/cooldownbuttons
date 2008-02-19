@@ -4,7 +4,6 @@ local L = LibStub("AceLocale-3.0"):GetLocale("CoolDown Buttons", false)
 CoolDownButtonAnchor = CreateFrame("Frame", "CoolDownButtonAnchor", UIParent)
 CoolDownButtonAnchor:SetWidth(20);      CoolDownButtonAnchor:SetHeight(20)
 CoolDownButtonAnchor:SetMovable(true);  CoolDownButtonAnchor:EnableMouse(true); 
-CoolDownButtonAnchor:SetPoint("CENTER", UIParent, "CENTER", 0, 150)
 CoolDownButtonAnchor:SetScript("OnMouseDown", function(self) self:StartMoving()         end)
 CoolDownButtonAnchor:SetScript("OnMouseUp",   function(self) self:StopMovingOrSizing(); CoolDownButtons:SaveAnchorPos(self) end)
 CoolDownButtonAnchor:SetScript("OnDragStop",  function(self) self:StopMovingOrSizing(); end)
@@ -26,10 +25,8 @@ local defaults = {
 		direction   = "right",
         maxbuttons  = 10,
         showAnchor  = true,
-        X_Anchor    = 0,
-        Y_Anchor    = 150,
-        point_Anchor = "CENTER",
-        relativePoint_Anchor = "CENTER",
+        X_Anchor    = UIParent:GetWidth() / 2,   --default to screen center 
+        Y_Anchor    = UIParent:GetHeight() / 2,  --default to screen center 
         chatPost    = false,
         posttochats = {
             ["*"] = false,
@@ -58,16 +55,13 @@ function CoolDownButtons:OnEnable()
     else
         CoolDownButtonAnchor:Hide()
     end	
-    CoolDownButtonAnchor:SetPoint(self.db.profile.point_Anchor, UIParent, self.db.profile.relativePoint_Anchor, self.db.profile.X_Anchor, self.db.profile.Y_Anchor)
+    CoolDownButtonAnchor:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", self.db.profile.X_Anchor, self.db.profile.Y_Anchor)
     local frame = CreateFrame("Frame"); frame:SetScript("OnUpdate", Text_OnUpdate2)
 end
 
 function CoolDownButtons:SaveAnchorPos(anchor)
-    local point, _, relativePoint, xOfs, yOfs = anchor:GetPoint()
-    self.db.profile.point_Anchor = point
-    self.db.profile.relativePoint_Anchor = relativePoint
-    self.db.profile.X_Anchor = xOfs
-    self.db.profile.Y_Anchor = yOfs
+    self.db.profile.Y_Anchor = anchor:GetBottom()
+    self.db.profile.X_Anchor = anchor:GetLeft()
 end
 function CoolDownButtons:CoolDownButtonsConfigChanged()
     if self.db.profile.showAnchor then
