@@ -1,5 +1,5 @@
 ## Interface: 20400
-## Title: CoolDown Buttons |cff6f0303-Ace3-|r
+## Title: CoolDown Buttons
 ## Author: Dodge
 ## Notes: Shows simple Buttons for your Cooldowns :)
 ## Version: $Rev$
