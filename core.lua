@@ -1,4 +1,4 @@
-local CoolDownButtons = LibStub("AceAddon-3.0"):NewAddon("CoolDown Buttons", "AceConsole-3.0", "AceEvent-3.0")
+CoolDownButtons = LibStub("AceAddon-3.0"):NewAddon("CoolDown Buttons", "AceConsole-3.0", "AceEvent-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("CoolDown Buttons", false)
 
 CoolDownButtonAnchor = CreateFrame("Frame", "CoolDownButtonAnchor", UIParent)
@@ -18,9 +18,14 @@ CoolDownButtonAnchor.texture:SetAllPoints(CoolDownButtonAnchor)
 
 local cooldowns = {}
 
+
+CDB = CoolDownButtons
+
+
 local defaults = {
 	profile = {
         scale       = 0.85,
+        size        = 45,
         alpha       = 1,
 		direction   = "right",
         maxbuttons  = 10,
@@ -33,6 +38,14 @@ local defaults = {
         },
         postdefaultmsg = true,
         postcustom = L["RemainingCoolDown"],
+        saveToPos  = {
+            ["**"] = {
+                cdtype  = "",
+                default = true,
+                saved   = false,
+                pos     = { x = UIParent:GetWidth() / 2, y = UIParent:GetHeight() / 2, },
+            },
+        },
 	},
 }
 
@@ -158,32 +171,40 @@ function Text_OnUpdate2()
                     frame.used = false
                 end
             end 
-            
+
             -- set position, scaling and alpha :)
             local order = cooldown["order"] - 1
             local scale = CoolDownButtons.db.profile.scale
             local alpha = CoolDownButtons.db.profile.alpha
+            local size = CoolDownButtons.db.profile.size
 
-            frame:SetWidth (45 * scale)
-            frame:SetHeight(45 * scale)
+            frame:SetWidth (size * scale)
+            frame:SetHeight(size * scale)
             frame:GetNormalTexture():SetWidth(75 * scale)
             frame:GetNormalTexture():SetHeight(75 * scale)
             cooldownframe.textFrame.text:SetPoint("CENTER", cooldownframe.textFrame, "CENTER", 0, -33 * scale)
             cooldownframe.textFrame.text:SetFont("Interface\\AddOns\\CoolDownButtons\\skurri.ttf", 15 * scale, "OUTLINE")
 
-            if CoolDownButtons.db.profile.direction == "left" then
-                frame:SetPoint("CENTER", CoolDownButtonAnchor, "CENTER", - (50 * order * scale), 0)
-            elseif CoolDownButtons.db.profile.direction == "right" then
-                frame:SetPoint("CENTER", CoolDownButtonAnchor, "CENTER", (50 * order * scale), 0)
-            elseif CoolDownButtons.db.profile.direction == "up" then
-                frame:SetPoint("CENTER", CoolDownButtonAnchor, "CENTER", 0, (65 * order * scale))
-            elseif CoolDownButtons.db.profile.direction == "down" then 
-                frame:SetPoint("CENTER", CoolDownButtonAnchor, "CENTER", 0, - (65 * order * scale))
+            frame:ClearAllPoints()
+
+            local save = CoolDownButtons.db.profile.saveToPos
+            if save[cooldown["name"]] and save[cooldown["name"]].saved then
+                local pos = save[cooldown["name"]].pos
+                frame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", pos.x, pos.y)
+            else
+                if CoolDownButtons.db.profile.direction == "left" then
+                    frame:SetPoint("CENTER", CoolDownButtonAnchor, "CENTER", - (50 * order * scale), 0)
+                elseif CoolDownButtons.db.profile.direction == "right" then
+                    frame:SetPoint("CENTER", CoolDownButtonAnchor, "CENTER", (50 * order * scale), 0)
+                elseif CoolDownButtons.db.profile.direction == "up" then
+                    frame:SetPoint("CENTER", CoolDownButtonAnchor, "CENTER", 0, (65 * order * scale))
+                elseif CoolDownButtons.db.profile.direction == "down" then 
+                    frame:SetPoint("CENTER", CoolDownButtonAnchor, "CENTER", 0, - (65 * order * scale))
+                end
             end
-            
+
             frame:SetAlpha(alpha)
             cooldownframe.textFrame:SetAlpha(alpha)
-            
         end
     end
     CoolDownButtons:SPELL_UPDATE_COOLDOWN()
@@ -204,6 +225,15 @@ function CoolDownButtons:SPELL_UPDATE_COOLDOWN()
                 if duration > 3 and enable == 1 and cooldowns[start*duration] == nil then
                 -- continue only if duration > GCD AND cooldown started AND cooldown not registred yet
                     local freeindex, nextindex = self:getFreeFrame()
+                    local saved = nil
+                    if self.db.profile.saveToPos[spellName].default then
+                        self.db.profile.saveToPos[spellName].default = false -- added to DB!
+                        self.db.profile.saveToPos[spellName].cdtype  = "spell"
+                        CoolDownButtonsConfig:InitPositions()
+                    end
+                    if self.db.profile.saveToPos[spellName].saved then
+                        saved = -1
+                    end
                     if freeindex == nil and nextindex then
                         self.cdbtns[nextindex] = self:createButton(nextindex)
                         self.numcooldownbuttons = self.numcooldownbuttons + 1
@@ -216,7 +246,7 @@ function CoolDownButtons:SPELL_UPDATE_COOLDOWN()
                             duration  = duration,      -- cooldown duration
                             texture   = spellTexture,  -- item or spell texture
                             buttonID  = freeindex,     -- assign to button #?
-                            order     = 0,             -- display position
+                            order     = saved or 0,    -- display position
                         }     
                         if spellName == L["Spellgroup: Shocks"] then
                             cooldowns[start*duration].texture = "Interface\\AddOns\\CoolDownButtons\\shocks.tga"
@@ -243,6 +273,15 @@ function CoolDownButtons:BAG_UPDATE_COOLDOWN()
             local name = select(3, string.find(link, "Hitem[^|]+|h%[([^[]+)%]"))
             if cooldowns[name] == nil then
                 local freeindex, nextindex = self:getFreeFrame()
+                local saved = nil
+                if self.db.profile.saveToPos[name].default then
+                    self.db.profile.saveToPos[name].default = false -- added to DB!
+                    self.db.profile.saveToPos[name].cdtype  = "item"
+                    CoolDownButtonsConfig:InitPositions()
+                end
+                if self.db.profile.saveToPos[name].saved then
+                    saved = -1
+                end
                 if freeindex == nil and nextindex then
                     self.cdbtns[nextindex] = self:createButton(nextindex)
                     self.numcooldownbuttons = self.numcooldownbuttons + 1
@@ -256,7 +295,7 @@ function CoolDownButtons:BAG_UPDATE_COOLDOWN()
                         duration  = duration,     -- cooldown duration
                         texture   = itemTexture,  -- item or spell texture
                         buttonID  = freeindex,    -- assign to button #?
-                        order     = 0,            -- display position
+                        order     = saved or 0,   -- display position
                     }
                     self.cdbtns[freeindex].used = true
                 end
@@ -274,6 +313,15 @@ function CoolDownButtons:BAG_UPDATE_COOLDOWN()
                 local name = self:getItemGroup(itemID) or select(3, string.find(link, "Hitem[^|]+|h%[([^[]+)%]"))
                 if cooldowns[name] == nil then
                     local freeindex, nextindex = self:getFreeFrame()
+                    local saved = nil
+                    if self.db.profile.saveToPos[name].default then
+                        self.db.profile.saveToPos[name].default = false -- added to DB!
+                        self.db.profile.saveToPos[name].cdtype  = "item"
+                        CoolDownButtonsConfig:InitPositions()
+                    end
+                    if self.db.profile.saveToPos[name].saved then
+                        saved = -1
+                    end
                     if freeindex == nil and nextindex then
                         self.cdbtns[nextindex] = self:createButton(nextindex)
                         self.numcooldownbuttons = self.numcooldownbuttons + 1
@@ -288,7 +336,7 @@ function CoolDownButtons:BAG_UPDATE_COOLDOWN()
                             duration  = duration,     -- cooldown duration
                             texture   = itemTexture,  -- item or spell texture
                             buttonID  = freeindex,    -- assign to button #?
-                            order     = 0,            -- display position
+                            order     = saved or 0,   -- display position
                         }
                         self.cdbtns[freeindex].used = true
                     end
@@ -493,7 +541,7 @@ function CoolDownButtons:createButton(i)
     end
     
     cooldown.textFrame = CreateFrame("Frame", "CoolDownButton"..i.."CooldownText", cooldown:GetParent())
-    cooldown.textFrame:SetAllPoints(cooldown:GetParent())
+    cooldown.textFrame:SetAllPoints(button)
     cooldown.textFrame:SetFrameLevel(cooldown.textFrame:GetFrameLevel() + 1)
     cooldown.textFrame.text = cooldown.textFrame:CreateFontString(nil, "OVERLAY")
     cooldown.textFrame.text:SetPoint("CENTER", cooldown.textFrame, "CENTER", 0, -33)
@@ -520,7 +568,7 @@ end
 function CoolDownButtons:sortButtons()
     local i = 1
     for key, cooldown in pairs(cooldowns) do
-        if type(cooldown) == "table" then
+        if type(cooldown) == "table" and cooldown["order"] ~= -1 then
             cooldown["order"] = i
             i = i + 1
         end

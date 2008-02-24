@@ -84,6 +84,19 @@ L["Delete a Profile"] = true
 L["Deletes a profile from the database."] = true
 L["Are you sure you want to delete the selected profile?"] = true
 
+L["Position Settings"] = true
+L["Spell Positions"] = true
+L["Item  Positions"] = true
+L["|cFFFFFFFFNote: The X and Y Axis are relative to your bottomleft screen cornor.|r"] = true
+L["Save $obj to a consistent Position"] = true
+L["Toggle saving of $obj."] = true
+L["X - Axis"] = true
+L["Set the Position on X-Axis."] = true
+L["Y - Axis"] = true
+L["Set the Position on Y-Axis."] = true
+L["Move"] = true 
+L["Stop"] = true
+
 -- itemgroups.lua
 L["Healing Potions"] = true
 L["Mana Potions"] = true

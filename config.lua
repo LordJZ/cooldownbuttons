@@ -1,5 +1,5 @@
-local CoolDownButtons = LibStub("AceAddon-3.0"):GetAddon("CoolDown Buttons")
-local CoolDownButtonsConfig = CoolDownButtons:NewModule("Config","AceConsole-3.0","AceEvent-3.0")
+--local CoolDownButtons = LibStub("AceAddon-3.0"):GetAddon("CoolDown Buttons")
+CoolDownButtonsConfig = CoolDownButtons:NewModule("Config","AceConsole-3.0","AceEvent-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("CoolDown Buttons", false)
 
 local CDBCHelper = {}
@@ -47,7 +47,7 @@ options.args.display = {
             desc = L["Maximal number of Buttons to display."],
             type = "input",
             arg = "maxbuttons",
-            set = function( k, v ) if not (tonumber(v) == nil) then db[k.arg] = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end
+            set = function( k, v ) if not (tonumber(v) == nil) then db[k.arg] = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
         },
         dummy1 = { -- Need another line break :)
             order = 3,
@@ -76,7 +76,7 @@ options.args.display = {
 options.args.posting = {
 	type = "group",
 	name = L["Posting Settings"],
-	order = 2,
+	order = 1,
 	args = {
         enablePosting = {
             order = 0,
@@ -215,6 +215,39 @@ options.args.posting.args.messagesettings = {
     },
 }
 
+
+options.args.savetopos = {
+ 	type = "group",
+    name = L["Position Settings"],
+	order = 2,
+	args = {
+        spells = {
+            type = "group",
+            name = L["Spell Positions"],
+            order = 0,
+            args = {
+                desc = {
+                    order = 0,
+                    type = "description",
+                    name = L["|cFFFFFFFFNote: The X and Y Axis are relative to your bottomleft screen cornor.|r"],
+                },
+            },
+        },
+        items = {
+            type = "group",
+            name = L["Item  Positions"],
+            order = 1,
+            args = {
+                desc = {
+                    order = 0,
+                    type = "description",
+                    name = L["|cFFFFFFFFNote: The X and Y Axis are relative to your bottomleft screen cornor.|r"],
+                },
+            },
+        },
+    },
+}
+
 local getProfilesOptionsTable
 do
 	local defaultProfiles
@@ -315,8 +348,83 @@ do
 	end
 end
 
+function CoolDownButtonsConfig:InitPositions(state)
+
+    options.args.savetopos.args.spells.args = {}
+    options.args.savetopos.args.items.args = {}
+    
+    local idx = 1
+    for name, data in pairs(db.saveToPos) do
+        if type(data) == "table" then
+            local arg = {
+                type = "group",
+                name = name,
+                guiInline = true,
+                order = idx,
+                args = {
+                    savethis = {
+                        name  = CoolDownButtons:gsub(L["Save $obj to a consistent Position"], "$obj", name),
+                        desc  = CoolDownButtons:gsub(L["Toggle saving of $obj."], "$obj", name),
+                        arg   = name,
+                        order = 0,
+                        width = "full",
+                        type  = "toggle",
+                        set = function( k, state ) db.saveToPos[k.arg].saved = state; CoolDownButtonsConfig:UpdateConfig(); end,
+                        get = function( k ) return db.saveToPos[k.arg].saved end,
+                    },
+                    xpos = {
+                        order = 1,
+                        name = L["X - Axis"],
+                        desc = L["Set the Position on X-Axis."],
+                        type = "input",
+                        arg = name,
+                        set = function( k, v ) if not (tonumber(v) == nil) then db.saveToPos[k.arg].pos.x = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
+                        get = function( k ) return db.saveToPos[k.arg].pos.x end,
+                    },
+                    ypos = {
+                        order = 2,
+                        name = L["Y - Axis"],
+                        desc = L["Set the Position on Y-Axis."],
+                        type = "input",
+                        arg = name,
+                        set = function( k, v ) if not (tonumber(v) == nil) then db.saveToPos[k.arg].pos.y = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
+                        get = function( k ) return db.saveToPos[k.arg].pos.y end,
+                    }, dummy = { order = 3, type = "description", name = "", },
+					move = {
+						order = 4,
+						type = "execute",
+						name = L["Move"],
+                        arg = name,
+						func = function(k) CoolDownButtonsConfig:ShowFrameToMoveSavedCD(k.arg) end,
+					},
+					stopmove = {
+						order = 5,
+						type = "execute",
+						name = L["Stop"],
+						disabled = true,
+                        arg = name,
+						func = function(k) CoolDownButtonsConfig:HideFrameToMoveSavedCD(k.arg) CoolDownButtonsConfig:UpdateConfig(); end,
+					},
+                },
+            }
+            if data.cdtype == "spell" then
+                options.args.savetopos.args.spells.args["obj"..idx] = arg
+            else
+                options.args.savetopos.args.items.args["obj"..idx]  = arg
+            end
+            idx = idx + 1
+        end
+    end
+    if state ~= "initial" then
+        LibStub("AceConfigRegistry-3.0"):NotifyChange("CoolDown Buttons")
+    end
+end
+
 function CoolDownButtonsConfig:OnInitialize()
 	db = CoolDownButtons.db.profile
+
+    self:InitPositions("initial")
+    
     options.plugins["profiles"] = getProfilesOptionsTable(CoolDownButtons.db)
 	self.options = options
     self:CHANNEL_UI_UPDATE() -- Force Update Channellist for the first time :)
@@ -325,10 +433,67 @@ function CoolDownButtonsConfig:OnInitialize()
 	self:RegisterChatCommand("cooldownbuttons", function() LibStub("AceConfigDialog-3.0"):Open("CoolDown Buttons") end)
     self:RegisterMessage("CoolDownButtonsConfigChanged")
     self:RegisterEvent("CHANNEL_UI_UPDATE")
+    
+    self.moveableframe = nil
 end
 
 function CoolDownButtonsConfig:UpdateConfig()
 	self:SendMessage("CoolDownButtonsConfigChanged")
+end
+
+function CoolDownButtonsConfig:ShowFrameToMoveSavedCD(name)
+    if not self.moveableframe then
+        self:createMovableFrame()
+    end
+	self.moveableframe:Show() 
+    self.moveableframe.textFrame:Show()
+	self.moveableframe:ClearAllPoints() 
+	self.moveableframe:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", db.saveToPos[name].pos.x, db.saveToPos[name].pos.y) 
+	self.moveableframe.element = name
+    local items = options.args.savetopos.args.items.args
+    for k, v in pairs(items) do
+        if k ~= "desc" then
+            items[k].args.move.disabled = true
+            if items[k].args.stopmove.arg == name then
+                items[k].args.stopmove.disabled = false
+            else
+                items[k].args.stopmove.disabled = true
+            end
+        end
+    end
+    local spells = options.args.savetopos.args.spells.args
+    for k, v in pairs(spells) do
+        if k ~= "desc" then
+            spells[k].args.move.disabled = true
+            if spells[k].args.stopmove.arg == name then
+                spells[k].args.stopmove.disabled = false
+            else
+                spells[k].args.stopmove.disabled = true
+            end
+        end
+    end
+end
+function CoolDownButtonsConfig:HideFrameToMoveSavedCD(name)
+	self.moveableframe:Hide()
+    self.moveableframe.textFrame:Hide()
+    
+    db.saveToPos[name].pos.x = tonumber(string.format("%.3f", self.moveableframe:GetLeft()))
+    db.saveToPos[name].pos.y = tonumber(string.format("%.3f", self.moveableframe:GetBottom()))
+    
+    local items = options.args.savetopos.args.items.args
+    for k, v in pairs(items) do
+        if k ~= "desc" then
+            items[k].args.move.disabled     = false
+            items[k].args.stopmove.disabled = true
+        end
+    end
+    local spells = options.args.savetopos.args.spells.args
+    for k, v in pairs(spells) do
+        if k ~= "desc" then
+            spells[k].args.move.disabled     = false
+            spells[k].args.stopmove.disabled = true
+        end
+    end
 end
 
 function CoolDownButtonsConfig:CoolDownButtonsConfigChanged()
@@ -349,4 +514,30 @@ function CoolDownButtonsConfig:CHANNEL_UI_UPDATE()
         end
     end
     LibStub("AceConfigRegistry-3.0"):NotifyChange("CoolDown Buttons")
+end
+
+function CoolDownButtonsConfig:createMovableFrame()
+    self.moveableframe = CreateFrame("Button", "Cooldownmovable", UIParent)
+	self.moveableframe:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 0) 
+    self.moveableframe:SetWidth(db.size * db.scale);
+    self.moveableframe:SetHeight(db.size * db.scale)
+    self.moveableframe:SetMovable(true);
+    self.moveableframe:RegisterForDrag("LeftButton", "RightButton")
+    self.moveableframe:RegisterForClicks("AnyDown")
+    self.moveableframe:SetScript("OnDragStart", function(self) self:StartMoving() end)
+    self.moveableframe:SetScript("OnDragStop",  function(self) self:StopMovingOrSizing(); end)
+    self.moveableframe:SetClampedToScreen(true)
+    self.moveableframe:SetFrameStrata("HIGH")
+    self.moveableframe.texture = self.moveableframe:CreateTexture(nil,"OVERLAY")
+    self.moveableframe.texture:SetTexture("Interface\\Icons\\Spell_Nature_WispSplode")
+    self.moveableframe.texture:SetAllPoints(self.moveableframe)
+    self.moveableframe.textFrame = CreateFrame("Frame", "CooldownmovableCooldownText")
+    self.moveableframe.textFrame:SetAllPoints(self.moveableframe)
+    self.moveableframe.textFrame.text = self.moveableframe.textFrame:CreateFontString(nil, "OVERLAY")
+    self.moveableframe.textFrame.text:SetPoint("CENTER", self.moveableframe.textFrame, "CENTER", 0, -23)
+    self.moveableframe.textFrame.text:SetFont("Interface\\AddOns\\CoolDownButtons\\skurri.ttf", 10, "OUTLINE")
+    self.moveableframe.textFrame.text:SetTextColor(10,10,10)
+    self.moveableframe.textFrame.text:SetText("00:00")
+    self.moveableframe.textFrame:Hide()
+    self.moveableframe:Hide()
 end
