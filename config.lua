@@ -446,10 +446,8 @@ function CoolDownButtonsConfig:ShowFrameToMoveSavedCD(name)
         self:createMovableFrame()
     end
 	self.moveableframe:Show() 
-    self.moveableframe.textFrame:Show()
-	self.moveableframe:ClearAllPoints() 
+    self.moveableframe:ClearAllPoints() 
 	self.moveableframe:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", db.saveToPos[name].pos.x, db.saveToPos[name].pos.y) 
-	self.moveableframe.element = name
     local items = options.args.savetopos.args.items.args
     for k, v in pairs(items) do
         if k ~= "desc" then
@@ -475,7 +473,6 @@ function CoolDownButtonsConfig:ShowFrameToMoveSavedCD(name)
 end
 function CoolDownButtonsConfig:HideFrameToMoveSavedCD(name)
 	self.moveableframe:Hide()
-    self.moveableframe.textFrame:Hide()
     
     db.saveToPos[name].pos.x = tonumber(string.format("%.3f", self.moveableframe:GetLeft()))
     db.saveToPos[name].pos.y = tonumber(string.format("%.3f", self.moveableframe:GetBottom()))
@@ -517,27 +514,11 @@ function CoolDownButtonsConfig:CHANNEL_UI_UPDATE()
 end
 
 function CoolDownButtonsConfig:createMovableFrame()
-    self.moveableframe = CreateFrame("Button", "Cooldownmovable", UIParent)
-	self.moveableframe:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 0) 
-    self.moveableframe:SetWidth(db.size * db.scale);
-    self.moveableframe:SetHeight(db.size * db.scale)
+    self.moveableframe = CoolDownButtons:createButton(-1, justMove)
     self.moveableframe:SetMovable(true);
     self.moveableframe:RegisterForDrag("LeftButton", "RightButton")
     self.moveableframe:RegisterForClicks("AnyDown")
     self.moveableframe:SetScript("OnDragStart", function(self) self:StartMoving() end)
     self.moveableframe:SetScript("OnDragStop",  function(self) self:StopMovingOrSizing(); end)
-    self.moveableframe:SetClampedToScreen(true)
-    self.moveableframe:SetFrameStrata("HIGH")
-    self.moveableframe.texture = self.moveableframe:CreateTexture(nil,"OVERLAY")
-    self.moveableframe.texture:SetTexture("Interface\\Icons\\Spell_Nature_WispSplode")
-    self.moveableframe.texture:SetAllPoints(self.moveableframe)
-    self.moveableframe.textFrame = CreateFrame("Frame", "CooldownmovableCooldownText")
-    self.moveableframe.textFrame:SetAllPoints(self.moveableframe)
-    self.moveableframe.textFrame.text = self.moveableframe.textFrame:CreateFontString(nil, "OVERLAY")
-    self.moveableframe.textFrame.text:SetPoint("CENTER", self.moveableframe.textFrame, "CENTER", 0, -23)
-    self.moveableframe.textFrame.text:SetFont("Interface\\AddOns\\CoolDownButtons\\skurri.ttf", 10, "OUTLINE")
-    self.moveableframe.textFrame.text:SetTextColor(10,10,10)
-    self.moveableframe.textFrame.text:SetText("00:00")
-    self.moveableframe.textFrame:Hide()
     self.moveableframe:Hide()
 end

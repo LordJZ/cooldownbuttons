@@ -25,7 +25,6 @@ CDB = CoolDownButtons
 local defaults = {
 	profile = {
         scale       = 0.85,
-        size        = 45,
         alpha       = 1,
 		direction   = "right",
         maxbuttons  = 10,
@@ -176,10 +175,9 @@ function Text_OnUpdate2()
             local order = cooldown["order"] - 1
             local scale = CoolDownButtons.db.profile.scale
             local alpha = CoolDownButtons.db.profile.alpha
-            local size = CoolDownButtons.db.profile.size
 
-            frame:SetWidth (size * scale)
-            frame:SetHeight(size * scale)
+            frame:SetWidth (45 * scale)
+            frame:SetHeight(45 * scale)
             frame:GetNormalTexture():SetWidth(75 * scale)
             frame:GetNormalTexture():SetHeight(75 * scale)
             cooldownframe.textFrame.text:SetPoint("CENTER", cooldownframe.textFrame, "CENTER", 0, -33 * scale)
@@ -423,113 +421,118 @@ function CoolDownButtons:getFreeFrame()
     return nil, x
 end
 
-function CoolDownButtons:createButton(i)
+function CoolDownButtons:createButton(i, justMove)
     local button = CreateFrame("Button", "CoolDownButton"..i, UIParent, "CoolDownButtonTemplate")
-    button:SetWidth(45); button:SetHeight(45); button:SetID(i)
+    button:SetWidth(45 * self.db.profile.scale); button:SetHeight(45 * self.db.profile.scale); button:SetID(i)
     button:EnableMouse(true)
+    button:SetClampedToScreen(true)
     button:SetParent("UIParent")
-    button:SetScript("OnLeave", function() GameTooltip:Hide() end)
-    button:SetScript("OnEnter", function(self) 
-                                    GameTooltip:SetOwner(this, "ANCHOR_CURSOR");
-                                    for key, cooldown in pairs(cooldowns) do
-                                        if type(cooldown) == "table" and cooldown["buttonID"] == self.id then
-                                            if CoolDownButtons.db.profile.chatPost then
-                                                GameTooltip:SetText(cooldown["name"]..": Click to Post Cooldown")
-                                            else
-                                                GameTooltip:SetText(cooldown["name"])
-                                            end
-                                            break
-                                        end
-                                    end
-                                end)
-    button:SetScript("OnMouseDown", function(self)
-                                    if CoolDownButtons.db.profile.chatPost then
+    if not justMove then
+        button:SetScript("OnLeave", function() GameTooltip:Hide() end)
+        button:SetScript("OnEnter", function(self) 
+                                        GameTooltip:SetOwner(this, "ANCHOR_CURSOR");
                                         for key, cooldown in pairs(cooldowns) do
                                             if type(cooldown) == "table" and cooldown["buttonID"] == self.id then
-                                                local time = ceil(cooldown["start"] + cooldown["duration"] - GetTime())
-                                                local formated_time
-                                                if time < 60 then
-                                                    formated_time = string.format("0:%02d", time)
-                                                elseif( time < 3600 ) then
-                                                    local m = math.floor(time / 60)
-                                                    local s = math.fmod(time, 60)
-                                                    formated_time = string.format("%d:%02d", m, s)
+                                                if CoolDownButtons.db.profile.chatPost then
+                                                    GameTooltip:SetText(cooldown["name"]..": Click to Post Cooldown")
                                                 else
-                                                    local hr = math.floor(time / 3600)
-                                                    local m = math.floor( math.fmod(time, 3600) / 60 )
-                                                    formated_time = string.format("%d.%02dhr", hr, m)
+                                                    GameTooltip:SetText(cooldown["name"])
                                                 end
-                                                GameTooltip:SetText(cooldown["name"].." Click to Post Cooldown")
-                                                
-                                                local chatmsg
-                                                if CoolDownButtons.db.profile.postdefaultmsg then
-                                                    chatmsg = CoolDownButtons:gsub(L["RemainingCoolDown"], "$spell", cooldown["name"])
-                                                    chatmsg = CoolDownButtons:gsub(chatmsg, "$time", formated_time)
-                                                else
-                                                    chatmsg = CoolDownButtons:gsub(CoolDownButtons.db.profile.postcustom, "$spell", cooldown["name"])
-                                                    chatmsg = CoolDownButtons:gsub(chatmsg, "$time", formated_time)
-                                                end
-                                                
-                                                local postto = CoolDownButtons.db.profile.posttochats
-                                                if postto["chatframe"] then
-                                                    DEFAULT_CHAT_FRAME:AddMessage(chatmsg)
-                                                end
-                                                if postto["say"] then
-                                                    SendChatMessage(chatmsg, "SAY", GetDefaultLanguage("player"))
-                                                end
-                                                if postto["party"] then
-                                                    if (GetNumPartyMembers() > 0) then
-                                                        SendChatMessage(chatmsg, "PARTY", GetDefaultLanguage("player"))
+                                                break
+                                            end
+                                        end
+                                    end)
+        button:SetScript("OnMouseDown", function(self)
+                                        if CoolDownButtons.db.profile.chatPost then
+                                            for key, cooldown in pairs(cooldowns) do
+                                                if type(cooldown) == "table" and cooldown["buttonID"] == self.id then
+                                                    local time = ceil(cooldown["start"] + cooldown["duration"] - GetTime())
+                                                    local formated_time
+                                                    if time < 60 then
+                                                        formated_time = string.format("0:%02d", time)
+                                                    elseif( time < 3600 ) then
+                                                        local m = math.floor(time / 60)
+                                                        local s = math.fmod(time, 60)
+                                                        formated_time = string.format("%d:%02d", m, s)
+                                                    else
+                                                        local hr = math.floor(time / 3600)
+                                                        local m = math.floor( math.fmod(time, 3600) / 60 )
+                                                        formated_time = string.format("%d.%02dhr", hr, m)
                                                     end
-                                                end
-                                                if postto["raid"] then
-                                                    if (GetNumRaidMembers() > 0) then
-                                                        SendChatMessage(chatmsg, "RAID", GetDefaultLanguage("player"))
+                                                    GameTooltip:SetText(cooldown["name"].." Click to Post Cooldown")
+                                                    
+                                                    local chatmsg
+                                                    if CoolDownButtons.db.profile.postdefaultmsg then
+                                                        chatmsg = CoolDownButtons:gsub(L["RemainingCoolDown"], "$spell", cooldown["name"])
+                                                        chatmsg = CoolDownButtons:gsub(chatmsg, "$time", formated_time)
+                                                    else
+                                                        chatmsg = CoolDownButtons:gsub(CoolDownButtons.db.profile.postcustom, "$spell", cooldown["name"])
+                                                        chatmsg = CoolDownButtons:gsub(chatmsg, "$time", formated_time)
                                                     end
-                                                end
-                                                if postto["guild"] then
-                                                    if (IsInGuild()) then
-                                                        SendChatMessage(chatmsg, "GUILD", GetDefaultLanguage("player"))
+                                                    
+                                                    local postto = CoolDownButtons.db.profile.posttochats
+                                                    if postto["chatframe"] then
+                                                        DEFAULT_CHAT_FRAME:AddMessage(chatmsg)
                                                     end
-                                                end
-                                                if postto["officer"] then
-                                                    -- TODO: Check if you are allowed to write in /o
-                                                    SendChatMessage(chatmsg, "OFFICER", GetDefaultLanguage("player"))
-                                                end
-                                                if postto["emote"] then
-                                                    SendChatMessage(chatmsg, "EMOTE", GetDefaultLanguage("player"))
-                                                end
-                                                if postto["raidwarn"] then
-                                                    if (GetNumRaidMembers() > 0) then
-                                                        SendChatMessage(chatmsg, "RAID_WARNING", GetDefaultLanguage("player"))
+                                                    if postto["say"] then
+                                                        SendChatMessage(chatmsg, "SAY", GetDefaultLanguage("player"))
                                                     end
-                                                end
-                                                if postto["battleground"] then
-                                                    if select(2,IsInInstance()) == "pvp" then
-                                                        SendChatMessage(chatmsg, "BATTLEGROUND", GetDefaultLanguage("player"))
+                                                    if postto["party"] then
+                                                        if (GetNumPartyMembers() > 0) then
+                                                            SendChatMessage(chatmsg, "PARTY", GetDefaultLanguage("player"))
+                                                        end
                                                     end
-                                                end
-                                                if postto["yell"] then
-                                                    SendChatMessage(chatmsg, "YELL", GetDefaultLanguage("player"))
-                                                end
-                                                for i = 5, 10 do
-                                                    local channame = tostring(select(2,GetChannelName(i)))
-                                                    if postto["channel"..i] and channame ~= "nil" then
-                                                        SendChatMessage(chatmsg, "CHANNEL", GetDefaultLanguage("player"), i)
+                                                    if postto["raid"] then
+                                                        if (GetNumRaidMembers() > 0) then
+                                                            SendChatMessage(chatmsg, "RAID", GetDefaultLanguage("player"))
+                                                        end
+                                                    end
+                                                    if postto["guild"] then
+                                                        if (IsInGuild()) then
+                                                            SendChatMessage(chatmsg, "GUILD", GetDefaultLanguage("player"))
+                                                        end
+                                                    end
+                                                    if postto["officer"] then
+                                                        -- TODO: Check if you are allowed to write in /o
+                                                        SendChatMessage(chatmsg, "OFFICER", GetDefaultLanguage("player"))
+                                                    end
+                                                    if postto["emote"] then
+                                                        SendChatMessage(chatmsg, "EMOTE", GetDefaultLanguage("player"))
+                                                    end
+                                                    if postto["raidwarn"] then
+                                                        if (GetNumRaidMembers() > 0) then
+                                                            SendChatMessage(chatmsg, "RAID_WARNING", GetDefaultLanguage("player"))
+                                                        end
+                                                    end
+                                                    if postto["battleground"] then
+                                                        if select(2,IsInInstance()) == "pvp" then
+                                                            SendChatMessage(chatmsg, "BATTLEGROUND", GetDefaultLanguage("player"))
+                                                        end
+                                                    end
+                                                    if postto["yell"] then
+                                                        SendChatMessage(chatmsg, "YELL", GetDefaultLanguage("player"))
+                                                    end
+                                                    for i = 5, 10 do
+                                                        local channame = tostring(select(2,GetChannelName(i)))
+                                                        if postto["channel"..i] and channame ~= "nil" then
+                                                            SendChatMessage(chatmsg, "CHANNEL", GetDefaultLanguage("player"), i)
+                                                        end
                                                     end
                                                 end
                                             end
                                         end
-                                    end
-                                end)
+                                    end)
+    end -- if not justMove
 
     button.texture = button:CreateTexture(nil,"BACKGROUND")
+    button.texture:SetTexture("Interface\\Icons\\Spell_Nature_WispSplode")
     button.texture:SetAllPoints(button)
+    
+    button:GetNormalTexture():SetWidth(75 * self.db.profile.scale)
+    button:GetNormalTexture():SetHeight(75 * self.db.profile.scale)
 
     button.used = false
     button.id   = i
-
-    button:SetPoint("CENTER", CoolDownButtonAnchor, "CENTER", -60 + (50 * i), -35)
 
     local cooldown -- Get Cooldown Frame
     local kids = { button:GetChildren() };
@@ -544,10 +547,10 @@ function CoolDownButtons:createButton(i)
     cooldown.textFrame:SetAllPoints(button)
     cooldown.textFrame:SetFrameLevel(cooldown.textFrame:GetFrameLevel() + 1)
     cooldown.textFrame.text = cooldown.textFrame:CreateFontString(nil, "OVERLAY")
-    cooldown.textFrame.text:SetPoint("CENTER", cooldown.textFrame, "CENTER", 0, -33)
-    cooldown.textFrame.text:SetFont("Interface\\AddOns\\CoolDownButtons\\skurri.ttf", 15, "OUTLINE")
+    cooldown.textFrame.text:SetPoint("CENTER", cooldown.textFrame, "CENTER", 0, -33 * self.db.profile.scale)
+    cooldown.textFrame.text:SetFont("Interface\\AddOns\\CoolDownButtons\\skurri.ttf", 15 * self.db.profile.scale, "OUTLINE")
     cooldown.textFrame.text:SetTextColor(10,10,10)
-    cooldown.textFrame.text:SetText("")
+    cooldown.textFrame.text:SetText("00:00")
     cooldown.textFrame:Show()
 
     button:Hide()
