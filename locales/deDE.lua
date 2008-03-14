@@ -51,6 +51,8 @@ L["Down"]  = true
 L["Left"]  = true
 L["Right"] = true
 
+L["Font"] = true
+
 L["Default Chatframe"] = true
 L["Say"]     = true
 L["Party"]   = true
@@ -84,18 +86,32 @@ L["Delete a Profile"] = true
 L["Deletes a profile from the database."] = true
 L["Are you sure you want to delete the selected profile?"] = true
 
-L["Position Settings"] = true
+
+L["Cooldown Settings"] = true
+L["Max Spell Duration"] = true
+L["Maximal Duration to show a Spell."] = true
+L["Max Item Duration"] = true
+L["Maximal Duration to show a Item."] = true
+L["Show Spells later"] = true
+L["Toggle Spells to display after remaining duration is below max duration."] = true
+L["Show Items later"] = true
+L["Toggle Item to display after remaining duration is below max duration."] = true
+
 L["Spell Positions"] = true
-L["Item  Positions"] = true
+L["Hide Spells"] = true
+L["Item Positions"] = true
+L["Hide Items"] = true
 L["|cFFFFFFFFNote: The X and Y Axis are relative to your bottomleft screen cornor.|r"] = true
-L["Save $obj to a consistent Position"] = true
-L["Toggle saving of $obj."] = true
+L["Save |cFFFFFFFF$obj|r to a consistent Position"] = true
+L["Toggle saving of |cFFFFFFFF$obj|r."] = true
 L["X - Axis"] = true
 L["Set the Position on X-Axis."] = true
 L["Y - Axis"] = true
 L["Set the Position on Y-Axis."] = true
 L["Move"] = true 
 L["Stop"] = true
+L["Show |cFFFFFFFF$obj|r"] = true
+L["Toggle to display |cFFFFFFFF$obj|r's CoolDown."] = true
 
 -- itemgroups.lua
 L["Healing Potions"] = true

@@ -1,6 +1,7 @@
 --local CoolDownButtons = LibStub("AceAddon-3.0"):GetAddon("CoolDown Buttons")
 CoolDownButtonsConfig = CoolDownButtons:NewModule("Config","AceConsole-3.0","AceEvent-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("CoolDown Buttons", false)
+local LSM = LibStub("LibSharedMedia-2.0")
 
 local CDBCHelper = {}
 local options = {}
@@ -48,6 +49,7 @@ options.args.display = {
             type = "input",
             arg = "maxbuttons",
             set = function( k, v ) if not (tonumber(v) == nil) then db[k.arg] = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
+            get = function( k ) return tostring(db[k.arg]) end,
         },
         dummy1 = { -- Need another line break :)
             order = 3,
@@ -69,6 +71,16 @@ options.args.display = {
             type = "range",
             min = 0.1, max = 1, step = 0.05,
             arg = "alpha",
+        },
+        fontToUse = {
+            order = 6,
+            name = L["Font"],
+            desc = "",
+            type = "select",
+            values = function() local fonts, newFonts = LSM:List("font"), {}; for k, v in pairs(fonts) do newFonts[v] = v; end return newFonts; end,
+            get = function( k ) return db[k.arg] end,
+            set = function( k, v ) db[k.arg] = v; CoolDownButtonsConfig:UpdateConfig(); end,
+            arg = "font",
         },
     },
 }
@@ -218,9 +230,46 @@ options.args.posting.args.messagesettings = {
 
 options.args.savetopos = {
  	type = "group",
-    name = L["Position Settings"],
+    name = L["Cooldown Settings"],
 	order = 2,
 	args = {
+        maxSpellDuration = {
+            order = 0,
+            name = L["Max Spell Duration"],
+            desc = L["Maximal Duration to show a Spell."],
+            type = "input",
+            arg = "maxSpellDuration",
+            set = function( k, v ) if not (tonumber(v) == nil) then db[k.arg] = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
+            get = function( k ) return tostring(db[k.arg]) end,
+        },
+        maxItemDuration = {
+            order = 1,
+            name = L["Max Item Duration"],
+            desc = L["Maximal Duration to show a Item."],
+            type = "input",
+            arg = "maxItemDuration",
+            set = function( k, v ) if not (tonumber(v) == nil) then db[k.arg] = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
+            get = function( k ) return tostring(db[k.arg]) end,
+        },
+        desc3 = {
+            order = 2,
+            type = "description",
+            name = "",
+        },
+    	showSpellAfterMax = {
+            order = 3,
+            type = "toggle",
+			name = L["Show Spells later"],
+			desc = L["Toggle Spells to display after remaining duration is below max duration."],
+            arg = "spellShowAfterMaxDurationPassed",
+        },
+    	showItemsAfterMax = {
+            order = 4,
+            type = "toggle",
+			name = L["Show Items later"],
+			desc = L["Toggle Item to display after remaining duration is below max duration."],
+            arg = "itemShowAfterMaxDurationPassed",
+        },
         spells = {
             type = "group",
             name = L["Spell Positions"],
@@ -233,16 +282,30 @@ options.args.savetopos = {
                 },
             },
         },
+        hidespells = {
+            type = "group",
+            name = L["Hide Spells"],
+            order = 1,
+            args = {
+            },
+        },
         items = {
             type = "group",
-            name = L["Item  Positions"],
-            order = 1,
+            name = L["Item Positions"],
+            order = 2,
             args = {
                 desc = {
                     order = 0,
                     type = "description",
                     name = L["|cFFFFFFFFNote: The X and Y Axis are relative to your bottomleft screen cornor.|r"],
                 },
+            },
+        },
+        hideitems = {
+            type = "group",
+            name = L["Hide Items"],
+            order = 3,
+            args = {
             },
         },
     },
@@ -363,8 +426,8 @@ function CoolDownButtonsConfig:InitPositions(state)
                 order = idx,
                 args = {
                     savethis = {
-                        name  = CoolDownButtons:gsub(L["Save $obj to a consistent Position"], "$obj", name),
-                        desc  = CoolDownButtons:gsub(L["Toggle saving of $obj."], "$obj", name),
+                        name  = CoolDownButtons:gsub(L["Save |cFFFFFFFF$obj|r to a consistent Position"], "$obj", name),
+                        desc  = CoolDownButtons:gsub(L["Toggle saving of |cFFFFFFFF$obj|r."], "$obj", name),
                         arg   = name,
                         order = 0,
                         width = "full",
@@ -379,7 +442,7 @@ function CoolDownButtonsConfig:InitPositions(state)
                         type = "input",
                         arg = name,
                         set = function( k, v ) if not (tonumber(v) == nil) then db.saveToPos[k.arg].pos.x = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
-                        get = function( k ) return db.saveToPos[k.arg].pos.x end,
+                        get = function( k ) return tostring(db.saveToPos[k.arg].pos.x) end,
                     },
                     ypos = {
                         order = 2,
@@ -388,7 +451,7 @@ function CoolDownButtonsConfig:InitPositions(state)
                         type = "input",
                         arg = name,
                         set = function( k, v ) if not (tonumber(v) == nil) then db.saveToPos[k.arg].pos.y = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
-                        get = function( k ) return db.saveToPos[k.arg].pos.y end,
+                        get = function( k ) return tostring(db.saveToPos[k.arg].pos.y) end,
                     }, dummy = { order = 3, type = "description", name = "", },
 					move = {
 						order = 4,
@@ -409,8 +472,30 @@ function CoolDownButtonsConfig:InitPositions(state)
             }
             if data.cdtype == "spell" then
                 options.args.savetopos.args.spells.args["obj"..idx] = arg
+                options.args.savetopos.args.hidespells.args["obj"..idx] = {
+                    --hideme = {
+                        order = 0,
+                        type = "toggle",
+                        name = CoolDownButtons:gsub(L["Show |cFFFFFFFF$obj|r"], "$obj", name),
+                        desc = CoolDownButtons:gsub(L["Toggle to display |cFFFFFFFF$obj|r's CoolDown."], "$obj", name),
+                        set = function( k, state ) db.saveToPos[k.arg].show = state; CoolDownButtonsConfig:UpdateConfig(); end,
+                        get = function( k ) return db.saveToPos[k.arg].show end,
+                        arg = name,
+                   -- },
+                }
             else
                 options.args.savetopos.args.items.args["obj"..idx]  = arg
+                options.args.savetopos.args.hideitems.args["obj"..idx] = {
+                 --   hideme = {
+                        order = 0,
+                        type = "toggle",
+                        name = CoolDownButtons:gsub(L["Show |cFFFFFFFF$obj|r"], "$obj", name),
+                        desc = CoolDownButtons:gsub(L["Toggle to display |cFFFFFFFF$obj|r's CoolDown."], "$obj", name),
+                        set = function( k, state ) db.saveToPos[k.arg].show = state; CoolDownButtonsConfig:UpdateConfig(); end,
+                        get = function( k ) return db.saveToPos[k.arg].show end,
+                        arg = name,
+                --    },
+                }
             end
             idx = idx + 1
         end
@@ -495,6 +580,7 @@ end
 
 function CoolDownButtonsConfig:CoolDownButtonsConfigChanged()
 	db = CoolDownButtons.db.profile
+    CoolDownButtons:ResetCooldowns()
 end
 
 function CoolDownButtonsConfig:CHANNEL_UI_UPDATE()

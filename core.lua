@@ -1,6 +1,9 @@
 CoolDownButtons = LibStub("AceAddon-3.0"):NewAddon("CoolDown Buttons", "AceConsole-3.0", "AceEvent-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("CoolDown Buttons", false)
 
+local LSM = LibStub("LibSharedMedia-2.0")
+LSM:Register("font", "Skurri", [[Interface\AddOns\CoolDownButtons\skurri.ttf]])
+
 CoolDownButtonAnchor = CreateFrame("Frame", "CoolDownButtonAnchor", UIParent)
 CoolDownButtonAnchor:SetWidth(20);      CoolDownButtonAnchor:SetHeight(20)
 CoolDownButtonAnchor:SetMovable(true);  CoolDownButtonAnchor:EnableMouse(true); 
@@ -18,12 +21,9 @@ CoolDownButtonAnchor.texture:SetAllPoints(CoolDownButtonAnchor)
 
 local cooldowns = {}
 
-
-CDB = CoolDownButtons
-
-
 local defaults = {
 	profile = {
+        font        = "Skurri",
         scale       = 0.85,
         alpha       = 1,
 		direction   = "right",
@@ -43,8 +43,13 @@ local defaults = {
                 default = true,
                 saved   = false,
                 pos     = { x = UIParent:GetWidth() / 2, y = UIParent:GetHeight() / 2, },
+                show    = true,
             },
         },
+        maxSpellDuration = 1800,
+        spellShowAfterMaxDurationPassed = true,
+        maxItemDuration  = 1800,
+        itemShowAfterMaxDurationPassed = true,
 	},
 }
 
@@ -181,7 +186,7 @@ function Text_OnUpdate2()
             frame:GetNormalTexture():SetWidth(75 * scale)
             frame:GetNormalTexture():SetHeight(75 * scale)
             cooldownframe.textFrame.text:SetPoint("CENTER", cooldownframe.textFrame, "CENTER", 0, -33 * scale)
-            cooldownframe.textFrame.text:SetFont("Interface\\AddOns\\CoolDownButtons\\skurri.ttf", 15 * scale, "OUTLINE")
+            cooldownframe.textFrame.text:SetFont(LSM:Fetch("font", CoolDownButtons.db.profile.font), 15 * scale, "OUTLINE")
 
             frame:ClearAllPoints()
 
@@ -220,40 +225,48 @@ function CoolDownButtons:SPELL_UPDATE_COOLDOWN()
             local spellTexture = GetSpellTexture(spellIndex, BOOKTYPE_SPELL)
             if (GetSpellCooldown(spellIndex, BOOKTYPE_SPELL) ~= nil and GetSpellCooldown(spellIndex, BOOKTYPE_SPELL) > 0) then
                 local start, duration, enable = GetSpellCooldown(spellIndex, BOOKTYPE_SPELL)
-                if duration > 3 and enable == 1 and cooldowns[start*duration] == nil then
+                if self.db.profile.spellShowAfterMaxDurationPassed then
+                    remaining = ceil(start + duration - GetTime())
+                else
+                    remaining = duration
+                end
+                if duration > 3 and enable == 1 and cooldowns[spellName] == nil and remaining < self.db.profile.maxSpellDuration and self.db.profile.saveToPos[spellName].show then
                 -- continue only if duration > GCD AND cooldown started AND cooldown not registred yet
                     local freeindex, nextindex = self:getFreeFrame()
-                    local saved = nil
-                    if self.db.profile.saveToPos[spellName].default then
-                        self.db.profile.saveToPos[spellName].default = false -- added to DB!
-                        self.db.profile.saveToPos[spellName].cdtype  = "spell"
-                        CoolDownButtonsConfig:InitPositions()
-                    end
-                    if self.db.profile.saveToPos[spellName].saved then
-                        saved = -1
-                    end
-                    if freeindex == nil and nextindex then
-                        self.cdbtns[nextindex] = self:createButton(nextindex)
-                        self.numcooldownbuttons = self.numcooldownbuttons + 1
-                    elseif freeindex then
-                        cooldowns[start*duration] = {
-                            cdtype    = "spell",       -- "item" or "spell"
-                            id        = spellIndex,    -- itemid or spellid
-                            name      = spellName,     -- item or spell name
-                            start     = start,         -- cooldown start time
-                            duration  = duration,      -- cooldown duration
-                            texture   = spellTexture,  -- item or spell texture
-                            buttonID  = freeindex,     -- assign to button #?
-                            order     = saved or 0,    -- display position
-                        }     
-                        if spellName == L["Spellgroup: Shocks"] then
-                            cooldowns[start*duration].texture = "Interface\\AddOns\\CoolDownButtons\\shocks.tga"
+                    if freeindex or nextindex then
+                        local saved = nil
+                        if self.db.profile.saveToPos[spellName].default then
+                            self.db.profile.saveToPos[spellName].default = false -- added to DB!
+                            self.db.profile.saveToPos[spellName].cdtype  = "spell"
+                            CoolDownButtonsConfig:InitPositions()
                         end
-                        if spellName == L["Spellgroup: Traps"] then
-                            cooldowns[start*duration].texture = "Interface\\Icons\\Spell_Frost_ChainsOfIce"
+                        if self.db.profile.saveToPos[spellName].saved then
+                            saved = 1
                         end
-                        --self:Print("Spell: "..spellName.." assigned to button: "..freeindex)
-                        self.cdbtns[freeindex].used = true
+                        if freeindex == nil and nextindex then
+                            self.cdbtns[nextindex] = self:createButton(nextindex)
+                            self.numcooldownbuttons = self.numcooldownbuttons + 1
+                        elseif freeindex then
+                            cooldowns[spellName] = {
+                                cdtype    = "spell",       -- "item" or "spell"
+                                id        = spellIndex,    -- itemid or spellid
+                                name      = spellName,     -- item or spell name
+                                start     = start,         -- cooldown start time
+                                duration  = duration,      -- cooldown duration
+                                texture   = spellTexture,  -- item or spell texture
+                                buttonID  = freeindex,     -- assign to button #?
+                                order     = 0,             -- display position
+                                saved     = saved,         -- position saved?
+                            }     
+                            if spellName == L["Spellgroup: Shocks"] then
+                                cooldowns[spellName].texture = "Interface\\AddOns\\CoolDownButtons\\shocks.tga"
+                            end
+                            if spellName == L["Spellgroup: Traps"] then
+                                cooldowns[spellName].texture = "Interface\\Icons\\Spell_Frost_ChainsOfIce"
+                            end
+                            --self:Print("Spell: "..spellName.." assigned to button: "..freeindex)
+                            self.cdbtns[freeindex].used = true
+                        end
                     end
                 end 
             end
@@ -265,37 +278,45 @@ end
 function CoolDownButtons:BAG_UPDATE_COOLDOWN()
   	for i=1,18 do
 		local start, duration, enable = GetInventoryItemCooldown("player", i)
-        if duration > 3 and enable == 1 then
+        if self.db.profile.itemShowAfterMaxDurationPassed then
+            remaining = ceil(start + duration - GetTime())
+        else
+            remaining = duration
+        end
+        if duration > 3 and enable == 1  and remaining < self.db.profile.maxItemDuration then
         -- continue only if duration > GCD AND cooldown started
             local link = GetInventoryItemLink("player",i)
             local name = select(3, string.find(link, "Hitem[^|]+|h%[([^[]+)%]"))
-            if cooldowns[name] == nil then
+            if cooldowns[name] == nil and self.db.profile.saveToPos[name].show then
                 local freeindex, nextindex = self:getFreeFrame()
-                local saved = nil
-                if self.db.profile.saveToPos[name].default then
-                    self.db.profile.saveToPos[name].default = false -- added to DB!
-                    self.db.profile.saveToPos[name].cdtype  = "item"
-                    CoolDownButtonsConfig:InitPositions()
-                end
-                if self.db.profile.saveToPos[name].saved then
-                    saved = -1
-                end
-                if freeindex == nil and nextindex then
-                    self.cdbtns[nextindex] = self:createButton(nextindex)
-                    self.numcooldownbuttons = self.numcooldownbuttons + 1
-                elseif freeindex then
-                    local itemTexture = GetInventoryItemTexture("player", i)
-                    cooldowns[name] = {
-                        cdtype    = "eq_item",    -- "item" or "spell"
-                        id        = i,            -- itemid or spellid
-                        name      = name,         -- item or spell name
-                        start     = start,        -- cooldown start time
-                        duration  = duration,     -- cooldown duration
-                        texture   = itemTexture,  -- item or spell texture
-                        buttonID  = freeindex,    -- assign to button #?
-                        order     = saved or 0,   -- display position
-                    }
-                    self.cdbtns[freeindex].used = true
+                if freeindex or nextindex then
+                    local saved = nil
+                    if self.db.profile.saveToPos[name].default then
+                        self.db.profile.saveToPos[name].default = false -- added to DB!
+                        self.db.profile.saveToPos[name].cdtype  = "item"
+                        CoolDownButtonsConfig:InitPositions()
+                    end
+                    if self.db.profile.saveToPos[name].saved then
+                        saved = 1
+                    end
+                    if freeindex == nil and nextindex then
+                        self.cdbtns[nextindex] = self:createButton(nextindex)
+                        self.numcooldownbuttons = self.numcooldownbuttons + 1
+                    elseif freeindex then
+                        local itemTexture = GetInventoryItemTexture("player", i)
+                        cooldowns[name] = {
+                            cdtype    = "eq_item",    -- "item" or "spell"
+                            id        = i,            -- itemid or spellid
+                            name      = name,         -- item or spell name
+                            start     = start,        -- cooldown start time
+                            duration  = duration,     -- cooldown duration
+                            texture   = itemTexture,  -- item or spell texture
+                            buttonID  = freeindex,    -- assign to button #?
+                            order     = 0,   -- display position
+                            saved     = saved,   -- position saved?
+                        }
+                        self.cdbtns[freeindex].used = true
+                    end
                 end
             end
         end
@@ -304,39 +325,47 @@ function CoolDownButtons:BAG_UPDATE_COOLDOWN()
 		local slots = GetContainerNumSlots(i)
 		for j=1,slots do
 			local start, duration, enable = GetContainerItemCooldown(i,j)
-			if duration > 3 and enable == 1 then
+			if self.db.profile.itemShowAfterMaxDurationPassed then
+                remaining = ceil(start + duration - GetTime())
+            else
+                remaining = duration
+            end
+            if duration > 3 and enable == 1  and remaining < self.db.profile.maxItemDuration then
             -- continue only if duration > GCD AND cooldown started
                 local link = GetContainerItemLink(i,j)
                 local itemID = select(3, string.find(link, "item:(%d+):"))
                 local name = self:getItemGroup(itemID) or select(3, string.find(link, "Hitem[^|]+|h%[([^[]+)%]"))
-                if cooldowns[name] == nil then
+                if cooldowns[name] == nil and self.db.profile.saveToPos[name].show then
                     local freeindex, nextindex = self:getFreeFrame()
-                    local saved = nil
-                    if self.db.profile.saveToPos[name].default then
-                        self.db.profile.saveToPos[name].default = false -- added to DB!
-                        self.db.profile.saveToPos[name].cdtype  = "item"
-                        CoolDownButtonsConfig:InitPositions()
-                    end
-                    if self.db.profile.saveToPos[name].saved then
-                        saved = -1
-                    end
-                    if freeindex == nil and nextindex then
-                        self.cdbtns[nextindex] = self:createButton(nextindex)
-                        self.numcooldownbuttons = self.numcooldownbuttons + 1
-                    elseif freeindex then
-                        local itemTexture = self:getItemGroupTexture(name) or select(1, GetContainerItemInfo(i,j)	)
-                        cooldowns[name] = {
-                            cdtype    = "bag_item",   -- "item" or "spell"
-                            id        = i,            -- bag
-                            id2       = j,            -- bag slot
-                            name      = name,         -- item or spell name
-                            start     = start,        -- cooldown start time
-                            duration  = duration,     -- cooldown duration
-                            texture   = itemTexture,  -- item or spell texture
-                            buttonID  = freeindex,    -- assign to button #?
-                            order     = saved or 0,   -- display position
-                        }
-                        self.cdbtns[freeindex].used = true
+                    if freeindex or nextindex then
+                        local saved = nil
+                        if self.db.profile.saveToPos[name].default then
+                            self.db.profile.saveToPos[name].default = false -- added to DB!
+                            self.db.profile.saveToPos[name].cdtype  = "item"
+                            CoolDownButtonsConfig:InitPositions()
+                        end
+                        if self.db.profile.saveToPos[name].saved then
+                            saved = 1
+                        end
+                        if freeindex == nil and nextindex then
+                            self.cdbtns[nextindex] = self:createButton(nextindex)
+                            self.numcooldownbuttons = self.numcooldownbuttons + 1
+                        elseif freeindex then
+                            local itemTexture = self:getItemGroupTexture(name) or select(1, GetContainerItemInfo(i,j)	)
+                            cooldowns[name] = {
+                                cdtype    = "bag_item",   -- "item" or "spell"
+                                id        = i,            -- bag
+                                id2       = j,            -- bag slot
+                                name      = name,         -- item or spell name
+                                start     = start,        -- cooldown start time
+                                duration  = duration,     -- cooldown duration
+                                texture   = itemTexture,  -- item or spell texture
+                                buttonID  = freeindex,    -- assign to button #?
+                                order     = 0,   -- display position
+                                saved     = saved,   -- position saved?
+                            }
+                            self.cdbtns[freeindex].used = true
+                        end
                     end
                 end
             end
@@ -413,12 +442,16 @@ function CoolDownButtons:getFreeFrame()
     local x
     for i = 1, self.numcooldownbuttons do
         x = i
-        if self.cdbtns[i].used == false then
+        if self.cdbtns[i].used == false and i <= self.db.profile.maxbuttons then
             return i, nil
         end
     end
     x = x + 1
-    return nil, x
+    if x <= self.db.profile.maxbuttons then
+        return nil, x
+    else
+        return nil, nil
+    end
 end
 
 function CoolDownButtons:createButton(i, justMove)
@@ -459,7 +492,6 @@ function CoolDownButtons:createButton(i, justMove)
                                                         local m = math.floor( math.fmod(time, 3600) / 60 )
                                                         formated_time = string.format("%d.%02dhr", hr, m)
                                                     end
-                                                    GameTooltip:SetText(cooldown["name"].." Click to Post Cooldown")
                                                     
                                                     local chatmsg
                                                     if CoolDownButtons.db.profile.postdefaultmsg then
@@ -548,7 +580,7 @@ function CoolDownButtons:createButton(i, justMove)
     cooldown.textFrame:SetFrameLevel(cooldown.textFrame:GetFrameLevel() + 1)
     cooldown.textFrame.text = cooldown.textFrame:CreateFontString(nil, "OVERLAY")
     cooldown.textFrame.text:SetPoint("CENTER", cooldown.textFrame, "CENTER", 0, -33 * self.db.profile.scale)
-    cooldown.textFrame.text:SetFont("Interface\\AddOns\\CoolDownButtons\\skurri.ttf", 15 * self.db.profile.scale, "OUTLINE")
+    cooldown.textFrame.text:SetFont(LSM:Fetch("font", self.db.profile.font), 15 * self.db.profile.scale, "OUTLINE")
     cooldown.textFrame.text:SetTextColor(10,10,10)
     cooldown.textFrame.text:SetText("00:00")
     cooldown.textFrame:Show()
@@ -568,10 +600,20 @@ function CoolDownButtons:gsub(text, variable, value)
 	return text;
 end
 
+function  CoolDownButtons:ResetCooldowns()
+    cooldowns = {}  
+    for key, button in pairs(self.cdbtns) do
+        button:Hide()
+        button.used = false
+    end
+    self:SPELL_UPDATE_COOLDOWN()
+    self:BAG_UPDATE_COOLDOWN()
+end
+
 function CoolDownButtons:sortButtons()
     local i = 1
     for key, cooldown in pairs(cooldowns) do
-        if type(cooldown) == "table" and cooldown["order"] ~= -1 then
+        if type(cooldown) == "table" and cooldown["saved"] ~= 1 then
             cooldown["order"] = i
             i = i + 1
         end
