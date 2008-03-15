@@ -6,6 +6,7 @@
 ## X-ReleaseDate: "$Date$"
 ## X-Category: Interface Enhancements
 ## X-Website: http://www.wowace.com/wiki/CoolDownButtons
+# X-AceForum: 11951
 
 ## SavedVariables: CoolDownButtonsDB
 ## DefaultState: Enabled
