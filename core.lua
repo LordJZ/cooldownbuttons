@@ -361,8 +361,8 @@ function CoolDownButtons:BAG_UPDATE_COOLDOWN()
                                 duration  = duration,     -- cooldown duration
                                 texture   = itemTexture,  -- item or spell texture
                                 buttonID  = freeindex,    -- assign to button #?
-                                order     = 0,   -- display position
-                                saved     = saved,   -- position saved?
+                                order     = 0,            -- display position
+                                saved     = saved,        -- position saved?
                             }
                             self.cdbtns[freeindex].used = true
                         end
@@ -375,15 +375,18 @@ function CoolDownButtons:BAG_UPDATE_COOLDOWN()
 end
 
 function CoolDownButtons:getItemGroup(itemid)
+    local group = select(2, LibStub("LibPeriodicTable-3.1"):ItemInSet(itemid, "Consumable"))
+
     for groupKey, value in pairs(self.itemgroups) do
         if type(value) == "table" then
             for _, curid in pairs(value.ids) do
-                if curid == tonumber(itemid) then
+                if curid == group then
                     return groupKey
                 end
             end
         end
     end
+
     return nil
 end
 

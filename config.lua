@@ -413,11 +413,13 @@ end
 
 function CoolDownButtonsConfig:InitPositions(state)
 
-    options.args.savetopos.args.spells.args = {}
-    options.args.savetopos.args.items.args = {}
+    options.args.savetopos.args.spells.args     = {}
+    options.args.savetopos.args.hidespells.args = {}
+    options.args.savetopos.args.items.args      = {}
+    options.args.savetopos.args.hideitems.args  = {}
     
     local idx = 1
-    for name, data in pairs(db.saveToPos) do
+    for name, data in sortedpairs(db.saveToPos) do
         if type(data) == "table" then
             local arg = {
                 type = "group",
@@ -473,29 +475,27 @@ function CoolDownButtonsConfig:InitPositions(state)
             if data.cdtype == "spell" then
                 options.args.savetopos.args.spells.args["obj"..idx] = arg
                 options.args.savetopos.args.hidespells.args["obj"..idx] = {
-                    --hideme = {
-                        order = 0,
-                        type = "toggle",
-                        name = CoolDownButtons:gsub(L["Show |cFFFFFFFF$obj|r"], "$obj", name),
-                        desc = CoolDownButtons:gsub(L["Toggle to display |cFFFFFFFF$obj|r's CoolDown."], "$obj", name),
-                        set = function( k, state ) db.saveToPos[k.arg].show = state; CoolDownButtonsConfig:UpdateConfig(); end,
-                        get = function( k ) return db.saveToPos[k.arg].show end,
-                        arg = name,
-                   -- },
+                    order = 0,
+                    type = "toggle",
+                    name = CoolDownButtons:gsub(L["Show |cFFFFFFFF$obj|r"], "$obj", name),
+                    desc = CoolDownButtons:gsub(L["Toggle to display |cFFFFFFFF$obj|r's CoolDown."], "$obj", name),
+                    set = function( k, state ) db.saveToPos[k.arg].show = state; CoolDownButtonsConfig:UpdateConfig(); end,
+                    get = function( k ) return db.saveToPos[k.arg].show end,
+                    arg = name,
                 }
+                ChatFrame3:AddMessage("spell")
             else
                 options.args.savetopos.args.items.args["obj"..idx]  = arg
                 options.args.savetopos.args.hideitems.args["obj"..idx] = {
-                 --   hideme = {
-                        order = 0,
-                        type = "toggle",
-                        name = CoolDownButtons:gsub(L["Show |cFFFFFFFF$obj|r"], "$obj", name),
-                        desc = CoolDownButtons:gsub(L["Toggle to display |cFFFFFFFF$obj|r's CoolDown."], "$obj", name),
-                        set = function( k, state ) db.saveToPos[k.arg].show = state; CoolDownButtonsConfig:UpdateConfig(); end,
-                        get = function( k ) return db.saveToPos[k.arg].show end,
-                        arg = name,
-                --    },
+                    order = 0,
+                    type = "toggle",
+                    name = CoolDownButtons:gsub(L["Show |cFFFFFFFF$obj|r"], "$obj", name),
+                    desc = CoolDownButtons:gsub(L["Toggle to display |cFFFFFFFF$obj|r's CoolDown."], "$obj", name),
+                    set = function( k, state ) db.saveToPos[k.arg].show = state; CoolDownButtonsConfig:UpdateConfig(); end,
+                    get = function( k ) return db.saveToPos[k.arg].show end,
+                    arg = name,
                 }
+                ChatFrame3:AddMessage("item")
             end
             idx = idx + 1
         end
@@ -607,4 +607,23 @@ function CoolDownButtonsConfig:createMovableFrame()
     self.moveableframe:SetScript("OnDragStart", function(self) self:StartMoving() end)
     self.moveableframe:SetScript("OnDragStop",  function(self) self:StopMovingOrSizing(); end)
     self.moveableframe:Hide()
+end
+
+
+
+
+-- http://www.wowwiki.com/HOWTO:_Do_Tricks_With_Tables#Iterate_with_sorted_keys
+function sortedpairs(t,comparator)
+	local sortedKeys = {};
+	table.foreach(t, function(k,v) table.insert(sortedKeys,k) end);
+	table.sort(sortedKeys,comparator);
+	local i = 0;
+	local function _f(_s,_v)
+		i = i + 1;
+		local k = sortedKeys[i];
+		if (k) then
+			return k,t[k];
+		end
+	end
+	return _f,nil,nil;
 end
