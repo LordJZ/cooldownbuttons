@@ -230,8 +230,12 @@ function CoolDownButtons_UPDATE()
             if frame.used then
                 -- set position, scaling and alpha :)
                 local order = cooldown["order"] - 1
-                local scale = CoolDownButtons.db.profile.anchors[frame.usedInBar].scale
-                local alpha = CoolDownButtons.db.profile.anchors[frame.usedInBar].alpha
+                local forBar = frame.usedInBar
+                if not CoolDownButtons.db.profile.splitRows and forBar ~= "single" then
+                    forBar = "spells"
+                end
+                local scale = CoolDownButtons.db.profile.anchors[forBar].scale
+                local alpha = CoolDownButtons.db.profile.anchors[forBar].alpha
 
                 frame:SetWidth (45 * scale)
                 frame:SetHeight(45 * scale)
