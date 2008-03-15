@@ -1,5 +1,6 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("CoolDown Buttons","enUS",true)
 
+
 -- core.lua
 L["Click to Move"] = true
 L["RemainingCoolDown"] = "Cooldown on $spell active for $time."
@@ -21,6 +22,12 @@ L["Display Settings"] = true
 L["Direction"] = true
 L["Direction from Anchor"] = true
 
+
+L["Split Cooldowns"] = true
+L["Toggle showing Items and Spells as own Cooldown rows or not."] = true
+L["Spell Cooldowns"] = true
+L["Item Cooldowns"] = true
+L["Seperated Cooldowns"] = true
 
 L["Show Anchor"] = true
 L["Toggle showing Anchor."] = true

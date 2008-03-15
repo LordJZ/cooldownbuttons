@@ -23,6 +23,12 @@ L["Direction"] = true
 L["Direction from Anchor"] = true
 
 
+L["Split Cooldowns"] = true
+L["Toggle showing Items and Spells as own Cooldown rows or not."] = true
+L["Spell Cooldowns"] = true
+L["Item Cooldowns"] = true
+L["Seperated Cooldowns"] = true
+
 L["Show Anchor"] = true
 L["Toggle showing Anchor."] = true
 L["Max Buttons"] = true

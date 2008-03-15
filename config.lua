@@ -26,54 +26,15 @@ options.args.display = {
     name = L["Display Settings"],
 	order = 0,
 	args = {
-        showAnchor = {
+        splitCooldowns = {
             order = 0,
-            name = L["Show Anchor"],
-            desc = L["Toggle showing Anchor."],
+            name = L["Split Cooldowns"],
+            desc = L["Toggle showing Items and Spells as own Cooldown rows or not."],
             type = "toggle",
-            arg = "showAnchor",
-            width= "full",
-        },
-        displayDirection = {
-            order = 1,
-            name = L["Direction"],
-            desc = L["Direction from Anchor"],
-            type = "select",
-            values = opt_directions,
-            arg = "direction"
-        },
-        maxButtons = {
-            order = 2,
-            name = L["Max Buttons"],
-            desc = L["Maximal number of Buttons to display."],
-            type = "input",
-            arg = "maxbuttons",
-            set = function( k, v ) if not (tonumber(v) == nil) then db[k.arg] = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
-            get = function( k ) return tostring(db[k.arg]) end,
-        },
-        dummy1 = { -- Need another line break :)
-            order = 3,
-            type = "description",
-            name = "",
-        },
-        buttonScale = {
-            order = 4,
-            name = L["Button Scale"],
-            desc = L["Button scaling, this lets you enlarge or shrink your Buttons."],
-            type = "range",
-            min = 0.5, max = 1.5, step = 0.05,
-            arg = "scale",
-        },
-        buttonAlpha = {
-            order = 5,
-            name = L["Button Alpha"],
-            desc = L["Icon alpha value, this lets you change the transparency of the Button."],
-            type = "range",
-            min = 0.1, max = 1, step = 0.05,
-            arg = "alpha",
+            arg = "splitRows",
         },
         fontToUse = {
-            order = 6,
+            order = 1,
             name = L["Font"],
             desc = "",
             type = "select",
@@ -81,6 +42,145 @@ options.args.display = {
             get = function( k ) return db[k.arg] end,
             set = function( k, v ) db[k.arg] = v; CoolDownButtonsConfig:UpdateConfig(); end,
             arg = "font",
+        },
+        cooldownsSpells = {
+            type = "group",
+            name = L["Spell Cooldowns"],
+            guiInline = true,
+            order = 2,
+            set = function( k, v ) db.anchors.spells[k.arg] = v; CoolDownButtonsConfig:UpdateConfig(); end,
+            get = function( k ) return db.anchors.spells[k.arg] end,
+            args = {
+                showAnchor = {
+                    order = 0,
+                    name = L["Show Anchor"],
+                    desc = L["Toggle showing Anchor."],
+                    type = "toggle",
+                    arg = "show",
+                    width= "full",
+                },
+                displayDirection = {
+                    order = 1,
+                    name = L["Direction"],
+                    desc = L["Direction from Anchor"],
+                    type = "select",
+                    values = opt_directions,
+                    arg = "direction"
+                },
+                maxButtons = {
+                    order = 2,
+                    name = L["Max Buttons"],
+                    desc = L["Maximal number of Buttons to display."],
+                    type = "input",
+                    arg = "maxbuttons",
+                    set = function( k, v ) if not (tonumber(v) == nil) then db.anchors.spells[k.arg] = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
+                    get = function( k ) return tostring(db.anchors.spells[k.arg]) end,
+                },
+                dummy1 = { -- Need another line break :)
+                    order = 3,
+                    type = "description",
+                    name = "",
+                },
+                buttonScale = {
+                    order = 4,
+                    name = L["Button Scale"],
+                    desc = L["Button scaling, this lets you enlarge or shrink your Buttons."],
+                    type = "range",
+                    min = 0.5, max = 1.5, step = 0.05,
+                    arg = "scale",
+                },
+                buttonAlpha = {
+                    order = 5,
+                    name = L["Button Alpha"],
+                    desc = L["Icon alpha value, this lets you change the transparency of the Button."],
+                    type = "range",
+                    min = 0.1, max = 1, step = 0.05,
+                    arg = "alpha",
+                },
+            },
+        },
+        cooldownsItems = {
+            type = "group",
+            name = L["Item Cooldowns"],
+            guiInline = true,
+            order = 3,
+            disabled = function( k ) return not db.splitRows end,
+            set = function( k, v ) db.anchors.items[k.arg] = v; CoolDownButtonsConfig:UpdateConfig(); end,
+            get = function( k ) return db.anchors.items[k.arg] end,
+            args = {
+                showAnchor = {
+                    order = 0,
+                    name = L["Show Anchor"],
+                    desc = L["Toggle showing Anchor."],
+                    type = "toggle",
+                    arg = "show",
+                    width= "full",
+                },
+                displayDirection = {
+                    order = 1,
+                    name = L["Direction"],
+                    desc = L["Direction from Anchor"],
+                    type = "select",
+                    values = opt_directions,
+                    arg = "direction"
+                },
+                maxButtons = {
+                    order = 2,
+                    name = L["Max Buttons"],
+                    desc = L["Maximal number of Buttons to display."],
+                    type = "input",
+                    arg = "maxbuttons",
+                    set = function( k, v ) if not (tonumber(v) == nil) then db.anchors.items[k.arg] = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
+                    get = function( k ) return tostring(db.anchors.items[k.arg]) end,
+                },
+                dummy1 = { -- Need another line break :)
+                    order = 3,
+                    type = "description",
+                    name = "",
+                },
+                buttonScale = {
+                    order = 4,
+                    name = L["Button Scale"],
+                    desc = L["Button scaling, this lets you enlarge or shrink your Buttons."],
+                    type = "range",
+                    min = 0.5, max = 1.5, step = 0.05,
+                    arg = "scale",
+                },
+                buttonAlpha = {
+                    order = 5,
+                    name = L["Button Alpha"],
+                    desc = L["Icon alpha value, this lets you change the transparency of the Button."],
+                    type = "range",
+                    min = 0.1, max = 1, step = 0.05,
+                    arg = "alpha",
+                },
+            },
+        },
+        cooldownsSigle = {
+            type = "group",
+            name = L["Seperated Cooldowns"],
+            guiInline = true,
+            order = 4,
+            set = function( k, v ) db.anchors.single[k.arg] = v; CoolDownButtonsConfig:UpdateConfig(); end,
+            get = function( k ) return db.anchors.single[k.arg] end,
+            args = {
+                buttonScale = {
+                    order = 4,
+                    name = L["Button Scale"],
+                    desc = L["Button scaling, this lets you enlarge or shrink your Buttons."],
+                    type = "range",
+                    min = 0.5, max = 1.5, step = 0.05,
+                    arg = "scale",
+                },
+                buttonAlpha = {
+                    order = 5,
+                    name = L["Button Alpha"],
+                    desc = L["Icon alpha value, this lets you change the transparency of the Button."],
+                    type = "range",
+                    min = 0.1, max = 1, step = 0.05,
+                    arg = "alpha",
+                },
+            },
         },
     },
 }
@@ -364,7 +464,7 @@ do
 						type = "execute",
 						name = L["Reset Profile"],
 						desc = L["Reset the current profile to the default"],
-						func = function() db:ResetProfile() end,
+						func = function() db:ResetProfile() CoolDownButtonsConfig:UpdateConfig(); end,
 					},
 					choosedesc = {
 						order = 21,
@@ -385,7 +485,7 @@ do
 						type = "select",
 						order = 40,
 						get = function() return db:GetCurrentProfile() end,
-						set = function(info, value) db:SetProfile(value) end,
+						set = function(info, value) db:SetProfile(value) CoolDownButtonsConfig:UpdateConfig(); end,
 						values = function() return getProfileList(db, true) end,
 					},
 					deldesc = {
@@ -417,7 +517,7 @@ function CoolDownButtonsConfig:InitPositions(state)
     options.args.savetopos.args.hidespells.args = {}
     options.args.savetopos.args.items.args      = {}
     options.args.savetopos.args.hideitems.args  = {}
-    
+
     local idx = 1
     for name, data in sortedpairs(db.saveToPos) do
         if type(data) == "table" then
@@ -475,7 +575,7 @@ function CoolDownButtonsConfig:InitPositions(state)
             if data.cdtype == "spell" then
                 options.args.savetopos.args.spells.args["obj"..idx] = arg
                 options.args.savetopos.args.hidespells.args["obj"..idx] = {
-                    order = 0,
+                    order = idx,
                     type = "toggle",
                     name = CoolDownButtons:gsub(L["Show |cFFFFFFFF$obj|r"], "$obj", name),
                     desc = CoolDownButtons:gsub(L["Toggle to display |cFFFFFFFF$obj|r's CoolDown."], "$obj", name),
@@ -483,11 +583,10 @@ function CoolDownButtonsConfig:InitPositions(state)
                     get = function( k ) return db.saveToPos[k.arg].show end,
                     arg = name,
                 }
-                ChatFrame3:AddMessage("spell")
             else
-                options.args.savetopos.args.items.args["obj"..idx]  = arg
+                options.args.savetopos.args.items.args["obj"..idx] = arg
                 options.args.savetopos.args.hideitems.args["obj"..idx] = {
-                    order = 0,
+                    order = idx,
                     type = "toggle",
                     name = CoolDownButtons:gsub(L["Show |cFFFFFFFF$obj|r"], "$obj", name),
                     desc = CoolDownButtons:gsub(L["Toggle to display |cFFFFFFFF$obj|r's CoolDown."], "$obj", name),
@@ -495,7 +594,6 @@ function CoolDownButtonsConfig:InitPositions(state)
                     get = function( k ) return db.saveToPos[k.arg].show end,
                     arg = name,
                 }
-                ChatFrame3:AddMessage("item")
             end
             idx = idx + 1
         end
