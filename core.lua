@@ -328,9 +328,21 @@ function CoolDownButtons_UPDATE()
                 -- set position, scaling and alpha :)
                 local order = cooldown["order"] - 1
                 local forBar = frame.usedInBar
-                if not CoolDownButtons.db.profile.splitRows and forBar ~= "single" and not CoolDownButtons.db.profile.splitSoon then
+                
+                if not CoolDownButtons.db.profile.splitRows and forBar == "items" then
+                    forBar = "spells"                    
+                end
+                if not CoolDownButtons.db.profile.splitSoon and forBar == "soon" then
+                    forBar = "spells"                    
+                end
+                --[[
+                if not CoolDownButtons.db.profile.splitRows or (forBar ~= "soon" or forBar ~= "single") then
                     forBar = "spells"
                 end
+                if not CoolDownButtons.db.profile.splitSoon or (forBar ~= "soon" or forBar ~= "single" or forBar ~= "items") then
+                    forBar = "spells"
+                end
+                --]]
                 local scale = CoolDownButtons.db.profile.anchors[forBar].scale
                 local alpha = CoolDownButtons.db.profile.anchors[forBar].alpha
                 local direction = CoolDownButtons.db.profile.anchors[forBar].direction
@@ -877,19 +889,19 @@ function CoolDownButtons:sortButtons()
                 self.cdbtns[cooldown["buttonID"]].usedInBar = "soon"
                 cooldown["order"] = soon
                 soon = soon + 1                
-            end
-            if self.db.profile.splitRows then
-                if cooldown.cdtype == "spell" then
+            else
+                if self.db.profile.splitRows then
+                    if cooldown.cdtype == "spell" then
+                        cooldown["order"] = spells
+                        spells = spells + 1
+                    elseif cooldown.cdtype == "eq_item" or cooldown.cdtype == "bag_item" then
+                        cooldown["order"] = items
+                        items = items + 1
+                    end
+                else
                     cooldown["order"] = spells
                     spells = spells + 1
-                elseif cooldown.cdtype == "eq_item" or cooldown.cdtype == "bag_item" then
-                    cooldown["order"] = items
-                    items = items + 1
                 end
-            else
-                cooldown["order"] = spells
-                spells = spells + 1
-                
             end
         end
     end
