@@ -500,8 +500,6 @@ function CoolDownButtons:BAG_UPDATE_COOLDOWN()
                     if self.db.profile.saveToPos[name].saved then
                         saved = 1
                     end
-                    self.cdbtns[nextindex] = self:createButton(nextindex)
-                    self.numcooldownbuttons = self.numcooldownbuttons + 1
                     local itemTexture = GetInventoryItemTexture("player", i)
                     cooldowns[name] = {
                         cdtype    = "eq_item",    -- "item" or "spell"
