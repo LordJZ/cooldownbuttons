@@ -25,7 +25,7 @@ L["Direction"] = true
 L["Direction from Anchor"] = true
 
 
-L["Split Cooldowns"] = true
+L["Split Item Cooldowns"] = true
 L["Toggle showing Item and Spell Cooldowns as own rows or not."] = true
 L["Split expiring Cooldown"] = true
 L["Toggle showing Item and Spell Cooldowns in an additional row if they are expiring soon."] = true
@@ -61,6 +61,7 @@ L["Set the Text to post."] = true
 L["Message Settings"] = true
 L["Use default Message"] = true
 L["Toggle posting the default Message."] = true
+L["Custom Message"] = true
 L["Set the Text to post."] = true
 L["The default message is: |cFFFFFFFF$RemainingCoolDown|r"] = true
 L["Use |cFFFFFFFF$spell|r for spell name and |cFFFFFFFF$time|r for cooldowntime."] = true
@@ -103,7 +104,7 @@ L["Emote"] = true
 L["Raidwarning"] = true
 L["Battleground"] = true
 L["Yell"] = true
-L["Custom Channel"] = true
+L["Custom Channels:"] = true
 L["Note: Click on a Cooldown Button to post the remaining time to the above selectet Chats."] = true
 
 L["Default"] = true

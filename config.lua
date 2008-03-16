@@ -34,7 +34,7 @@ options.args.display = {
 	args = {
         splitCooldowns = {
             order = 0,
-            name = L["Split Cooldowns"],
+            name = L["Split Item Cooldowns"],
             desc = L["Toggle showing Item and Spell Cooldowns as own rows or not."],
             type = "toggle",
             arg = "splitRows",
@@ -680,7 +680,7 @@ options.args.posting.args.chatPostList = {
         desc1 = {
             order = 14,
             type = "description",
-            name = "Custom Channels:",
+            name = L["Custom Channels:"],
         },
     	enablePostingChannel5 = { arg = "channel5", order = 15, type = "toggle",
 			name = "",
@@ -736,8 +736,8 @@ options.args.posting.args.messagesettings = {
         },
         custommessage = {
             order = 3,
-            name = "",
-            desc = L["Set the Text to post."],
+            name = L["Custom Message"],
+			desc = L["Set the Text to post."],
             type = "input",
             arg  = "postcustom",
             width= "double",
