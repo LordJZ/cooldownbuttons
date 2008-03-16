@@ -236,6 +236,7 @@ function CoolDownButtons_UPDATE()
                 end
                 local scale = CoolDownButtons.db.profile.anchors[forBar].scale
                 local alpha = CoolDownButtons.db.profile.anchors[forBar].alpha
+                local direction = CoolDownButtons.db.profile.anchors[forBar].direction
 
                 frame:SetWidth (45 * scale)
                 frame:SetHeight(45 * scale)
@@ -259,13 +260,13 @@ function CoolDownButtons_UPDATE()
                             anchorTo = CoolDownButtonAnchor2
                         end
                     end 
-                    if CoolDownButtons.db.profile.direction == "left" then
+                    if direction == "left" then
                         frame:SetPoint("CENTER", anchorTo, "CENTER", - (50 * order * scale), 0)
-                    elseif CoolDownButtons.db.profile.direction == "right" then
+                    elseif direction == "right" then
                         frame:SetPoint("CENTER", anchorTo, "CENTER", (50 * order * scale), 0)
-                    elseif CoolDownButtons.db.profile.direction == "up" then
+                    elseif direction == "up" then
                         frame:SetPoint("CENTER", anchorTo, "CENTER", 0, (65 * order * scale))
-                    elseif CoolDownButtons.db.profile.direction == "down" then 
+                    elseif direction == "down" then 
                         frame:SetPoint("CENTER", anchorTo, "CENTER", 0, - (65 * order * scale))
                     end
                 end
