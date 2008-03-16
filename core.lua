@@ -576,7 +576,7 @@ function CoolDownButtons:BAG_UPDATE_COOLDOWN()
 end
 
 function CoolDownButtons:getItemGroup(itemid)
-    local group = select(2, LibStub("LibPeriodicTable-3.1"):ItemInSet(itemid, "Consumable"))
+    local group = select(2, LibStub("LibPeriodicTable-3.1"):ItemInSet(itemid, "CDB_Itemgroup"))
 
     for groupKey, value in pairs(self.itemgroups) do
         if type(value) == "table" then
