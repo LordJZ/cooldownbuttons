@@ -534,6 +534,80 @@ options.args.display = {
     },
 }
 
+
+options.args.display.args.testMode = {
+ 	type = "group",
+    name = L["Test Mode"],
+    order = 0,
+	args = {
+        testModeTime = {
+            order = 0,
+            name = L["Time to show Buttons"],
+            type = "input",
+            arg = "testModeTime",
+            set = function( k, v ) if not (tonumber(v) == nil) then CoolDownButtons.testModeTime = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
+            get = function( k ) return tostring(CoolDownButtons.testModeTime) end,
+        },
+        testCancle = {
+            order = 1,
+            type = "execute",
+            name = L["Cancle Test"],
+            disabled = function() return not CoolDownButtons.testMode end,
+            desc = "",
+            func = function() CoolDownButtons:EndTestMode(true) end,
+        },
+        dummy1 = {
+            order = 2,
+            type = "description",
+            name = "",
+        },
+        testAll = {
+            order = 3,
+            type = "execute",
+            name = L["Test All"],
+            disabled = function() return CoolDownButtons.testMode end,
+            desc = "",
+            func = function() CoolDownButtons:StartTestMode({"spells","items","soon","single"}) end,
+        },
+        testSpells = {
+            order = 4,
+            type = "execute",
+            name = L["Test Spells"],
+            disabled = function() return CoolDownButtons.testMode end,
+            desc = "",
+            func = function() CoolDownButtons:StartTestMode({"spells"}) end,
+        },
+        dummy2 = {
+            order = 5,
+            type = "description",
+            name = "",
+        },
+        testItems = {
+            order = 6,
+            type = "execute",
+            name = L["Test Items"],
+            desc = "",
+            disabled = function() return not db.splitRows or CoolDownButtons.testMode end,
+            func = function() CoolDownButtons:StartTestMode({"items"}) end,
+        },
+        testSoon = {
+            order = 7,
+            type = "execute",
+            name = L["Test expiring Soon"],
+            desc = "",
+            disabled = function() return not db.splitSoon or CoolDownButtons.testMode end,
+            func = function() CoolDownButtons:StartTestMode({"soon"}) end,
+        },
+        testSeperated = {
+            order = 8,
+            type = "execute",
+            name = L["Test Single"],
+            desc = "",
+            disabled = function() return CoolDownButtons.testMode end,
+            func = function() CoolDownButtons:StartTestMode({"single"}) end,
+        },
+    },
+}
 options.args.posting = {
 	type = "group",
 	name = L["Posting Settings"],
@@ -760,6 +834,8 @@ options.args.savetopos = {
     },
 }
 
+
+
 local getProfilesOptionsTable
 do
 	local defaultProfiles
@@ -964,6 +1040,7 @@ function CoolDownButtonsConfig:OnInitialize()
 	self:RegisterChatCommand("cdb", function() LibStub("AceConfigDialog-3.0"):Open("CoolDown Buttons") end)
 	self:RegisterChatCommand("cooldownbuttons", function() LibStub("AceConfigDialog-3.0"):Open("CoolDown Buttons") end)
     self:RegisterMessage("CoolDownButtonsConfigChanged")
+    self:RegisterMessage("CoolDownButtonsTestModeEnd")
     self:RegisterEvent("CHANNEL_UI_UPDATE")
     
     self.moveableframe = nil
@@ -972,12 +1049,16 @@ end
 function CoolDownButtonsConfig:UpdateConfig()
 	self:SendMessage("CoolDownButtonsConfigChanged")
 end
+function CoolDownButtonsConfig:CoolDownButtonsTestModeEnd()
+    LibStub("AceConfigRegistry-3.0"):NotifyChange("CoolDown Buttons")
+end
 
 function CoolDownButtonsConfig:ShowFrameToMoveSavedCD(name)
     if not self.moveableframe then
         self:createMovableFrame()
     end
 	self.moveableframe:Show() 
+	self.moveableframe.cooldown.textFrame.text:Show()
     self.moveableframe:ClearAllPoints() 
 	self.moveableframe:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", db.saveToPos[name].pos.x, db.saveToPos[name].pos.y) 
     local items = options.args.savetopos.args.items.args
@@ -1005,6 +1086,7 @@ function CoolDownButtonsConfig:ShowFrameToMoveSavedCD(name)
 end
 function CoolDownButtonsConfig:HideFrameToMoveSavedCD(name)
 	self.moveableframe:Hide()
+	self.moveableframe.cooldown.textFrame.text:Hide()
     
     db.saveToPos[name].pos.x = tonumber(string.format("%.3f", self.moveableframe:GetLeft()))
     db.saveToPos[name].pos.y = tonumber(string.format("%.3f", self.moveableframe:GetBottom()))
@@ -1027,7 +1109,6 @@ end
 
 function CoolDownButtonsConfig:CoolDownButtonsConfigChanged()
 	db = CoolDownButtons.db.profile
-    CoolDownButtons:ResetCooldowns()
 end
 
 function CoolDownButtonsConfig:CHANNEL_UI_UPDATE()
@@ -1053,24 +1134,6 @@ function CoolDownButtonsConfig:createMovableFrame()
     self.moveableframe:RegisterForClicks("AnyDown")
     self.moveableframe:SetScript("OnDragStart", function(self) self:StartMoving() end)
     self.moveableframe:SetScript("OnDragStop",  function(self) self:StopMovingOrSizing(); end)
+    self.moveableframe:SetFrameStrata("HIGH")
     self.moveableframe:Hide()
-end
-
-
-
-
--- http://www.wowwiki.com/HOWTO:_Do_Tricks_With_Tables#Iterate_with_sorted_keys
-function sortedpairs(t,comparator)
-	local sortedKeys = {};
-	table.foreach(t, function(k,v) table.insert(sortedKeys,k) end);
-	table.sort(sortedKeys,comparator);
-	local i = 0;
-	local function _f(_s,_v)
-		i = i + 1;
-		local k = sortedKeys[i];
-		if (k) then
-			return k,t[k];
-		end
-	end
-	return _f,nil,nil;
 end

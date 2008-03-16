@@ -42,6 +42,16 @@ L["Button scaling, this lets you enlarge or shrink your Buttons."] = true
 L["Button Alpha"] = true
 L["Icon alpha value, this lets you change the transparency of the Button."] = true
 
+
+L["Test Mode"] = true
+L["Cancle Test"] = true
+L["Time to show Buttons"] = true
+L["Test All"] = true
+L["Test Spells"] = true
+L["Test Items"] = true
+L["Test expiring Soon"] = true
+L["Test Single"] = true
+
 L["Posting Settings"] = true
 L["Post to:"] = true
 L["Enable Chatpost"] = true
