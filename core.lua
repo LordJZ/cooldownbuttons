@@ -352,10 +352,8 @@ function CoolDownButtons_UPDATE()
                 frame:GetNormalTexture():SetWidth(75 * scale)
                 frame:GetNormalTexture():SetHeight(75 * scale)
 
-
                 cooldownframe.textFrame.text:ClearAllPoints()
                 cooldownframe.textFrame.text:SetFont(LSM:Fetch("font", CoolDownButtons.db.profile.font), 15 * textScale, "OUTLINE")
-
 
                 if textDirection == "left" then
                     cooldownframe.textFrame.text:SetPoint("CENTER", cooldownframe.textFrame, "CENTER", - (textPadding * scale), 0)
@@ -457,7 +455,12 @@ function CoolDownButtons:SPELL_UPDATE_COOLDOWN()
                         if spellName == L["Spellgroup: Traps"] then
                             cooldowns[spellName].texture = "Interface\\Icons\\Spell_Frost_ChainsOfIce"
                         end
-                        --self:Print("Spell: "..spellName.." assigned to button: "..freeindex)
+                        --[[ for 2.4
+                        if spellName == L["Spellgroup: Shocks"] or spellName == L["Spellgroup: Traps"] then
+                            cooldowns[spellName].texture = self.spellgroups[spellName].texture
+                        end
+                        --]]
+                        
                         self.cdbtns[freeindex].used = true
                         if saved ~= 1 then
                             self.cdbtns[freeindex].usedInBar = "spells"
@@ -604,7 +607,6 @@ function CoolDownButtons:PLAYER_ENTERING_WORLD()
 end
 
 function CoolDownButtons:myGetSpellName(index)
-    --GetSpellInfo(id)
     local spell, rank = GetSpellName(index, BOOKTYPE_SPELL)
     -- Shaman shocks
     if spell == L["Earth Shock"] or spell == L["Flame Shock"] or spell == L["Frost Shock"] then
@@ -618,6 +620,31 @@ function CoolDownButtons:myGetSpellName(index)
 
     return spell, rank
 end
+
+--[[ for 2.4
+function CoolDownButtons:myGetSpellName(index)
+    local spell, rank = GetSpellName(index, BOOKTYPE_SPELL)
+    local spellLink   = GetSpellLink(spell)
+    local spellID     = select(3, string.find(spellLink, "spell:(%d+)"))
+    local group       = select(2, LibStub("LibPeriodicTable-3.1"):ItemInSet(spellID, "CDB_Spellgroup"))
+    local groupKey    = nil
+    
+    for key, value in pairs(self.spellgroups) do
+        if type(value) == "table" then
+            for _, curid in pairs(value.ids) do
+                if curid == group then
+                    groupKey = key
+                end
+            end
+        end
+    end
+    if groupKey then
+        return self.spellgroups[groupKey].name, rank
+    else
+        return spell, rank
+    end
+end
+--]]
 
 function CoolDownButtons:checkSpell(index)
     for i = 1, self.numcooldownbuttons do
