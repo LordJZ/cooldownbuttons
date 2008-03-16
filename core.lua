@@ -36,6 +36,22 @@ CoolDownButtonAnchor2.texture = CoolDownButtonAnchor2:CreateTexture(nil,"OVERLAY
 CoolDownButtonAnchor2.texture:SetTexture("Interface\\Icons\\Spell_Nature_WispSplode")
 CoolDownButtonAnchor2.texture:SetAllPoints(CoolDownButtonAnchor2)
 
+CoolDownButtonAnchor3 = CreateFrame("Frame", "CoolDownButtonAnchor3", UIParent)
+CoolDownButtonAnchor3:SetWidth(20);      CoolDownButtonAnchor3:SetHeight(20)
+CoolDownButtonAnchor3:SetMovable(true);  CoolDownButtonAnchor3:EnableMouse(true); 
+CoolDownButtonAnchor3:SetScript("OnMouseDown", function(self) self:StartMoving()         end)
+CoolDownButtonAnchor3:SetScript("OnMouseUp",   function(self) self:StopMovingOrSizing(); CoolDownButtons:SaveAnchorPos(self) end)
+CoolDownButtonAnchor3:SetScript("OnDragStop",  function(self) self:StopMovingOrSizing(); end)
+CoolDownButtonAnchor3:SetScript("OnLeave",     function() GameTooltip:Hide()                         end)
+CoolDownButtonAnchor3:SetScript("OnEnter",     function() GameTooltip:SetOwner(this, "ANCHOR_CURSOR"); GameTooltip:SetText(L["Click to Move"]) end)
+CoolDownButtonAnchor3:SetClampedToScreen(true)
+CoolDownButtonAnchor3:SetFrameStrata("HIGH")
+CoolDownButtonAnchor3.what = "soon"
+
+CoolDownButtonAnchor3.texture = CoolDownButtonAnchor3:CreateTexture(nil,"OVERLAY")
+CoolDownButtonAnchor3.texture:SetTexture("Interface\\Icons\\Spell_Nature_WispSplode")
+CoolDownButtonAnchor3.texture:SetAllPoints(CoolDownButtonAnchor3)
+
 local cooldowns = {}
 
 local defaults = {
@@ -45,44 +61,60 @@ local defaults = {
         alpha       = 1,
 		direction   = "right",
         maxbuttons  = 10,
-        showAnchor  = true,
+        showTime    = true,
         splitRows   = false,
+        splitSoon   = true,
         anchors     = {
             spells = {
-                show = true,
-                maxbuttons  = 10,
-                scale       = 0.85,
-                alpha       = 1,
-                direction   = "right",
-                pos     = { x = UIParent:GetWidth() / 2, y = UIParent:GetHeight() / 2, },
-                textSettings = false,
-                textSide = "down",
-                textScale = 0.85,
-                textAlpha = 1,
+                show          = true,
+                maxbuttons    = 10,
+                scale         = 0.85,
+                alpha         = 1,
+                direction     = "right",
+                pos           = { x = 100, y = 300, },
+                textSettings  = false,
+                textSide      = "down",
+                textScale     = 0.85,
+                textAlpha     = 1,
                 buttonPadding = 50,
                 textPadding   = 33,
             },
             items = {
-                show = false,
-                maxbuttons  = 10,
-                scale       = 0.85,
-                alpha       = 1,
-                direction   = "right",
-                pos     = { x = UIParent:GetWidth() / 2, y = (UIParent:GetHeight() / 2) - 100, },
-                textSettings = false,
-                textSide = "down",
-                textScale = 0.85,
-                textAlpha = 1,
+                show          = true,
+                maxbuttons    = 10,
+                scale         = 0.85,
+                alpha         = 1,
+                direction     = "right",
+                pos           = { x = 100, y = 250, },
+                textSettings  = false,
+                textSide      = "down",
+                textScale     = 0.85,
+                textAlpha     = 1,
+                buttonPadding = 50,
+                textPadding   = 33,
+            },
+            soon = {
+                show          = true,
+                timeToSplit   = 5,
+                maxbuttons    = 10,
+                scale         = 0.85,
+                alpha         = 1,
+                direction     = "right",
+                pos           = { x = 100, y = 350, },
+                textSettings  = false,
+                textSide      = "down",
+                textScale     = 0.85,
+                textAlpha     = 1,
                 buttonPadding = 50,
                 textPadding   = 33,
             },
             single = {
-                scale       = 0.85,
-                alpha       = 1,
-                textSettings = false,
-                textSide = "down",
-                textScale = 0.85,
-                textAlpha = 1,
+                scale         = 0.85,
+                alpha         = 1,
+                textSettings  = false,
+                textSide      = "down",
+                textScale     = 0.85,
+                textAlpha     = 1,
                 buttonPadding =  0,
                 textPadding   = 33,
             },
@@ -130,8 +162,10 @@ function CoolDownButtons:OnEnable()
     
     CoolDownButtonAnchor:ClearAllPoints()
     CoolDownButtonAnchor2:ClearAllPoints()
+    CoolDownButtonAnchor3:ClearAllPoints()
     CoolDownButtonAnchor:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", self.db.profile.anchors.spells.pos.x, self.db.profile.anchors.spells.pos.y)
     CoolDownButtonAnchor2:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", self.db.profile.anchors.items.pos.x, self.db.profile.anchors.items.pos.y)
+    CoolDownButtonAnchor3:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", self.db.profile.anchors.soon.pos.x, self.db.profile.anchors.soon.pos.y)
     
     
     local frame = CreateFrame("Frame"); frame:SetScript("OnUpdate", CoolDownButtons_UPDATE)
@@ -152,6 +186,18 @@ function CoolDownButtons:CoolDownButtonsConfigChanged()
     else
         CoolDownButtonAnchor2:Hide()
     end	
+    if self.db.profile.anchors.soon.show and self.db.profile.splitSoon then
+        CoolDownButtonAnchor3:Show()
+    else
+        CoolDownButtonAnchor3:Hide()
+    end	
+    for i = 1, self.numcooldownbuttons do
+        if self.db.profile.chatPost then
+            self.cdbtns[i]:EnableMouse(true)
+        else
+            self.cdbtns[i]:EnableMouse(false)
+        end
+    end
 end
 
 function CoolDownButtons_UPDATE()
@@ -247,7 +293,7 @@ function CoolDownButtons_UPDATE()
                 -- set position, scaling and alpha :)
                 local order = cooldown["order"] - 1
                 local forBar = frame.usedInBar
-                if not CoolDownButtons.db.profile.splitRows and forBar ~= "single" then
+                if not CoolDownButtons.db.profile.splitRows and forBar ~= "single" and not CoolDownButtons.db.profile.splitSoon then
                     forBar = "spells"
                 end
                 local scale = CoolDownButtons.db.profile.anchors[forBar].scale
@@ -295,12 +341,17 @@ function CoolDownButtons_UPDATE()
                 else
                     local anchorTo = CoolDownButtonAnchor
                     if CoolDownButtons.db.profile.splitRows then
-                        if cooldown.cdtype == "spell" then
+                        if forBar == "spells" then
                             anchorTo = CoolDownButtonAnchor
-                        elseif cooldown.cdtype == "eq_item" or cooldown.cdtype == "bag_item" then
+                        elseif forBar == "items" then
                             anchorTo = CoolDownButtonAnchor2
+                        elseif forBar == "soon" then
+                            anchorTo = CoolDownButtonAnchor3
                         end
                     end 
+                    if CoolDownButtons.db.profile.splitSoon and forBar == "soon" then
+                        anchorTo = CoolDownButtonAnchor3
+                    end
                     if direction == "left" then
                         frame:SetPoint("CENTER", anchorTo, "CENTER", - (buttonPadding * order * scale), 0)
                     elseif direction == "right" then
@@ -314,6 +365,9 @@ function CoolDownButtons_UPDATE()
 
                 frame:SetAlpha(alpha)               
                 cooldownframe.textFrame:SetAlpha(textAlpha)
+                if not CoolDownButtons.db.profile.showTime then
+                    cooldownframe.textFrame.text:Hide()
+                end
             end
         end
     end
@@ -606,11 +660,7 @@ function CoolDownButtons:createButton(i, justMove)
                                         GameTooltip:SetOwner(this, "ANCHOR_CURSOR");
                                         for key, cooldown in pairs(cooldowns) do
                                             if type(cooldown) == "table" and cooldown["buttonID"] == self.id then
-                                                if CoolDownButtons.db.profile.chatPost then
-                                                    GameTooltip:SetText(cooldown["name"]..": Click to Post Cooldown")
-                                                else
-                                                    GameTooltip:SetText(cooldown["name"])
-                                                end
+                                                GameTooltip:SetText(L["Click to Post Cooldown"])
                                                 break
                                             end
                                         end
@@ -760,8 +810,16 @@ end
 function CoolDownButtons:sortButtons()
     local spells = 1
     local items = 1
+    local soon = 1
+    local timeToSplit = self.db.profile.anchors.soon.timeToSplit
     for key, cooldown in pairs(cooldowns) do
         if type(cooldown) == "table" and cooldown["saved"] ~= 1 then
+            local remaining = ceil(cooldown["start"] + cooldown["duration"] - GetTime())
+            if self.db.profile.splitSoon and remaining < timeToSplit then
+                self.cdbtns[cooldown["buttonID"]].usedInBar = "soon"
+                cooldown["order"] = soon
+                soon = soon + 1                
+            end
             if self.db.profile.splitRows then
                 if cooldown.cdtype == "spell" then
                     cooldown["order"] = spells

@@ -16,6 +16,8 @@ L["Immolation Trap"] = true
 L["Snake Trap"] = true
 L["Explosive Trap"] = true
 
+L["Click to Post Cooldown"] = true
+
 
 -- config.lua
 L["Display Settings"] = true
@@ -24,7 +26,9 @@ L["Direction from Anchor"] = true
 
 
 L["Split Cooldowns"] = true
-L["Toggle showing Items and Spells as own Cooldown rows or not."] = true
+L["Toggle showing Item and Spell Cooldowns as own rows or not."] = true
+L["Split expiring Cooldown"] = true
+L["Toggle showing Item and Spell Cooldowns in an additional row if they are expiring soon."] = true
 L["Spell Cooldowns"] = true
 L["Item Cooldowns"] = true
 L["Seperated Cooldowns"] = true
@@ -62,6 +66,8 @@ L["Below"] = true
 L["Font"] = true
 
 L["Use Text Settings"] = true
+L["Show Time"] = true
+L["Toggle showing Cooldown Time at the Buttons."] = true
 L["Toggle using extra Text Settings."] = true
 L["Text Side"] = true
 L["Text Side from Button"] = true
@@ -73,6 +79,9 @@ L["Button Padding"] = true
 L["Space Between Buttons."] = true
 L["Text Distance"] = true
 L["Distance of Text to Button."] = true
+L["Show X seconds before ready"] = true
+L["Sets the time in seconds when the Cooldown should switch to this bar."] = true
+L["Expiring soon"] = true
 
 L["Default Chatframe"] = true
 L["Say"]     = true
