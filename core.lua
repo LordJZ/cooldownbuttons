@@ -598,22 +598,13 @@ function CoolDownButtons:getItemGroupTexture(itemgroup)
 end
 
 function CoolDownButtons:PLAYER_ENTERING_WORLD()
-    for key, cooldown in pairs(cooldowns) do
-        if type(cooldown) == "table" then
-            cooldown = nil
-        end
-    end
-    cooldowns = nil
-    cooldowns = {}
-    for i = 1, self.numcooldownbuttons do
-        self.cdbtns[i]:Hide()
-        self.cdbtns[i].used = false
-    end
+    self:ResetCooldowns()
     self:SPELL_UPDATE_COOLDOWN()
     self:BAG_UPDATE_COOLDOWN()
 end
 
 function CoolDownButtons:myGetSpellName(index)
+    --GetSpellInfo(id)
     local spell, rank = GetSpellName(index, BOOKTYPE_SPELL)
     -- Shaman shocks
     if spell == L["Earth Shock"] or spell == L["Flame Shock"] or spell == L["Frost Shock"] then
@@ -854,8 +845,7 @@ function CoolDownButtons:sortButtons()
     local items = 1
     local soon = 1
     local timeToSplit = self.db.profile.anchors.soon.timeToSplit
-    --for key, cooldown in pairs(cooldowns) do
-    for key, cooldown in sortedpairs(cooldowns) do
+    for key, cooldown in pairs(cooldowns) do
         if type(cooldown) == "table" and cooldown["saved"] ~= 1 then
             local remaining = ceil(cooldown["start"] + cooldown["duration"] - GetTime())
             if self.db.profile.splitSoon and remaining < timeToSplit then
@@ -960,8 +950,9 @@ end
 
 
 -- http://www.wowwiki.com/HOWTO:_Do_Tricks_With_Tables#Iterate_with_sorted_keys
+
 function sortedpairs(t,comparator)
-	local sortedKeys = {};
+    local sortedKeys = {};
 	table.foreach(t, function(k,v) table.insert(sortedKeys,k) end);
 	table.sort(sortedKeys,comparator);
 	local i = 0;
