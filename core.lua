@@ -55,6 +55,12 @@ local defaults = {
                 alpha       = 1,
                 direction   = "right",
                 pos     = { x = UIParent:GetWidth() / 2, y = UIParent:GetHeight() / 2, },
+                textSettings = false,
+                textSide = "down",
+                textScale = 0.85,
+                textAlpha = 1,
+                buttonPadding = 50,
+                textPadding   = 33,
             },
             items = {
                 show = false,
@@ -63,10 +69,22 @@ local defaults = {
                 alpha       = 1,
                 direction   = "right",
                 pos     = { x = UIParent:GetWidth() / 2, y = (UIParent:GetHeight() / 2) - 100, },
+                textSettings = false,
+                textSide = "down",
+                textScale = 0.85,
+                textAlpha = 1,
+                buttonPadding = 50,
+                textPadding   = 33,
             },
             single = {
                 scale       = 0.85,
                 alpha       = 1,
+                textSettings = false,
+                textSide = "down",
+                textScale = 0.85,
+                textAlpha = 1,
+                buttonPadding =  0,
+                textPadding   = 33,
             },
         }, 
         chatPost    = false,
@@ -140,15 +158,10 @@ function CoolDownButtons_UPDATE()
     for key, cooldown in pairs(cooldowns) do
         if type(cooldown) == "table" then
             local frame = CoolDownButtons.cdbtns[cooldown["buttonID"]]
-            local kids = { frame:GetChildren() };
-            local cooldownframe
-            for _, child in ipairs(kids) do
-                if child:GetObjectType() == "Cooldown" then
-                    cooldownframe = child
-                    break
-                end
-            end
+            local cooldownframe = frame.cooldown
+
             frame:Show()
+            cooldownframe.textFrame.text:Show()
             if cooldown["cdtype"] == "spell" then -- spell
                 if (GetSpellCooldown(cooldown["id"], BOOKTYPE_SPELL) ~= nil and GetSpellCooldown(cooldown["id"], BOOKTYPE_SPELL) > 0) then
                     local time = ceil(cooldown["start"] + cooldown["duration"] - GetTime())
@@ -168,6 +181,7 @@ function CoolDownButtons_UPDATE()
                     cooldownframe:SetCooldown(cooldown["start"], cooldown["duration"])
                 else
                     frame:Hide()
+                    cooldownframe.textFrame.text:Hide()
                     cooldowns[key] = nil
                     frame.used = false
                     frame.usedInBar = ""
@@ -193,6 +207,7 @@ function CoolDownButtons_UPDATE()
                     cooldownframe:SetCooldown(cooldown["start"], cooldown["duration"])
                 else
                     frame:Hide()
+                    cooldownframe.textFrame.text:Hide()
                     cooldowns[key] = nil
                     frame.used = false
                     frame.usedInBar = ""
@@ -221,6 +236,7 @@ function CoolDownButtons_UPDATE()
                     end
                 else
                     frame:Hide()
+                    cooldownframe.textFrame.text:Hide()
                     cooldowns[key] = nil
                     frame.used = false
                     frame.usedInBar = ""
@@ -237,13 +253,38 @@ function CoolDownButtons_UPDATE()
                 local scale = CoolDownButtons.db.profile.anchors[forBar].scale
                 local alpha = CoolDownButtons.db.profile.anchors[forBar].alpha
                 local direction = CoolDownButtons.db.profile.anchors[forBar].direction
+                local buttonPadding = CoolDownButtons.db.profile.anchors[forBar].buttonPadding
+
+                local textScale = CoolDownButtons.db.profile.anchors[forBar].textScale
+                local textAlpha = CoolDownButtons.db.profile.anchors[forBar].textAlpha
+                local textDirection = CoolDownButtons.db.profile.anchors[forBar].textSide
+                local textPadding = CoolDownButtons.db.profile.anchors[forBar].textPadding                
+
+                if not CoolDownButtons.db.profile.anchors[forBar].textSettings then
+                    textScale     = scale
+                    textAlpha     = alpha
+                    textDirection = "down"
+                end
 
                 frame:SetWidth (45 * scale)
                 frame:SetHeight(45 * scale)
                 frame:GetNormalTexture():SetWidth(75 * scale)
                 frame:GetNormalTexture():SetHeight(75 * scale)
-                cooldownframe.textFrame.text:SetPoint("CENTER", cooldownframe.textFrame, "CENTER", 0, -33 * scale)
-                cooldownframe.textFrame.text:SetFont(LSM:Fetch("font", CoolDownButtons.db.profile.font), 15 * scale, "OUTLINE")
+
+
+                cooldownframe.textFrame.text:ClearAllPoints()
+                cooldownframe.textFrame.text:SetFont(LSM:Fetch("font", CoolDownButtons.db.profile.font), 15 * textScale, "OUTLINE")
+
+
+                if textDirection == "left" then
+                    cooldownframe.textFrame.text:SetPoint("CENTER", cooldownframe.textFrame, "CENTER", - (textPadding * scale), 0)
+                elseif textDirection == "right" then
+                    cooldownframe.textFrame.text:SetPoint("CENTER", cooldownframe.textFrame, "CENTER", (textPadding * scale), 0)
+                elseif textDirection == "up" then
+                    cooldownframe.textFrame.text:SetPoint("CENTER", cooldownframe.textFrame, "CENTER", 0, (textPadding * scale))
+                elseif textDirection == "down" then 
+                    cooldownframe.textFrame.text:SetPoint("CENTER", cooldownframe.textFrame, "CENTER", 0, - (textPadding * scale))
+                end
 
                 frame:ClearAllPoints()
 
@@ -261,18 +302,18 @@ function CoolDownButtons_UPDATE()
                         end
                     end 
                     if direction == "left" then
-                        frame:SetPoint("CENTER", anchorTo, "CENTER", - (50 * order * scale), 0)
+                        frame:SetPoint("CENTER", anchorTo, "CENTER", - (buttonPadding * order * scale), 0)
                     elseif direction == "right" then
-                        frame:SetPoint("CENTER", anchorTo, "CENTER", (50 * order * scale), 0)
+                        frame:SetPoint("CENTER", anchorTo, "CENTER", (buttonPadding * order * scale), 0)
                     elseif direction == "up" then
-                        frame:SetPoint("CENTER", anchorTo, "CENTER", 0, (65 * order * scale))
+                        frame:SetPoint("CENTER", anchorTo, "CENTER", 0, (buttonPadding * order * scale))
                     elseif direction == "down" then 
-                        frame:SetPoint("CENTER", anchorTo, "CENTER", 0, - (65 * order * scale))
+                        frame:SetPoint("CENTER", anchorTo, "CENTER", 0, - (buttonPadding * order * scale))
                     end
                 end
 
-                frame:SetAlpha(alpha)
-                cooldownframe.textFrame:SetAlpha(alpha)
+                frame:SetAlpha(alpha)               
+                cooldownframe.textFrame:SetAlpha(textAlpha)
             end
         end
     end
@@ -675,15 +716,19 @@ function CoolDownButtons:createButton(i, justMove)
         end
     end
     
-    cooldown.textFrame = CreateFrame("Frame", "CoolDownButton"..i.."CooldownText", cooldown:GetParent())
-    cooldown.textFrame:SetAllPoints(button)
-    cooldown.textFrame:SetFrameLevel(cooldown.textFrame:GetFrameLevel() + 1)
-    cooldown.textFrame.text = cooldown.textFrame:CreateFontString(nil, "OVERLAY")
-    cooldown.textFrame.text:SetPoint("CENTER", cooldown.textFrame, "CENTER", 0, -33 * self.db.profile.scale)
-    cooldown.textFrame.text:SetFont(LSM:Fetch("font", self.db.profile.font), 15 * self.db.profile.scale, "OUTLINE")
-    cooldown.textFrame.text:SetTextColor(10,10,10)
-    cooldown.textFrame.text:SetText("00:00")
-    cooldown.textFrame:Show()
+    button.cooldown = cooldown
+    button.cooldown.textFrame = CreateFrame("Frame", "CoolDownButton"..i.."CooldownText", cooldown:GetParent())
+    button.cooldown.textFrame:SetAllPoints(button)
+    button.cooldown.textFrame:SetFrameLevel(cooldown.textFrame:GetFrameLevel() + 1)
+    button.cooldown.textFrame.text = cooldown.textFrame:CreateFontString(nil, "OVERLAY")
+    button.cooldown.textFrame.text:SetPoint("CENTER", cooldown.textFrame, "CENTER", 0, -33 * self.db.profile.scale)
+    button.cooldown.textFrame.text:SetFont(LSM:Fetch("font", self.db.profile.font), 15 * self.db.profile.scale, "OUTLINE")
+    button.cooldown.textFrame.text:SetTextColor(10,10,10)
+    button.cooldown.textFrame.text:SetText("00:00")
+    button.cooldown.textFrame:Show()
+    
+    -- Unset Parent to allow a custom Alpha for text.
+    button.cooldown.textFrame:SetParent(UIParent) 
 
     button:Hide()
     return button
@@ -704,6 +749,7 @@ function  CoolDownButtons:ResetCooldowns()
     cooldowns = {}  
     for key, button in pairs(self.cdbtns) do
         button:Hide()
+        button.cooldown.textFrame.text:Hide()
         button.used = false
         button.usedInBar = ""
     end

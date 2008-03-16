@@ -57,7 +57,22 @@ L["Down"]  = true
 L["Left"]  = true
 L["Right"] = true
 
+L["Above"] = true 
+L["Below"] = true
 L["Font"] = true
+
+L["Use Text Settings"] = true
+L["Toggle using extra Text Settings."] = true
+L["Text Side"] = true
+L["Text Side from Button"] = true
+L["Text Scale"] = true
+L["Text scaling, this lets you enlarge or shrink your Text."] = true
+L["Text Alpha"] = true
+L["Text alpha value, this lets you change the transparency of the Text."] = true
+L["Button Padding"] = true
+L["Space Between Buttons."] = true
+L["Text Distance"] = true
+L["Distance of Text to Button."] = true
 
 L["Default Chatframe"] = true
 L["Say"]     = true
