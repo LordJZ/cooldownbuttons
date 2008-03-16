@@ -44,7 +44,7 @@ L["Icon alpha value, this lets you change the transparency of the Button."] = "�
 
 
 L["Test Mode"] = "테스트 모드"
-L["Cancle Test"] = "테스트 취소"
+L["Cancel Test"] = "테스트 취소"
 L["Time to show Buttons"] = "버튼을 표시할 시간"
 L["Test All"] = "모두 테스트"
 L["Test Spells"] = "주문 테스트"

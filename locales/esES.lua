@@ -44,7 +44,7 @@ L["Icon alpha value, this lets you change the transparency of the Button."] = tr
 
 
 L["Test Mode"] = true
-L["Cancle Test"] = true
+L["Cancel Test"] = true
 L["Time to show Buttons"] = true
 L["Test All"] = true
 L["Test Spells"] = true
