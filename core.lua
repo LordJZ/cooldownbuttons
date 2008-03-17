@@ -63,6 +63,7 @@ local defaults = {
 		direction   = "right",
         maxbuttons  = 10,
         showTime    = true,
+        showCoolDownSpiral = true,
         splitRows   = false,
         splitSoon   = false,
         anchors     = {
@@ -227,6 +228,7 @@ function CoolDownButtons_UPDATE()
             local cooldownframe = frame.cooldown
 
             frame:Show()
+            cooldownframe:Show()
             cooldownframe.textFrame.text:Show()
             if not CoolDownButtons.testMode then
                 if cooldown["cdtype"] == "spell" then -- spell
@@ -432,6 +434,9 @@ function CoolDownButtons_UPDATE()
                 cooldownframe.textFrame:SetAlpha(textAlpha)
                 if not CoolDownButtons.db.profile.showTime then
                     cooldownframe.textFrame.text:Hide()
+                end
+                if not CoolDownButtons.db.profile.showCoolDownSpiral then
+                    cooldownframe:Hide()
                 end
             end
         end

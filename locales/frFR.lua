@@ -26,6 +26,8 @@ L["Direction from Anchor"] = true
 
 L["Font Color"] = true
 L["Color of the CoolDown Timer Font."] = true
+L["Center from Anchor"] = true
+L["Toggle Anchor to be the Center of the bar."] = true
 
 
 L["Split Item Cooldowns"] = true
@@ -33,6 +35,8 @@ L["Toggle showing Item and Spell Cooldowns as own rows or not."] = true
 L["Split expiring Cooldown"] = true
 L["Toggle showing Item and Spell Cooldowns in an additional row if they are expiring soon."] = true
 L["Spell Cooldowns"] = true
+L["Show CoolDown Spiral"] = true
+L["Toggle showing CoolDown Spiral on the Buttons."] = true
 L["Item Cooldowns"] = true
 L["Seperated Cooldowns"] = true
 

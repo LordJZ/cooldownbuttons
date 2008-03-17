@@ -28,6 +28,8 @@ L["Font Color"] = "글꼴 색상"
 L["Color of the CoolDown Timer Font."] = "재사용 대기시간의 글꼴 색상입니다."
 L["Center from Anchor"] = true
 L["Toggle Anchor to be the Center of the bar."] = true
+L["Show CoolDown Spiral"] = true
+L["Toggle showing CoolDown Spiral on the Buttons."] = true
 
 
 L["Split Item Cooldowns"] = "아이템 재사용 대기시간 사용"
