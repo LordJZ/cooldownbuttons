@@ -30,7 +30,8 @@ L["Center from Anchor"] = "앵커를 중앙"
 L["Toggle Anchor to be the Center of the bar."] = "바의 중앙에 앵커를 둡니다."
 L["Show CoolDown Spiral"] = "나선형 재사용 표시 보기"
 L["Toggle showing CoolDown Spiral on the Buttons."] = "버튼의 나선형 재사용 표시를 보여줍니다."
-
+L["Use Pulse effect"] = "맥박 효과 사용"
+L["Toggle Pulse effect."] = "맥박 효과를 사용합니다."
 
 L["Split Item Cooldowns"] = "아이템 재사용 대기시간 사용"
 L["Toggle showing Item and Spell Cooldowns as own rows or not."] = "자신의 주문이 아닌것과 아이템의 재사용 대기시간을 추가된 열에 보여줍니다."
