@@ -172,6 +172,11 @@ end
 function CoolDownButtons:SaveAnchorPos(anchor)
     self.db.profile.anchors[anchor.what].pos.x = anchor:GetLeft()
     self.db.profile.anchors[anchor.what].pos.y = anchor:GetBottom()
+    
+    -- I'm a Haxx0r :D
+    -- CoolDownButtonsConfig:UpdateConfig();
+    --  ^- this shit wont work so i use this -v
+    LibStub("AceConfigRegistry-3.0"):NotifyChange("CoolDown Buttons") -- It causes a short flash but it works :/
 end
 function CoolDownButtons:CoolDownButtonsConfigChanged()
     if self.db.profile.anchors.spells.show then
