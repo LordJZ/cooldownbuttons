@@ -52,7 +52,6 @@ options.args.display = {
             desc = L["Toggle showing Cooldown Time at the Buttons."],
             type = "toggle",
             arg = "showTime",
-            width= "full",
         },
         showCoolDownSpiral = {
             order = 21,
@@ -60,7 +59,6 @@ options.args.display = {
             desc = L["Toggle showing CoolDown Spiral on the Buttons."],
             type = "toggle",
             arg = "showCoolDownSpiral",
-            width= "full",
         },
         fontColor = {
             order = 30,
