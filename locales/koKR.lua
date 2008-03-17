@@ -34,7 +34,7 @@ L["Toggle showing CoolDown Spiral on the Buttons."] = "버튼의 나선형 재�
 
 L["Split Item Cooldowns"] = "아이템 재사용 대기시간 사용"
 L["Toggle showing Item and Spell Cooldowns as own rows or not."] = "자신의 주문이 아닌것과 아이템의 재사용 대기시간을 추가된 열에 보여줍니다."
-L["Split expiring Cooldown"] = "잠시후 완료 사용"
+L["Split expiring Cooldown"] = "끝나가는 재사용 대기시간 사용"
 L["Toggle showing Item and Spell Cooldowns in an additional row if they are expiring soon."] = "잠시후 완료될 경우의 아이템과 주문의 재사용 대기시간을 추가된 열에 보여줍니다."
 L["Spell Cooldowns"] = "주문 재사용 대기시간"
 L["Item Cooldowns"] = "아이템 재사용 대기시간"
@@ -99,7 +99,7 @@ L["Text Distance"] = "텍스트 간격"
 L["Distance of Text to Button."] = "버튼과 텍스트의 간격을 설정합니다."
 L["Show X seconds before ready"] = "준비되기 X 초전에 보기"
 L["Sets the time in seconds when the Cooldown should switch to this bar."] = "재사용 대기시간이 설정한 시간에 맞추어 잠시후 완료 버튼으로 전환됩니다."
-L["Expiring Cooldowns"] = "잠시후 완료"
+L["Expiring Cooldowns"] = "끝나가는 재사용 대기시간"
 
 L["Default Chatframe"] = "기본 대화창"
 L["Say"]     = "일반"
