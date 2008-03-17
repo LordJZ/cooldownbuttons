@@ -13,7 +13,7 @@ CoolDownButtonAnchor:SetScript("OnDragStop",  function(self) self:StopMovingOrSi
 CoolDownButtonAnchor:SetScript("OnLeave",     function() GameTooltip:Hide()                         end)
 CoolDownButtonAnchor:SetScript("OnEnter",     function() GameTooltip:SetOwner(this, "ANCHOR_CURSOR"); GameTooltip:SetText(L["Click to Move"]) end)
 CoolDownButtonAnchor:SetClampedToScreen(true)
-CoolDownButtonAnchor:SetFrameStrata("HIGH")
+CoolDownButtonAnchor:SetFrameStrata("DIALOG")
 CoolDownButtonAnchor.what = "spells"
 
 CoolDownButtonAnchor.texture = CoolDownButtonAnchor:CreateTexture(nil,"OVERLAY")
@@ -29,7 +29,7 @@ CoolDownButtonAnchor2:SetScript("OnDragStop",  function(self) self:StopMovingOrS
 CoolDownButtonAnchor2:SetScript("OnLeave",     function() GameTooltip:Hide()                         end)
 CoolDownButtonAnchor2:SetScript("OnEnter",     function() GameTooltip:SetOwner(this, "ANCHOR_CURSOR"); GameTooltip:SetText(L["Click to Move"]) end)
 CoolDownButtonAnchor2:SetClampedToScreen(true)
-CoolDownButtonAnchor2:SetFrameStrata("HIGH")
+CoolDownButtonAnchor2:SetFrameStrata("DIALOG")
 CoolDownButtonAnchor2.what = "items"
 
 CoolDownButtonAnchor2.texture = CoolDownButtonAnchor2:CreateTexture(nil,"OVERLAY")
@@ -45,7 +45,7 @@ CoolDownButtonAnchor3:SetScript("OnDragStop",  function(self) self:StopMovingOrS
 CoolDownButtonAnchor3:SetScript("OnLeave",     function() GameTooltip:Hide()                         end)
 CoolDownButtonAnchor3:SetScript("OnEnter",     function() GameTooltip:SetOwner(this, "ANCHOR_CURSOR"); GameTooltip:SetText(L["Click to Move"]) end)
 CoolDownButtonAnchor3:SetClampedToScreen(true)
-CoolDownButtonAnchor3:SetFrameStrata("HIGH")
+CoolDownButtonAnchor3:SetFrameStrata("DIALOG")
 CoolDownButtonAnchor3.what = "soon"
 
 CoolDownButtonAnchor3.texture = CoolDownButtonAnchor3:CreateTexture(nil,"OVERLAY")
@@ -835,19 +835,16 @@ function CoolDownButtons:createButton(i, justMove)
     end
     
     button.cooldown = cooldown
-    button.cooldown.textFrame = CreateFrame("Frame", "CoolDownButton"..i.."CooldownText", cooldown:GetParent())
+    button.cooldown.textFrame = CreateFrame("Frame", "CoolDownButton"..i.."CooldownText", UIParent)
     button.cooldown.textFrame:SetAllPoints(button)
-    button.cooldown.textFrame:SetFrameLevel(cooldown.textFrame:GetFrameLevel() + 1)
     button.cooldown.textFrame.text = cooldown.textFrame:CreateFontString(nil, "OVERLAY")
     button.cooldown.textFrame.text:SetPoint("CENTER", cooldown.textFrame, "CENTER", 0, -33 * self.db.profile.scale)
     button.cooldown.textFrame.text:SetFont(LSM:Fetch("font", self.db.profile.font), 15 * self.db.profile.scale, "OUTLINE")
     button.cooldown.textFrame.text:SetTextColor(10,10,10)
     button.cooldown.textFrame.text:SetText("00:00")
+    button.cooldown.textFrame:SetFrameStrata("HIGH")
     button.cooldown.textFrame:Show()
     
-    -- Unset Parent to allow a custom Alpha for text.
-    button.cooldown.textFrame:SetParent(UIParent) 
-
     button:Hide()
     return button
 end
@@ -1003,7 +1000,7 @@ function sortedpairs(t,comparator)
 	return _f,nil,nil;
 end
 
-
+-- Debug function :)
 function cdb()
     for key, cooldown in sortedpairs(cooldowns) do
         local frame = CoolDownButtons.cdbtns[cooldown["buttonID"]]
