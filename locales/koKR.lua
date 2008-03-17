@@ -24,6 +24,9 @@ L["Display Settings"] = "디스플레이 설정"
 L["Direction"] = "방향"
 L["Direction from Anchor"] = "앵커에서 방향"
 
+L["Font Color"] = true
+L["Color of the CoolDown Timer Font."] = true
+
 
 L["Split Item Cooldowns"] = "아이템 재사용 대기시간 사용"
 L["Toggle showing Item and Spell Cooldowns as own rows or not."] = "자신의 주문이 아닌것과 아이템의 재사용 대기시간을 추가된 열에 보여줍니다."

@@ -24,6 +24,9 @@ L["Display Settings"] = true
 L["Direction"] = true
 L["Direction from Anchor"] = true
 
+L["Font Color"] = true
+L["Color of the CoolDown Timer Font."] = true
+
 
 L["Split Item Cooldowns"] = true
 L["Toggle showing Item and Spell Cooldowns as own rows or not."] = true

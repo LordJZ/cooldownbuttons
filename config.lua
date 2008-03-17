@@ -52,9 +52,30 @@ options.args.display = {
             desc = L["Toggle showing Cooldown Time at the Buttons."],
             type = "toggle",
             arg = "showTime",
+            width= "full",
+        },
+        fontColor = {
+            order = 3,
+            name = L["Font Color"],
+            desc = L["Color of the CoolDown Timer Font."],
+            type = "color",
+            hasAlpha = true,
+            arg = "fontColor",
+            get = function(info)
+                local t = db[info.arg]
+                return t.Red, t.Green, t.Blue, t.Alpha
+            end,
+            set = function(info, r, g, b, a)
+                local t = db[info.arg]
+                t.Red = r
+                t.Green = g
+                t.Blue = b
+                t.Alpha = a
+                CoolDownButtonsConfig:UpdateConfig()
+            end,
         },
         fontToUse = {
-            order = 3,
+            order = 4,
             name = L["Font"],
             desc = "",
             type = "select",
@@ -67,7 +88,7 @@ options.args.display = {
             type = "group",
             name = L["Spell Cooldowns"],
             guiInline = true,
-            order = 4,
+            order = 10,
             set = function( k, v ) db.anchors.spells[k.arg] = v; CoolDownButtonsConfig:UpdateConfig(); end,
             get = function( k ) return db.anchors.spells[k.arg] end,
             args = {
@@ -190,7 +211,7 @@ options.args.display = {
             type = "group",
             name = L["Item Cooldowns"],
             guiInline = true,
-            order = 5,
+            order = 11,
             hidden = function() return not db.splitRows end,
             set = function( k, v ) db.anchors.items[k.arg] = v; CoolDownButtonsConfig:UpdateConfig(); end,
             get = function( k ) return db.anchors.items[k.arg] end,
@@ -314,7 +335,7 @@ options.args.display = {
             type = "group",
             name = L["Expiring soon"],
             guiInline = true,
-            order = 6,
+            order = 12,
             hidden = function() return not db.splitSoon end,
             set = function( k, v ) db.anchors.soon[k.arg] = v; CoolDownButtonsConfig:UpdateConfig(); end,
             get = function( k ) return db.anchors.soon[k.arg] end,
@@ -451,7 +472,7 @@ options.args.display = {
             type = "group",
             name = L["Seperated Cooldowns"],
             guiInline = true,
-            order = 7,
+            order = 13,
             set = function( k, v ) db.anchors.single[k.arg] = v; CoolDownButtonsConfig:UpdateConfig(); end,
             get = function( k ) return db.anchors.single[k.arg] end,
             args = {

@@ -57,6 +57,7 @@ local cooldowns = {}
 local defaults = {
 	profile = {
         font        = "Skurri",
+        fontColor   = { Red = 1, Green = 1, Blue = 1, Alpha = 1, },
         scale       = 0.85,
         alpha       = 1,
 		direction   = "right",
@@ -407,6 +408,9 @@ function CoolDownButtons_UPDATE()
                         frame:SetPoint("CENTER", anchorTo, "CENTER", 0, - (buttonPadding * order * scale))
                     end
                 end
+                
+                local c  = CoolDownButtons.db.profile.fontColor
+                cooldownframe.textFrame.text:SetTextColor(c.Red, c.Green,  c.Blue,  c.Alpha)
 
                 frame:SetAlpha(alpha)               
                 cooldownframe.textFrame:SetAlpha(textAlpha)
@@ -834,13 +838,14 @@ function CoolDownButtons:createButton(i, justMove)
         end
     end
     
+    local c  = self.db.profile.fontColor
     button.cooldown = cooldown
     button.cooldown.textFrame = CreateFrame("Frame", "CoolDownButton"..i.."CooldownText", UIParent)
     button.cooldown.textFrame:SetAllPoints(button)
     button.cooldown.textFrame.text = cooldown.textFrame:CreateFontString(nil, "OVERLAY")
     button.cooldown.textFrame.text:SetPoint("CENTER", cooldown.textFrame, "CENTER", 0, -33 * self.db.profile.scale)
     button.cooldown.textFrame.text:SetFont(LSM:Fetch("font", self.db.profile.font), 15 * self.db.profile.scale, "OUTLINE")
-    button.cooldown.textFrame.text:SetTextColor(10,10,10)
+    button.cooldown.textFrame.text:SetTextColor(c.Red, c.Green,  c.Blue,  c.Alpha)
     button.cooldown.textFrame.text:SetText("00:00")
     button.cooldown.textFrame:SetFrameStrata("HIGH")
     button.cooldown.textFrame:Show()
@@ -984,7 +989,6 @@ end
 
 
 -- http://www.wowwiki.com/HOWTO:_Do_Tricks_With_Tables#Iterate_with_sorted_keys
-
 function sortedpairs(t,comparator)
     local sortedKeys = {};
 	table.foreach(t, function(k,v) table.insert(sortedKeys,k) end);
