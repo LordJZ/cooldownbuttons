@@ -54,7 +54,7 @@ options.args.display = {
             arg = "showTime",
             width= "full",
         },
-        showTime = {
+        showCoolDownSpiral = {
             order = 21,
             name = L["Show CoolDown Spiral"],
             desc = L["Toggle showing CoolDown Spiral on the Buttons."],
