@@ -1066,11 +1066,15 @@ end
 
 function CoolDownButtonsConfig:InitPositions(state)
 
-    options.args.savetopos.args.spells.args     = {}
-    options.args.savetopos.args.hidespells.args = {}
-    options.args.savetopos.args.items.args      = {}
-    options.args.savetopos.args.hideitems.args  = {}
-
+    local spells_table     = options.args.savetopos.args.spells.args
+    local hidespells_table = options.args.savetopos.args.hidespells.args
+    local items_table      = options.args.savetopos.args.items.args
+    local hideitems_table  = options.args.savetopos.args.hideitems.args
+    for k in pairs(spells_table)     do spells_table[k]     = nil; end
+    for k in pairs(hidespells_table) do hidespells_table[k] = nil; end
+    for k in pairs(items_table)      do spells_table[k]     = nil; end
+    for k in pairs(hideitems_table)  do spells_table[k]     = nil; end
+    
     local idx = 1
     for name, data in sortedpairs(db.saveToPos) do
         if type(data) == "table" then

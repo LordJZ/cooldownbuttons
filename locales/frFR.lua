@@ -135,7 +135,6 @@ L["Delete a Profile"] = true
 L["Deletes a profile from the database."] = true
 L["Are you sure you want to delete the selected profile?"] = true
 
-
 L["Cooldown Settings"] = true
 L["Max Spell Duration"] = true
 L["Maximal Duration to show a Spell."] = true
@@ -145,7 +144,6 @@ L["Show Spells later"] = true
 L["Toggle Spells to display after remaining duration is below max duration."] = true
 L["Show Items later"] = true
 L["Toggle Item to display after remaining duration is below max duration."] = true
-
 L["Spell Positions"] = true
 L["Hide Spells"] = true
 L["Item Positions"] = true

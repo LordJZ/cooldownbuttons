@@ -33,6 +33,7 @@ L["Toggle showing CoolDown Spiral on the Buttons."] = true
 L["Use Pulse effect"] = true
 L["Toggle Pulse effect."] = true
 
+
 L["Split Item Cooldowns"] = true
 L["Toggle showing Item and Spell Cooldowns as own rows or not."] = true
 L["Split expiring Cooldown"] = true

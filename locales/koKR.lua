@@ -33,6 +33,7 @@ L["Toggle showing CoolDown Spiral on the Buttons."] = "버튼의 나선형 재�
 L["Use Pulse effect"] = "맥박 효과 사용"
 L["Toggle Pulse effect."] = "맥박 효과를 사용합니다."
 
+
 L["Split Item Cooldowns"] = "아이템 재사용 대기시간 사용"
 L["Toggle showing Item and Spell Cooldowns as own rows or not."] = "자신의 주문이 아닌것과 아이템의 재사용 대기시간을 추가된 열에 보여줍니다."
 L["Split expiring Cooldown"] = "끝나가는 재사용 대기시간 사용"

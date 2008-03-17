@@ -932,7 +932,9 @@ function CoolDownButtons:gsub(text, variable, value)
 end
 
 function  CoolDownButtons:ResetCooldowns()
-    cooldowns = {}  
+    for k in pairs(cooldowns) do
+        cooldowns[k] = nil
+    end
     for key, button in pairs(self.cdbtns) do
         button:Hide()
         button.cooldown.textFrame.text:Hide()
