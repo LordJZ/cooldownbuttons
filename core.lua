@@ -228,7 +228,7 @@ function CoolDownButtons_UPDATE()
             local cooldownframe = frame.cooldown
 
             frame:Show()
-            cooldownframe:Show()
+            cooldownframe:SetAlpha(1)
             cooldownframe.textFrame.text:Show()
             if not CoolDownButtons.testMode then
                 if cooldown["cdtype"] == "spell" then -- spell
@@ -436,7 +436,7 @@ function CoolDownButtons_UPDATE()
                     cooldownframe.textFrame.text:Hide()
                 end
                 if not CoolDownButtons.db.profile.showCoolDownSpiral then
-                    cooldownframe:Hide()
+                    cooldownframe:SetAlpha(0)
                 end
             end
         end
