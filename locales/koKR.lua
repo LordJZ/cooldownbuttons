@@ -26,10 +26,10 @@ L["Direction from Anchor"] = "앵커에서 방향"
 
 L["Font Color"] = "글꼴 색상"
 L["Color of the CoolDown Timer Font."] = "재사용 대기시간의 글꼴 색상입니다."
-L["Center from Anchor"] = true
-L["Toggle Anchor to be the Center of the bar."] = true
-L["Show CoolDown Spiral"] = true
-L["Toggle showing CoolDown Spiral on the Buttons."] = true
+L["Center from Anchor"] = "앵커를 중앙"
+L["Toggle Anchor to be the Center of the bar."] = "바의 중앙에 앵커를 둡니다."
+L["Show CoolDown Spiral"] = "나선형 재사용 표시 보기"
+L["Toggle showing CoolDown Spiral on the Buttons."] = "버튼의 나선형 재사용 표시를 보여줍니다."
 
 
 L["Split Item Cooldowns"] = "아이템 재사용 대기시간 사용"
