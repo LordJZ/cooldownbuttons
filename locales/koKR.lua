@@ -24,8 +24,8 @@ L["Display Settings"] = "디스플레이 설정"
 L["Direction"] = "방향"
 L["Direction from Anchor"] = "앵커에서 방향"
 
-L["Font Color"] = true
-L["Color of the CoolDown Timer Font."] = true
+L["Font Color"] = "글꼴 색상"
+L["Color of the CoolDown Timer Font."] = "재사용 대기시간의 글꼴 색상입니다."
 
 
 L["Split Item Cooldowns"] = "아이템 재사용 대기시간 사용"
