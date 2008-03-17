@@ -164,15 +164,7 @@ function CoolDownButtons:OnEnable()
     end
     
     -- Hack to keep code "dry" :)
-    self:CoolDownButtonsConfigChanged()
-    
-    CoolDownButtonAnchor:ClearAllPoints()
-    CoolDownButtonAnchor2:ClearAllPoints()
-    CoolDownButtonAnchor3:ClearAllPoints()
-    CoolDownButtonAnchor:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", self.db.profile.anchors.spells.pos.x, self.db.profile.anchors.spells.pos.y)
-    CoolDownButtonAnchor2:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", self.db.profile.anchors.items.pos.x, self.db.profile.anchors.items.pos.y)
-    CoolDownButtonAnchor3:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", self.db.profile.anchors.soon.pos.x, self.db.profile.anchors.soon.pos.y)
-    
+    self:CoolDownButtonsConfigChanged()    
     
     local frame = CreateFrame("Frame"); frame:SetScript("OnUpdate", CoolDownButtons_UPDATE)
 end
@@ -208,6 +200,12 @@ function CoolDownButtons:CoolDownButtonsConfigChanged()
     if self.testMode then
         self:SetUpTestModeFakeCDS()
     end
+    CoolDownButtonAnchor:ClearAllPoints()
+    CoolDownButtonAnchor2:ClearAllPoints()
+    CoolDownButtonAnchor3:ClearAllPoints()
+    CoolDownButtonAnchor:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", self.db.profile.anchors.spells.pos.x, self.db.profile.anchors.spells.pos.y)
+    CoolDownButtonAnchor2:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", self.db.profile.anchors.items.pos.x, self.db.profile.anchors.items.pos.y)
+    CoolDownButtonAnchor3:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", self.db.profile.anchors.soon.pos.x, self.db.profile.anchors.soon.pos.y)
 end
 
 function CoolDownButtons_UPDATE()

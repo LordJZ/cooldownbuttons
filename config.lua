@@ -100,8 +100,26 @@ options.args.display = {
                     arg = "show",
                     width= "full",
                 },
-                displayDirection = {
+                xpos = {
                     order = 1,
+                    name = L["X - Axis"],
+                    desc = L["Set the Position on X-Axis."],
+                    type = "input",
+                    arg = "spells",
+                    set = function( k, v ) if not (tonumber(v) == nil) then db.anchors[k.arg].pos.x = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
+                    get = function( k ) return tostring(db.anchors[k.arg].pos.x) end,
+                },
+                ypos = {
+                    order = 2,
+                    name = L["Y - Axis"],
+                    desc = L["Set the Position on Y-Axis."],
+                    type = "input",
+                    arg = "spells",
+                    set = function( k, v ) if not (tonumber(v) == nil) then db.anchors[k.arg].pos.y = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
+                    get = function( k ) return tostring(db.anchors[k.arg].pos.y) end,
+                }, dummy = { order = 3, type = "description", name = "", },
+                displayDirection = {
+                    order = 4,
                     name = L["Direction"],
                     desc = L["Direction from Anchor"],
                     type = "select",
@@ -109,7 +127,7 @@ options.args.display = {
                     arg = "direction"
                 },
                 maxButtons = {
-                    order = 2,
+                    order = 5,
                     name = L["Max Buttons"],
                     desc = L["Maximal number of Buttons to display."],
                     type = "input",
@@ -118,12 +136,12 @@ options.args.display = {
                     get = function( k ) return tostring(db.anchors.spells[k.arg]) end,
                 },
                 dummy1 = { -- Need another line break :)
-                    order = 3,
+                    order = 6,
                     type = "description",
                     name = "",
                 },
                 buttonScale = {
-                    order = 4,
+                    order = 7,
                     name = L["Button Scale"],
                     desc = L["Button scaling, this lets you enlarge or shrink your Buttons."],
                     type = "range",
@@ -131,7 +149,7 @@ options.args.display = {
                     arg = "scale",
                 },
                 buttonAlpha = {
-                    order = 5,
+                    order = 8,
                     name = L["Button Alpha"],
                     desc = L["Icon alpha value, this lets you change the transparency of the Button."],
                     type = "range",
@@ -139,12 +157,12 @@ options.args.display = {
                     arg = "alpha",
                 },
                 dummy2 = { -- Need another line break :)
-                    order = 6,
+                    order = 9,
                     type = "description",
                     name = "",
                 },
                 buttonPadding = {
-                    order = 7,
+                    order = 10,
                     name = L["Button Padding"],
                     desc = L["Space Between Buttons."],
                     type = "input",
@@ -153,7 +171,7 @@ options.args.display = {
                     get = function( k ) return tostring(db.anchors.spells[k.arg]) end,
                 },
                 textPadding = {
-                    order = 8,
+                    order = 11,
                     name = L["Text Distance"],
                     desc = L["Distance of Text to Button."],
                     type = "input",
@@ -162,12 +180,12 @@ options.args.display = {
                     get = function( k ) return tostring(db.anchors.spells[k.arg]) end,
                 },
                 dummy1 = { -- Need another line break :)
-                    order = 9,
+                    order = 12,
                     type = "description",
                     name = "",
                 },
                 textSettings = {
-                    order = 10,
+                    order = 13,
                     name = L["Use Text Settings"],
                     desc = L["Toggle using extra Text Settings."],
                     type = "toggle",
@@ -175,7 +193,7 @@ options.args.display = {
                 },
                 textSide = {
                     disabled = function() return not db.anchors.spells.textSettings end,
-                    order = 11,
+                    order = 14,
                     name = L["Text Side"],
                     desc = L["Text Side from Button"],
                     type = "select",
@@ -183,13 +201,13 @@ options.args.display = {
                     arg = "textSide"
                 },
                 dummy3 = { -- Need another line break :)
-                    order = 12,
+                    order = 15,
                     type = "description",
                     name = "",
                 },
                 textScale = {
                     disabled = function() return not db.anchors.spells.textSettings end,
-                    order = 13,
+                    order = 16,
                     name = L["Text Scale"],
                     desc = L["Text scaling, this lets you enlarge or shrink your Text."],
                     type = "range",
@@ -198,7 +216,7 @@ options.args.display = {
                 },
                 textAlpha = {
                     disabled = function() return not db.anchors.spells.textSettings end,
-                    order = 14,
+                    order = 17,
                     name = L["Text Alpha"],
                     desc = L["Text alpha value, this lets you change the transparency of the Text."],
                     type = "range",
@@ -224,8 +242,26 @@ options.args.display = {
                     arg = "show",
                     width= "full",
                 },
-                displayDirection = {
+                xpos = {
                     order = 1,
+                    name = L["X - Axis"],
+                    desc = L["Set the Position on X-Axis."],
+                    type = "input",
+                    arg = "items",
+                    set = function( k, v ) if not (tonumber(v) == nil) then db.anchors[k.arg].pos.x = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
+                    get = function( k ) return tostring(db.anchors[k.arg].pos.x) end,
+                },
+                ypos = {
+                    order = 2,
+                    name = L["Y - Axis"],
+                    desc = L["Set the Position on Y-Axis."],
+                    type = "input",
+                    arg = "items",
+                    set = function( k, v ) if not (tonumber(v) == nil) then db.anchors[k.arg].pos.y = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
+                    get = function( k ) return tostring(db.anchors[k.arg].pos.y) end,
+                }, dummy = { order = 3, type = "description", name = "", },
+                displayDirection = {
+                    order = 4,
                     name = L["Direction"],
                     desc = L["Direction from Anchor"],
                     type = "select",
@@ -233,7 +269,7 @@ options.args.display = {
                     arg = "direction"
                 },
                 maxButtons = {
-                    order = 2,
+                    order = 5,
                     name = L["Max Buttons"],
                     desc = L["Maximal number of Buttons to display."],
                     type = "input",
@@ -242,12 +278,12 @@ options.args.display = {
                     get = function( k ) return tostring(db.anchors.items[k.arg]) end,
                 },
                 dummy1 = { -- Need another line break :)
-                    order = 3,
+                    order = 6,
                     type = "description",
                     name = "",
                 },
                 buttonScale = {
-                    order = 4,
+                    order = 7,
                     name = L["Button Scale"],
                     desc = L["Button scaling, this lets you enlarge or shrink your Buttons."],
                     type = "range",
@@ -255,7 +291,7 @@ options.args.display = {
                     arg = "scale",
                 },
                 buttonAlpha = {
-                    order = 5,
+                    order = 8,
                     name = L["Button Alpha"],
                     desc = L["Icon alpha value, this lets you change the transparency of the Button."],
                     type = "range",
@@ -263,12 +299,12 @@ options.args.display = {
                     arg = "alpha",
                 },
                 dummy2 = { -- Need another line break :)
-                    order = 6,
+                    order = 9,
                     type = "description",
                     name = "",
                 },
                 buttonPadding = {
-                    order = 7,
+                    order = 10,
                     name = L["Button Padding"],
                     desc = L["Space Between Buttons."],
                     type = "input",
@@ -277,7 +313,7 @@ options.args.display = {
                     get = function( k ) return tostring(db.anchors.items[k.arg]) end,
                 },
                 textPadding = {
-                    order = 8,
+                    order = 11,
                     name = L["Text Distance"],
                     desc = L["Distance of Text to Button."],
                     type = "input",
@@ -286,12 +322,12 @@ options.args.display = {
                     get = function( k ) return tostring(db.anchors.items[k.arg]) end,
                 },
                 dummy1 = { -- Need another line break :)
-                    order = 9,
+                    order = 12,
                     type = "description",
                     name = "",
                 },
                 textSettings = {
-                    order = 10,
+                    order = 13,
                     name = L["Use Text Settings"],
                     desc = L["Toggle using extra Text Settings."],
                     type = "toggle",
@@ -299,7 +335,7 @@ options.args.display = {
                 },
                 textSide = {
                     disabled = function() return not db.anchors.items.textSettings end,
-                    order = 11,
+                    order = 14,
                     name = L["Text Side"],
                     desc = L["Text Side from Button"],
                     type = "select",
@@ -307,13 +343,13 @@ options.args.display = {
                     arg = "textSide"
                 },
                 dummy3 = { -- Need another line break :)
-                    order = 12,
+                    order = 15,
                     type = "description",
                     name = "",
                 },
                 textScale = {
                     disabled = function() return not db.anchors.items.textSettings end,
-                    order = 13,
+                    order = 16,
                     name = L["Text Scale"],
                     desc = L["Text scaling, this lets you enlarge or shrink your Text."],
                     type = "range",
@@ -322,7 +358,7 @@ options.args.display = {
                 },
                 textAlpha = {
                     disabled = function() return not db.anchors.items.textSettings end,
-                    order = 14,
+                    order = 17,
                     name = L["Text Alpha"],
                     desc = L["Text alpha value, this lets you change the transparency of the Text."],
                     type = "range",
@@ -347,8 +383,26 @@ options.args.display = {
                     type = "toggle",
                     arg = "show",
                 },
-                timeToSplit = {
+                xpos = {
                     order = 1,
+                    name = L["X - Axis"],
+                    desc = L["Set the Position on X-Axis."],
+                    type = "input",
+                    arg = "soon",
+                    set = function( k, v ) if not (tonumber(v) == nil) then db.anchors[k.arg].pos.x = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
+                    get = function( k ) return tostring(db.anchors[k.arg].pos.x) end,
+                },
+                ypos = {
+                    order = 2,
+                    name = L["Y - Axis"],
+                    desc = L["Set the Position on Y-Axis."],
+                    type = "input",
+                    arg = "soon",
+                    set = function( k, v ) if not (tonumber(v) == nil) then db.anchors[k.arg].pos.y = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
+                    get = function( k ) return tostring(db.anchors[k.arg].pos.y) end,
+                }, dummy = { order = 3, type = "description", name = "", },
+                timeToSplit = {
+                    order = 4,
                     name = L["Show X seconds before ready"],
                     desc = L["Sets the time in seconds when the Cooldown should switch to this bar."],
                     type = "input",
@@ -357,12 +411,12 @@ options.args.display = {
                     get = function( k ) return tostring(db.anchors.soon[k.arg]) end,
                 },
                 dummy0 = { -- Need another line break :)
-                    order = 2,
+                    order = 5,
                     type = "description",
                     name = "",
                 },
                 displayDirection = {
-                    order = 3,
+                    order = 6,
                     name = L["Direction"],
                     desc = L["Direction from Anchor"],
                     type = "select",
@@ -370,7 +424,7 @@ options.args.display = {
                     arg = "direction"
                 },
                 maxButtons = {
-                    order = 4,
+                    order = 7,
                     name = L["Max Buttons"],
                     desc = L["Maximal number of Buttons to display."],
                     type = "input",
@@ -379,12 +433,12 @@ options.args.display = {
                     get = function( k ) return tostring(db.anchors.soon[k.arg]) end,
                 },
                 dummy1 = { -- Need another line break :)
-                    order = 5,
+                    order = 8,
                     type = "description",
                     name = "",
                 },
                 buttonScale = {
-                    order = 6,
+                    order = 9,
                     name = L["Button Scale"],
                     desc = L["Button scaling, this lets you enlarge or shrink your Buttons."],
                     type = "range",
@@ -392,7 +446,7 @@ options.args.display = {
                     arg = "scale",
                 },
                 buttonAlpha = {
-                    order = 7,
+                    order = 10,
                     name = L["Button Alpha"],
                     desc = L["Icon alpha value, this lets you change the transparency of the Button."],
                     type = "range",
@@ -400,12 +454,12 @@ options.args.display = {
                     arg = "alpha",
                 },
                 dummy2 = { -- Need another line break :)
-                    order = 8,
+                    order = 11,
                     type = "description",
                     name = "",
                 },
                 buttonPadding = {
-                    order = 9,
+                    order = 12,
                     name = L["Button Padding"],
                     desc = L["Space Between Buttons."],
                     type = "input",
@@ -414,7 +468,7 @@ options.args.display = {
                     get = function( k ) return tostring(db.anchors.soon[k.arg]) end,
                 },
                 textPadding = {
-                    order = 10,
+                    order = 13,
                     name = L["Text Distance"],
                     desc = L["Distance of Text to Button."],
                     type = "input",
@@ -423,12 +477,12 @@ options.args.display = {
                     get = function( k ) return tostring(db.anchors.soon[k.arg]) end,
                 },
                 dummy1 = { -- Need another line break :)
-                    order = 11,
+                    order = 14,
                     type = "description",
                     name = "",
                 },
                 textSettings = {
-                    order = 12,
+                    order = 15,
                     name = L["Use Text Settings"],
                     desc = L["Toggle using extra Text Settings."],
                     type = "toggle",
@@ -436,7 +490,7 @@ options.args.display = {
                 },
                 textSide = {
                     disabled = function() return not db.anchors.soon.textSettings end,
-                    order = 13,
+                    order = 16,
                     name = L["Text Side"],
                     desc = L["Text Side from Button"],
                     type = "select",
@@ -444,13 +498,13 @@ options.args.display = {
                     arg = "textSide"
                 },
                 dummy3 = { -- Need another line break :)
-                    order = 14,
+                    order = 17,
                     type = "description",
                     name = "",
                 },
                 textScale = {
                     disabled = function() return not db.anchors.soon.textSettings end,
-                    order = 15,
+                    order = 18,
                     name = L["Text Scale"],
                     desc = L["Text scaling, this lets you enlarge or shrink your Text."],
                     type = "range",
@@ -459,7 +513,7 @@ options.args.display = {
                 },
                 textAlpha = {
                     disabled = function() return not db.anchors.soon.textSettings end,
-                    order = 16,
+                    order = 19,
                     name = L["Text Alpha"],
                     desc = L["Text alpha value, this lets you change the transparency of the Text."],
                     type = "range",
