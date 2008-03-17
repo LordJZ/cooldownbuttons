@@ -1,4 +1,6 @@
 CoolDownButtons = LibStub("AceAddon-3.0"):NewAddon("CoolDown Buttons", "AceConsole-3.0", "AceEvent-3.0")
+local rev = tonumber(("$Revision$"):match("%d+")) or 0
+CoolDownButtons.rev = rev
 local L = LibStub("AceLocale-3.0"):GetLocale("CoolDown Buttons", false)
 
 local LSM = LibStub("LibSharedMedia-2.0")
@@ -70,6 +72,7 @@ local defaults = {
             spells = {
                 show          = true,
                 center        = false,
+                usePulse      = false,
                 maxbuttons    = 10,
                 scale         = 0.85,
                 alpha         = 1,
@@ -85,6 +88,7 @@ local defaults = {
             items = {
                 show          = true,
                 center        = false,
+                usePulse      = false,
                 maxbuttons    = 10,
                 scale         = 0.85,
                 alpha         = 1,
@@ -100,6 +104,7 @@ local defaults = {
             soon = {
                 show          = true,
                 center        = false,
+                usePulse      = false,
                 timeToSplit   = 5,
                 maxbuttons    = 10,
                 scale         = 0.85,
@@ -114,6 +119,7 @@ local defaults = {
                 textPadding   = 33,
             },
             single = {
+                usePulse      = false,
                 scale         = 0.85,
                 alpha         = 1,
                 textSettings  = false,
@@ -221,11 +227,12 @@ function CoolDownButtons:CoolDownButtonsConfigChanged()
     CoolDownButtonAnchor3:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", self.db.profile.anchors.soon.pos.x, self.db.profile.anchors.soon.pos.y)
 end
 
-function CoolDownButtons_UPDATE()
+function CoolDownButtons_UPDATE(self, elapsed)
     for key, cooldown in pairs(cooldowns) do
         if type(cooldown) == "table" then
             local frame = CoolDownButtons.cdbtns[cooldown["buttonID"]]
             local cooldownframe = frame.cooldown
+            local hideFrame = false
 
             frame:Show()
             cooldownframe:SetAlpha(1)
@@ -249,11 +256,7 @@ function CoolDownButtons_UPDATE()
                         
                         cooldownframe:SetCooldown(cooldown["start"], cooldown["duration"])
                     else
-                        frame:Hide()
-                        cooldownframe.textFrame.text:Hide()
-                        cooldowns[key] = nil
-                        frame.used = false
-                        frame.usedInBar = ""
+                        hideFrame = true
                     end
                 elseif cooldown["cdtype"] == "eq_item" then -- equipped Item (see Character Info)
                     if  GetInventoryItemCooldown("player", cooldown["id"]) ~= nil
@@ -275,11 +278,7 @@ function CoolDownButtons_UPDATE()
                         
                         cooldownframe:SetCooldown(cooldown["start"], cooldown["duration"])
                     else
-                        frame:Hide()
-                        cooldownframe.textFrame.text:Hide()
-                        cooldowns[key] = nil
-                        frame.used = false
-                        frame.usedInBar = ""
+                        hideFrame = true
                     end
                 elseif cooldown["cdtype"] == "bag_item" then -- Item in Bag
                     if  GetContainerItemCooldown(cooldown["id"], cooldown["id2"]) ~= nil
@@ -304,17 +303,12 @@ function CoolDownButtons_UPDATE()
                             cooldownframe:SetCooldown(cooldown["start"], cooldown["duration"])
                         end
                     else
-                        frame:Hide()
-                        cooldownframe.textFrame.text:Hide()
-                        cooldowns[key] = nil
-                        frame.used = false
-                        frame.usedInBar = ""
+                        hideFrame = true
                     end
                 end
             else
                 local time = ceil(cooldown["start"] + cooldown["duration"] - GetTime())
                 if time > 0 then
-                    local time = ceil(cooldown["start"] + cooldown["duration"] - GetTime())
                     if time < 60 then
                         cooldownframe.textFrame.text:SetText(string.format("0:%02d", time))
                     elseif( time < 3600 ) then
@@ -328,6 +322,23 @@ function CoolDownButtons_UPDATE()
                     end
                     frame.texture:SetTexture(cooldown["texture"]) -- "Interface\\Icons\\INV_Misc_Food_02"               
                     cooldownframe:SetCooldown(cooldown["start"], cooldown["duration"])
+                else
+                    hideFrame = true
+                end
+            end
+            if hideFrame then
+                if CoolDownButtons.db.profile.anchors[frame.usedInBar].usePulse then
+                    if not frame.pulseActive then
+                        CoolDownButtons:StartPulse(frame)
+                    else
+                        if CoolDownButtons:UpdatePulse(frame, elapsed) then -- returns true if pulse is finish
+                            frame:Hide()
+                            cooldownframe.textFrame.text:Hide()
+                            cooldowns[key] = nil
+                            frame.used = false
+                            frame.usedInBar = ""
+                        end
+                    end
                 else
                     frame:Hide()
                     cooldownframe.textFrame.text:Hide()
@@ -856,8 +867,57 @@ function CoolDownButtons:createButton(i, justMove)
     button.cooldown.textFrame:SetFrameStrata("HIGH")
     button.cooldown.textFrame:Show()
     
+    
+    button.pulse = CreateFrame('Frame', nil, button)
+	button.pulse:SetAllPoints(button)
+	button.pulse:SetToplevel(true)
+	button.pulse.icon = button:CreateTexture(nil, 'OVERLAY')
+	button.pulse.icon:SetPoint('CENTER')
+	button.pulse.icon:SetBlendMode('ADD')
+	button.pulse.icon:SetHeight(button:GetHeight())
+	button.pulse.icon:SetWidth(button:GetWidth())
+    button.pulseActive = false
+    
     button:Hide()
     return button
+end
+
+function CoolDownButtons:StartPulse(parent)
+	local icon = parent.texture
+
+	if icon and parent:IsVisible() then
+		local pulse = parent.pulse
+		if pulse then
+			pulse.scale = 1
+			pulse.icon:SetTexture(icon:GetTexture())
+
+			local r, g, b = icon:GetVertexColor()
+			pulse.icon:SetVertexColor(r, g, b, 0.7)
+			pulse:Show()
+
+            parent.pulseActive = true
+		end
+	end
+end
+
+function CoolDownButtons:UpdatePulse(parent, elapsed)
+    local pulse = parent.pulse
+	if pulse.scale >= 2 then
+		pulse.dec = 1
+	end
+
+	pulse.scale = max(min(pulse.scale + (pulse.dec and -1 or 1) * pulse.scale * (elapsed/0.5), 2), 1)
+
+	if pulse.scale <= 1 then
+		pulse:Hide()
+		pulse.dec = nil
+        parent.pulseActive = false
+        return true
+	else
+		pulse.icon:SetHeight(pulse:GetHeight() * pulse.scale)
+		pulse.icon:SetWidth(pulse:GetWidth() * pulse.scale)
+        return false
+    end
 end
 
 function CoolDownButtons:gsub(text, variable, value)
@@ -929,7 +989,7 @@ function CoolDownButtons:EndTestMode(force)
 end
 
 function CoolDownButtons:StartTestMode(mode)
-    self.AceTimerHandler = LibStub("AceTimer-3.0"):ScheduleTimer(CoolDownButtons.EndTestMode, self.testModeTime)
+    self.AceTimerHandler = LibStub("AceTimer-3.0"):ScheduleTimer(CoolDownButtons.EndTestMode, self.testModeTime + 1)
     self.testMode = true
     self.testModeData = mode
     self.testModeStart = GetTime()
@@ -1036,3 +1096,6 @@ function cdb()
         ChatFrame2:AddMessage("----------------------")
     end
 end
+
+
+

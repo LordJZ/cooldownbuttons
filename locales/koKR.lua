@@ -99,7 +99,7 @@ L["Text Distance"] = "텍스트 간격"
 L["Distance of Text to Button."] = "버튼과 텍스트의 간격을 설정합니다."
 L["Show X seconds before ready"] = "준비되기 X 초전에 보기"
 L["Sets the time in seconds when the Cooldown should switch to this bar."] = "재사용 대기시간이 설정한 시간에 맞추어 잠시후 완료 버튼으로 전환됩니다."
-L["Expiring soon"] = "잠시후 완료"
+L["Expiring Cooldowns"] = "잠시후 완료"
 
 L["Default Chatframe"] = "기본 대화창"
 L["Say"]     = "일반"

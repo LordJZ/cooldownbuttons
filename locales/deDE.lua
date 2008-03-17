@@ -99,7 +99,7 @@ L["Text Distance"] = true
 L["Distance of Text to Button."] = true
 L["Show X seconds before ready"] = true
 L["Sets the time in seconds when the Cooldown should switch to this bar."] = true
-L["Expiring soon"] = true
+L["Expiring Cooldowns"] = true
 
 L["Default Chatframe"] = true
 L["Say"]     = true

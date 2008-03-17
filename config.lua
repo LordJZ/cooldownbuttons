@@ -1,4 +1,3 @@
---local CoolDownButtons = LibStub("AceAddon-3.0"):GetAddon("CoolDown Buttons")
 CoolDownButtonsConfig = CoolDownButtons:NewModule("Config","AceConsole-3.0","AceEvent-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("CoolDown Buttons", false)
 local LSM = LibStub("LibSharedMedia-2.0")
@@ -8,7 +7,8 @@ local options = {}
 local db
 
 options.type = "group"
-options.name = "CoolDown Buttons"
+--options.name = "CoolDown Buttons"
+options.name = "CoolDown Buttons r"..CoolDownButtons.rev
 options.get = function( k ) return db[k.arg] end
 options.set = function( k, v ) db[k.arg] = v; CoolDownButtonsConfig:UpdateConfig(); end
 options.args = {}
@@ -93,7 +93,6 @@ options.args.display = {
         cooldownsSpells = {
             type = "group",
             name = L["Spell Cooldowns"],
-            guiInline = true,
             order = 50,
             set = function( k, v ) db.anchors.spells[k.arg] = v; CoolDownButtonsConfig:UpdateConfig(); end,
             get = function( k ) return db.anchors.spells[k.arg] end,
@@ -112,6 +111,14 @@ options.args.display = {
                     type = "toggle",
                     arg = "center",
                 }, dummy_0 = { order = 2, type = "description", name = "", },
+                usePulse = {
+                    order = 3,
+                    name = L["Use Pulse effect"],
+                    desc = L["Toggle Pulse effect."],
+                    type = "toggle",
+                    arg = "usePulse",
+                    width = "full",
+                },
                 xpos = {
                     order = 10,
                     name = L["X - Axis"],
@@ -240,7 +247,6 @@ options.args.display = {
         cooldownsItems = {
             type = "group",
             name = L["Item Cooldowns"],
-            guiInline = true,
             order = 60,
             hidden = function() return not db.splitRows end,
             set = function( k, v ) db.anchors.items[k.arg] = v; CoolDownButtonsConfig:UpdateConfig(); end,
@@ -260,6 +266,14 @@ options.args.display = {
                     type = "toggle",
                     arg = "center",
                 }, dummy_2 = { order = 2, type = "description", name = "", },
+                usePulse = {
+                    order = 3,
+                    name = L["Use Pulse effect"],
+                    desc = L["Toggle Pulse effect."],
+                    type = "toggle",
+                    arg = "usePulse",
+                    width = "full",
+                },
                 xpos = {
                     order = 10,
                     name = L["X - Axis"],
@@ -387,8 +401,7 @@ options.args.display = {
         },
         cooldownsSoon = {
             type = "group",
-            name = L["Expiring soon"],
-            guiInline = true,
+            name = L["Expiring Cooldowns"],
             order = 70,
             hidden = function() return not db.splitSoon end,
             set = function( k, v ) db.anchors.soon[k.arg] = v; CoolDownButtonsConfig:UpdateConfig(); end,
@@ -408,6 +421,14 @@ options.args.display = {
                     type = "toggle",
                     arg = "center",
                 }, dummy_1 = { order = 2, type = "description", name = "", },
+                usePulse = {
+                    order = 3,
+                    name = L["Use Pulse effect"],
+                    desc = L["Toggle Pulse effect."],
+                    type = "toggle",
+                    arg = "usePulse",
+                    width = "full",
+                },
                 timeToSplit = {
                     order = 10,
                     name = L["Show X seconds before ready"],
@@ -547,14 +568,21 @@ options.args.display = {
                 },
             },
         },
-        cooldownsSigle = {
+        cooldownsSingle = {
             type = "group",
             name = L["Seperated Cooldowns"],
-            guiInline = true,
             order = 80,
             set = function( k, v ) db.anchors.single[k.arg] = v; CoolDownButtonsConfig:UpdateConfig(); end,
             get = function( k ) return db.anchors.single[k.arg] end,
             args = {
+                usePulse = {
+                    order = 4,
+                    name = L["Use Pulse effect"],
+                    desc = L["Toggle Pulse effect."],
+                    type = "toggle",
+                    arg = "usePulse",
+                    width = "full",
+                },
                 buttonScale = {
                     order = 40,
                     name = L["Button Scale"],
