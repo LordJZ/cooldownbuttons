@@ -26,6 +26,8 @@ L["Direction from Anchor"] = true
 
 L["Font Color"] = true
 L["Color of the CoolDown Timer Font."] = true
+L["Center from Anchor"] = true
+L["Toggle Anchor to be the Center of the bar."] = true
 
 
 L["Split Item Cooldowns"] = true

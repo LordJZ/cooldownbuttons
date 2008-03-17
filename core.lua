@@ -68,6 +68,7 @@ local defaults = {
         anchors     = {
             spells = {
                 show          = true,
+                center        = false,
                 maxbuttons    = 10,
                 scale         = 0.85,
                 alpha         = 1,
@@ -82,6 +83,7 @@ local defaults = {
             },
             items = {
                 show          = true,
+                center        = false,
                 maxbuttons    = 10,
                 scale         = 0.85,
                 alpha         = 1,
@@ -96,6 +98,7 @@ local defaults = {
             },
             soon = {
                 show          = true,
+                center        = false,
                 timeToSplit   = 5,
                 maxbuttons    = 10,
                 scale         = 0.85,
@@ -155,6 +158,10 @@ function CoolDownButtons:OnEnable()
     self.testModeTime = 15
     self.testModeStart = 0
     self.testModeData = {}
+    
+    self.spellnum = 0
+    self.itemsnum = 0
+    self.soonnum  = 0
 
     self.numcooldownbuttons = 1
     self.cdbtns = {}
@@ -329,7 +336,6 @@ function CoolDownButtons_UPDATE()
             end
 
             if frame.used then
-                -- set position, scaling and alpha :)
                 local order = cooldown["order"] - 1
                 local forBar = frame.usedInBar
                 
@@ -339,14 +345,21 @@ function CoolDownButtons_UPDATE()
                 if not CoolDownButtons.db.profile.splitSoon and forBar == "soon" then
                     forBar = "spells"                    
                 end
-                --[[
-                if not CoolDownButtons.db.profile.splitRows or (forBar ~= "soon" or forBar ~= "single") then
-                    forBar = "spells"
+                
+                local center = CoolDownButtons.db.profile.anchors[forBar].center
+                if center and forBar == "spells" then
+                    local sub = CoolDownButtons.spellnum / 2
+                    order = order - sub + 1
                 end
-                if not CoolDownButtons.db.profile.splitSoon or (forBar ~= "soon" or forBar ~= "single" or forBar ~= "items") then
-                    forBar = "spells"
+                if center and forBar == "items" then
+                    local sub = CoolDownButtons.itemsnum / 2
+                    order = order - sub + 1
                 end
-                --]]
+                if center and forBar == "soon" then
+                    local sub = CoolDownButtons.soonnum / 2
+                    order = order - sub + 1
+                end
+                
                 local scale = CoolDownButtons.db.profile.anchors[forBar].scale
                 local alpha = CoolDownButtons.db.profile.anchors[forBar].alpha
                 local direction = CoolDownButtons.db.profile.anchors[forBar].direction
@@ -596,7 +609,6 @@ end
 
 function CoolDownButtons:getItemGroup(itemid)
     local group = select(2, LibStub("LibPeriodicTable-3.1"):ItemInSet(itemid, "CDB_Itemgroup"))
-
     for groupKey, value in pairs(self.itemgroups) do
         if type(value) == "table" then
             for _, curid in pairs(value.ids) do
@@ -606,7 +618,6 @@ function CoolDownButtons:getItemGroup(itemid)
             end
         end
     end
-
     return nil
 end
 
@@ -662,19 +673,6 @@ function CoolDownButtons:myGetSpellName(index)
     end
 end
 --]]
-
-function CoolDownButtons:checkSpell(index)
-    for i = 1, self.numcooldownbuttons do
-        if self.cdbtns[i].curspell ~= -1 then
-            local spell, _ = self:myGetSpellName(index)
-            local curspell, _ = self:myGetSpellName(CoolDownButtons.cdbtns[i].curspell)
-            if spell == curspell then
-                return 0
-            end
-        end
-    end
-    return 1
-end
 
 function CoolDownButtons:getFreeFrame(forThis, whatBar)
     local x
@@ -910,6 +908,9 @@ function CoolDownButtons:sortButtons()
             end
         end
     end
+    self.spellnum = spells
+    self.itemsnum = items
+    self.soonnum  = soon
 end
 
 function CoolDownButtons:EndTestMode(force)
@@ -988,6 +989,9 @@ function CoolDownButtons:SetUpTestModeFakeCDS()
             end
         end
     end
+    self.spellnum = self.db.profile.anchors.spells.maxbuttons + 1
+    self.itemsnum = self.db.profile.anchors.items.maxbuttons  + 1
+    self.soonnum  = self.db.profile.anchors.soon.maxbuttons   + 1
 end
 
 
@@ -1014,7 +1018,15 @@ function cdb()
         local remaining = ceil(cooldown["start"] + cooldown["duration"] - GetTime())
         ChatFrame2:AddMessage(cooldown["name"].." @ "..remaining.." of "..cooldown["duration"])
         ChatFrame2:AddMessage("Assgined to Button: "..cooldown["buttonID"] .." / "..CoolDownButtons.numcooldownbuttons)
-        ChatFrame2:AddMessage("Position in the row: "..cooldown["order"])
+        if frame.usedInBar == "spells" then
+            ChatFrame2:AddMessage("Position in the row: "..cooldown["order"].." / "..CoolDownButtons.spellnum - 1)
+        end
+        if frame.usedInBar == "items" then
+            ChatFrame2:AddMessage("Position in the row: "..cooldown["order"].." / "..CoolDownButtons.itemsnum - 1)
+        end
+        if frame.usedInBar == "soon" then
+            ChatFrame2:AddMessage("Position in the row: "..cooldown["order"].." / "..CoolDownButtons.soonnum - 1)
+        end
         ChatFrame2:AddMessage("Used in the row: "..frame.usedInBar)
         ChatFrame2:AddMessage("----------------------")
     end
