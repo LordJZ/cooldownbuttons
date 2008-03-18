@@ -72,16 +72,16 @@ local defaults = {
         alpha       = 1,
 		direction   = "right",
         maxbuttons  = 10,
-        showTime    = true,
-        showCoolDownSpiral = true,
         splitRows   = false,
-        showOmniCC  = false,
         splitSoon   = false,
         anchors     = {
             spells = {
                 show          = true,
                 center        = false,
                 usePulse      = false,
+                showTime    = true,
+                showCoolDownSpiral = true,
+                showOmniCC  = false,
                 maxbuttons    = 10,
                 scale         = 0.85,
                 alpha         = 1,
@@ -98,6 +98,9 @@ local defaults = {
                 show          = true,
                 center        = false,
                 usePulse      = false,
+                showTime    = true,
+                showCoolDownSpiral = true,
+                showOmniCC  = false,
                 maxbuttons    = 10,
                 scale         = 0.85,
                 alpha         = 1,
@@ -114,6 +117,9 @@ local defaults = {
                 show          = true,
                 center        = false,
                 usePulse      = false,
+                showTime    = true,
+                showCoolDownSpiral = true,
+                showOmniCC  = false,
                 timeToSplit   = 5,
                 maxbuttons    = 10,
                 scale         = 0.85,
@@ -129,6 +135,9 @@ local defaults = {
             },
             single = {
                 usePulse      = false,
+                showTime    = true,
+                showCoolDownSpiral = true,
+                showOmniCC  = false,
                 scale         = 0.85,
                 alpha         = 1,
                 textSettings  = false,
@@ -338,7 +347,7 @@ function CoolDownButtons_UPDATE(self, elapsed)
                     cooldownframe.textFrame.text:SetText(string_format("%d.%02dhr", hr, m))
                 end
                 frame.texture:SetTexture(cooldown["texture"])
-                cooldownframe:SetCD(cooldown["start"], cooldown["duration"], CoolDownButtons.db.profile.showOmniCC)
+                cooldownframe:SetCD(cooldown["start"], cooldown["duration"], CoolDownButtons.db.profile.anchors[frame.usedInBar].showOmniCC)
             end
 
             if frame.used then
@@ -436,10 +445,10 @@ function CoolDownButtons_UPDATE(self, elapsed)
 
                 frame:SetAlpha(alpha)               
                 cooldownframe.textFrame:SetAlpha(textAlpha)
-                if not CoolDownButtons.db.profile.showTime then
+                if not CoolDownButtons.db.profile.anchors[forBar].showTime then
                     cooldownframe.textFrame.text:Hide()
                 end
-                if not CoolDownButtons.db.profile.showCoolDownSpiral then
+                if not CoolDownButtons.db.profile.anchors[forBar].showCoolDownSpiral then
                     cooldownframe:SetAlpha(0)
                 end
             end
