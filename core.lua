@@ -15,7 +15,8 @@ CoolDownButtonAnchor:SetScript("OnDragStop",  function(self) self:StopMovingOrSi
 CoolDownButtonAnchor:SetScript("OnLeave",     function() GameTooltip:Hide()                         end)
 CoolDownButtonAnchor:SetScript("OnEnter",     function() GameTooltip:SetOwner(this, "ANCHOR_CURSOR"); GameTooltip:SetText(L["Click to Move"]) end)
 CoolDownButtonAnchor:SetClampedToScreen(true)
-CoolDownButtonAnchor:SetFrameStrata("DIALOG")
+CoolDownButtonAnchor:SetFrameStrata("MEDIUM")
+CoolDownButtonAnchor:SetFrameLevel(CoolDownButtonAnchor:GetFrameLevel()+4)
 CoolDownButtonAnchor.what = "spells"
 
 CoolDownButtonAnchor.texture = CoolDownButtonAnchor:CreateTexture(nil,"OVERLAY")
@@ -31,7 +32,8 @@ CoolDownButtonAnchor2:SetScript("OnDragStop",  function(self) self:StopMovingOrS
 CoolDownButtonAnchor2:SetScript("OnLeave",     function() GameTooltip:Hide()                         end)
 CoolDownButtonAnchor2:SetScript("OnEnter",     function() GameTooltip:SetOwner(this, "ANCHOR_CURSOR"); GameTooltip:SetText(L["Click to Move"]) end)
 CoolDownButtonAnchor2:SetClampedToScreen(true)
-CoolDownButtonAnchor2:SetFrameStrata("DIALOG")
+CoolDownButtonAnchor2:SetFrameStrata("MEDIUM")
+CoolDownButtonAnchor2:SetFrameLevel(CoolDownButtonAnchor2:GetFrameLevel()+4)
 CoolDownButtonAnchor2.what = "items"
 
 CoolDownButtonAnchor2.texture = CoolDownButtonAnchor2:CreateTexture(nil,"OVERLAY")
@@ -47,7 +49,8 @@ CoolDownButtonAnchor3:SetScript("OnDragStop",  function(self) self:StopMovingOrS
 CoolDownButtonAnchor3:SetScript("OnLeave",     function() GameTooltip:Hide()                         end)
 CoolDownButtonAnchor3:SetScript("OnEnter",     function() GameTooltip:SetOwner(this, "ANCHOR_CURSOR"); GameTooltip:SetText(L["Click to Move"]) end)
 CoolDownButtonAnchor3:SetClampedToScreen(true)
-CoolDownButtonAnchor3:SetFrameStrata("DIALOG")
+CoolDownButtonAnchor3:SetFrameStrata("MEDIUM")
+CoolDownButtonAnchor3:SetFrameLevel(CoolDownButtonAnchor3:GetFrameLevel()+4)
 CoolDownButtonAnchor3.what = "soon"
 
 CoolDownButtonAnchor3.texture = CoolDownButtonAnchor3:CreateTexture(nil,"OVERLAY")
@@ -864,9 +867,11 @@ function CoolDownButtons:createButton(i, justMove)
     button.cooldown.textFrame.text:SetFont(LSM:Fetch("font", self.db.profile.font), 15 * self.db.profile.scale, "OUTLINE")
     button.cooldown.textFrame.text:SetTextColor(c.Red, c.Green,  c.Blue,  c.Alpha)
     button.cooldown.textFrame.text:SetText("00:00")
-    button.cooldown.textFrame:SetFrameStrata("HIGH")
     button.cooldown.textFrame:Show()
     
+    button:SetFrameLevel(CoolDownButtonAnchor:GetFrameLevel()-3)
+    button.cooldown:SetFrameLevel(CoolDownButtonAnchor:GetFrameLevel()-2)
+    button.cooldown.textFrame:SetFrameLevel(CoolDownButtonAnchor:GetFrameLevel()-1)
     
     button.pulse = CreateFrame('Frame', nil, button)
 	button.pulse:SetAllPoints(button)
