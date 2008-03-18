@@ -32,8 +32,8 @@ L["Show CoolDown Spiral"] = true
 L["Toggle showing CoolDown Spiral on the Buttons."] = true
 L["Use Pulse effect"] = true
 L["Toggle Pulse effect."] = true
-L["Split expiring Cooldown"] = true
-L["Toggle showing Item and Spell Cooldowns in an additional row if they are expiring soon."] = true
+L["Show OmniCC Text"] = true
+L["Toggle showing OmniCC Text on the Buttons. (Only if it is installed!)"] = true
 
 L["Split Item Cooldowns"] = true
 L["Toggle showing Item and Spell Cooldowns as own rows or not."] = true
