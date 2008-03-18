@@ -1,63 +1,66 @@
+local LibStub = LibStub
 CoolDownButtons = LibStub("AceAddon-3.0"):NewAddon("CoolDown Buttons", "AceConsole-3.0", "AceEvent-3.0")
+local CoolDownButtons = CoolDownButtons
 local rev = tonumber(("$Revision$"):match("%d+")) or 0
 CoolDownButtons.rev = rev
 local L = LibStub("AceLocale-3.0"):GetLocale("CoolDown Buttons", false)
-
 local LSM = LibStub("LibSharedMedia-2.0")
 LSM:Register("font", "Skurri", [[Interface\AddOns\CoolDownButtons\skurri.ttf]])
 
-CoolDownButtonAnchor = CreateFrame("Frame", "CoolDownButtonAnchor", UIParent)
-CoolDownButtonAnchor:SetWidth(20);      CoolDownButtonAnchor:SetHeight(20)
-CoolDownButtonAnchor:SetMovable(true);  CoolDownButtonAnchor:EnableMouse(true); 
-CoolDownButtonAnchor:SetScript("OnMouseDown", function(self) self:StartMoving()         end)
-CoolDownButtonAnchor:SetScript("OnMouseUp",   function(self) self:StopMovingOrSizing(); CoolDownButtons:SaveAnchorPos(self) end)
-CoolDownButtonAnchor:SetScript("OnDragStop",  function(self) self:StopMovingOrSizing(); end)
-CoolDownButtonAnchor:SetScript("OnLeave",     function() GameTooltip:Hide()                         end)
-CoolDownButtonAnchor:SetScript("OnEnter",     function() GameTooltip:SetOwner(this, "ANCHOR_CURSOR"); GameTooltip:SetText(L["Click to Move"]) end)
-CoolDownButtonAnchor:SetClampedToScreen(true)
-CoolDownButtonAnchor:SetFrameStrata("MEDIUM")
-CoolDownButtonAnchor:SetFrameLevel(CoolDownButtonAnchor:GetFrameLevel()+4)
-CoolDownButtonAnchor.what = "spells"
+local GetInventoryItemCooldown = GetInventoryItemCooldown
+local GetContainerItemCooldown = GetContainerItemCooldown
+local GetInventoryItemLink = GetInventoryItemLink
+local GetContainerItemLink = GetContainerItemLink
+local GetContainerNumSlots = GetContainerNumSlots
+local GetContainerItemInfo = GetContainerItemInfo
+local GetSpellCooldown = GetSpellCooldown
+local GetSpellTexture = GetSpellTexture
+local GetNumSpellTabs = GetNumSpellTabs
+local GetSpellTabInfo = GetSpellTabInfo
+local string_format = string.format
+local table_foreach = table.foreach
+local GetSpellName = GetSpellName
+--local GetSpellLink = GetSpellLink
+local table_insert = table.insert
+local CreateFrame = CreateFrame
+local string_gsub = string.gsub
+local string_find = string.find
+local table_sort = table.sort
+local tostring = tostring
+local tonumber = tonumber
+local ceil = math.ceil
+local select = select
+local pairs = pairs
+local type = type
 
-CoolDownButtonAnchor.texture = CoolDownButtonAnchor:CreateTexture(nil,"OVERLAY")
-CoolDownButtonAnchor.texture:SetTexture("Interface\\Icons\\Spell_Nature_WispSplode")
-CoolDownButtonAnchor.texture:SetAllPoints(CoolDownButtonAnchor)
-
-CoolDownButtonAnchor2 = CreateFrame("Frame", "CoolDownButtonAnchor2", UIParent)
-CoolDownButtonAnchor2:SetWidth(20);      CoolDownButtonAnchor2:SetHeight(20)
-CoolDownButtonAnchor2:SetMovable(true);  CoolDownButtonAnchor2:EnableMouse(true); 
-CoolDownButtonAnchor2:SetScript("OnMouseDown", function(self) self:StartMoving()         end)
-CoolDownButtonAnchor2:SetScript("OnMouseUp",   function(self) self:StopMovingOrSizing(); CoolDownButtons:SaveAnchorPos(self) end)
-CoolDownButtonAnchor2:SetScript("OnDragStop",  function(self) self:StopMovingOrSizing(); end)
-CoolDownButtonAnchor2:SetScript("OnLeave",     function() GameTooltip:Hide()                         end)
-CoolDownButtonAnchor2:SetScript("OnEnter",     function() GameTooltip:SetOwner(this, "ANCHOR_CURSOR"); GameTooltip:SetText(L["Click to Move"]) end)
-CoolDownButtonAnchor2:SetClampedToScreen(true)
-CoolDownButtonAnchor2:SetFrameStrata("MEDIUM")
-CoolDownButtonAnchor2:SetFrameLevel(CoolDownButtonAnchor2:GetFrameLevel()+4)
-CoolDownButtonAnchor2.what = "items"
-
-CoolDownButtonAnchor2.texture = CoolDownButtonAnchor2:CreateTexture(nil,"OVERLAY")
-CoolDownButtonAnchor2.texture:SetTexture("Interface\\Icons\\Spell_Nature_WispSplode")
-CoolDownButtonAnchor2.texture:SetAllPoints(CoolDownButtonAnchor2)
-
-CoolDownButtonAnchor3 = CreateFrame("Frame", "CoolDownButtonAnchor3", UIParent)
-CoolDownButtonAnchor3:SetWidth(20);      CoolDownButtonAnchor3:SetHeight(20)
-CoolDownButtonAnchor3:SetMovable(true);  CoolDownButtonAnchor3:EnableMouse(true); 
-CoolDownButtonAnchor3:SetScript("OnMouseDown", function(self) self:StartMoving()         end)
-CoolDownButtonAnchor3:SetScript("OnMouseUp",   function(self) self:StopMovingOrSizing(); CoolDownButtons:SaveAnchorPos(self) end)
-CoolDownButtonAnchor3:SetScript("OnDragStop",  function(self) self:StopMovingOrSizing(); end)
-CoolDownButtonAnchor3:SetScript("OnLeave",     function() GameTooltip:Hide()                         end)
-CoolDownButtonAnchor3:SetScript("OnEnter",     function() GameTooltip:SetOwner(this, "ANCHOR_CURSOR"); GameTooltip:SetText(L["Click to Move"]) end)
-CoolDownButtonAnchor3:SetClampedToScreen(true)
-CoolDownButtonAnchor3:SetFrameStrata("MEDIUM")
-CoolDownButtonAnchor3:SetFrameLevel(CoolDownButtonAnchor3:GetFrameLevel()+4)
-CoolDownButtonAnchor3.what = "soon"
-
-CoolDownButtonAnchor3.texture = CoolDownButtonAnchor3:CreateTexture(nil,"OVERLAY")
-CoolDownButtonAnchor3.texture:SetTexture("Interface\\Icons\\Spell_Nature_WispSplode")
-CoolDownButtonAnchor3.texture:SetAllPoints(CoolDownButtonAnchor3)
+CoolDownButtonAnchor = {}
+local CoolDownButtonAnchor = CoolDownButtonAnchor
+for i = 1, 3 do
+    CoolDownButtonAnchor[i] = CreateFrame("Frame", "CoolDownButtonAnchor"..i, UIParent)
+    CoolDownButtonAnchor[i]:SetWidth(20);      CoolDownButtonAnchor[i]:SetHeight(20)
+    CoolDownButtonAnchor[i]:SetMovable(true);  CoolDownButtonAnchor[i]:EnableMouse(true); 
+    CoolDownButtonAnchor[i]:SetScript("OnMouseDown", function(self) self:StartMoving()         end)
+    CoolDownButtonAnchor[i]:SetScript("OnMouseUp",   function(self) self:StopMovingOrSizing(); CoolDownButtons:SaveAnchorPos(self) end)
+    CoolDownButtonAnchor[i]:SetScript("OnDragStop",  function(self) self:StopMovingOrSizing(); end)
+    CoolDownButtonAnchor[i]:SetScript("OnLeave",     function() GameTooltip:Hide()                         end)
+    CoolDownButtonAnchor[i]:SetScript("OnEnter",     function() GameTooltip:SetOwner(this, "ANCHOR_CURSOR"); GameTooltip:SetText(L["Click to Move"]) end)
+    CoolDownButtonAnchor[i]:SetClampedToScreen(true)
+    CoolDownButtonAnchor[i]:SetFrameStrata("MEDIUM")
+    CoolDownButtonAnchor[i]:SetFrameLevel(CoolDownButtonAnchor[i]:GetFrameLevel()+4)
+    if i == 1 then
+        CoolDownButtonAnchor[i].what = "spells"
+    elseif i == 2 then
+        CoolDownButtonAnchor[i].what = "items"
+    elseif i == 3 then
+        CoolDownButtonAnchor[i].what = "soon"
+    end
+    CoolDownButtonAnchor[i].texture = CoolDownButtonAnchor[i]:CreateTexture(nil,"OVERLAY")
+    CoolDownButtonAnchor[i].texture:SetTexture("Interface\\Icons\\Spell_Nature_WispSplode")
+    CoolDownButtonAnchor[i].texture:SetAllPoints(CoolDownButtonAnchor[i])
+end
 
 local cooldowns = {}
+local spellTable = {}
 
 local defaults = {
 	profile = {
@@ -160,10 +163,15 @@ function CoolDownButtons:OnInitialize()
 	self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
 	self:RegisterEvent("BAG_UPDATE_COOLDOWN")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
+    self:RegisterEvent("SPELLS_CHANGED", "ResetSpells")
     self:RegisterMessage("CoolDownButtonsConfigChanged")
 end
 
 function CoolDownButtons:OnEnable()
+
+    self.spellTable = spellTable
+    self:ResetSpells()
+
     self.testMode = false
     self.testModeTime = 15
     self.testModeStart = 0
@@ -179,11 +187,29 @@ function CoolDownButtons:OnEnable()
     for i = 1, self.numcooldownbuttons do
         self.cdbtns[i] = self:createButton(i)
     end
-    
     -- Hack to keep code "dry" :)
     self:CoolDownButtonsConfigChanged()    
     
     local frame = CreateFrame("Frame"); frame:SetScript("OnUpdate", CoolDownButtons_UPDATE)
+end
+
+function CoolDownButtons:ResetSpells()
+	for k in pairs(spellTable) do
+		spellTable[k] = nil
+	end
+	for spellTree = 1, GetNumSpellTabs() do
+		local _, _, offset, num = GetSpellTabInfo(spellTree)
+		for j = 1, num do
+			local spellIndex = offset + j
+			local spellName, spellID  = self:myGetSpellName(spellIndex)
+			spellTable[spellName] = {
+                spellName  = spellName,
+                spellIndex = spellIndex,
+                spellID    = spellID,
+                spellTree  = spellTree,
+            }
+		end
+	end
 end
 
 function CoolDownButtons:SaveAnchorPos(anchor)
@@ -195,21 +221,22 @@ function CoolDownButtons:SaveAnchorPos(anchor)
     --  ^- this shit wont work so i use this -v
     LibStub("AceConfigRegistry-3.0"):NotifyChange("CoolDown Buttons") -- It causes a short flash but it works :/
 end
+
 function CoolDownButtons:CoolDownButtonsConfigChanged()
     if self.db.profile.anchors.spells.show then
-        CoolDownButtonAnchor:Show()
+        CoolDownButtonAnchor[1]:Show()
     else
-        CoolDownButtonAnchor:Hide()
+        CoolDownButtonAnchor[1]:Hide()
     end	
     if self.db.profile.anchors.items.show and self.db.profile.splitRows then
-        CoolDownButtonAnchor2:Show()
+        CoolDownButtonAnchor[2]:Show()
     else
-        CoolDownButtonAnchor2:Hide()
+        CoolDownButtonAnchor[2]:Hide()
     end	
     if self.db.profile.anchors.soon.show and self.db.profile.splitSoon then
-        CoolDownButtonAnchor3:Show()
+        CoolDownButtonAnchor[3]:Show()
     else
-        CoolDownButtonAnchor3:Hide()
+        CoolDownButtonAnchor[3]:Hide()
     end	
     for i = 1, self.numcooldownbuttons do
         if self.db.profile.chatPost then
@@ -222,12 +249,11 @@ function CoolDownButtons:CoolDownButtonsConfigChanged()
     if self.testMode then
         self:SetUpTestModeFakeCDS()
     end
-    CoolDownButtonAnchor:ClearAllPoints()
-    CoolDownButtonAnchor2:ClearAllPoints()
-    CoolDownButtonAnchor3:ClearAllPoints()
-    CoolDownButtonAnchor:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", self.db.profile.anchors.spells.pos.x, self.db.profile.anchors.spells.pos.y)
-    CoolDownButtonAnchor2:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", self.db.profile.anchors.items.pos.x, self.db.profile.anchors.items.pos.y)
-    CoolDownButtonAnchor3:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", self.db.profile.anchors.soon.pos.x, self.db.profile.anchors.soon.pos.y)
+    for i = 1, 3 do
+        local forBar = CoolDownButtonAnchor[i].what
+        CoolDownButtonAnchor[i]:ClearAllPoints()
+        CoolDownButtonAnchor[i]:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", self.db.profile.anchors[forBar].pos.x, self.db.profile.anchors[forBar].pos.y)
+    end    
 end
 
 function CoolDownButtons_UPDATE(self, elapsed)
@@ -242,94 +268,32 @@ function CoolDownButtons_UPDATE(self, elapsed)
             cooldownframe.textFrame.text:Show()
             if not CoolDownButtons.testMode then
                 if cooldown["cdtype"] == "spell" then -- spell
-                    if (GetSpellCooldown(cooldown["id"], BOOKTYPE_SPELL) ~= nil and GetSpellCooldown(cooldown["id"], BOOKTYPE_SPELL) > 0) then
-                        local time = ceil(cooldown["start"] + cooldown["duration"] - GetTime())
-                        if time < 60 then
-                            cooldownframe.textFrame.text:SetText(string.format("0:%02d", time))
-                        elseif( time < 3600 ) then
-                            local m = math.floor(time / 60)
-                            local s = math.fmod(time, 60)
-                            cooldownframe.textFrame.text:SetText(string.format("%d:%02d", m, s))
-                        else
-                            local hr = math.floor(time / 3600)
-                            local m = math.floor( math.fmod(time, 3600) / 60 )
-                            cooldownframe.textFrame.text:SetText(string.format("%d.%02dhr", hr, m))
-                        end
-                        frame.texture:SetTexture(cooldown["texture"])
-                        
-                        cooldownframe:SetCooldown(cooldown["start"], cooldown["duration"])
-                    else
+                    local cooldownCheck = GetSpellCooldown(cooldown["id"], BOOKTYPE_SPELL)
+                    if (not cooldownCheck) or cooldownCheck == 0 then
                         hideFrame = true
                     end
                 elseif cooldown["cdtype"] == "eq_item" then -- equipped Item (see Character Info)
-                    if  GetInventoryItemCooldown("player", cooldown["id"]) ~= nil
-                    and GetInventoryItemCooldown("player", cooldown["id"]) > 0
-                    and cooldown["name"] == select(3, string.find(GetInventoryItemLink("player", cooldown["id"]), "Hitem[^|]+|h%[([^[]+)%]")) then
-                        local time = ceil(cooldown["start"] + cooldown["duration"] - GetTime())
-                        if time < 60 then
-                            cooldownframe.textFrame.text:SetText(string.format("0:%02d", time))
-                        elseif( time < 3600 ) then
-                            local m = math.floor(time / 60)
-                            local s = math.fmod(time, 60)
-                            cooldownframe.textFrame.text:SetText(string.format("%d:%02d", m, s))
-                        else
-                            local hr = math.floor(time / 3600)
-                            local m = math.floor( math.fmod(time, 3600) / 60 )
-                            cooldownframe.textFrame.text:SetText(string.format("%d.%02dhr", hr, m))
-                        end
-                        frame.texture:SetTexture(cooldown["texture"])
-                        
-                        cooldownframe:SetCooldown(cooldown["start"], cooldown["duration"])
-                    else
+                    local cooldownCheck = GetInventoryItemCooldown("player", cooldown["id"])
+                    local itemLink = GetInventoryItemLink("player", cooldown["id"])
+                    if (not cooldownCheck) or cooldownCheck == 0 or (not itemLink)
+                    or cooldown["name"] ~= select(3, string_find(GetInventoryItemLink("player", cooldown["id"]), "Hitem[^|]+|h%[([^[]+)%]")) then
                         hideFrame = true
                     end
                 elseif cooldown["cdtype"] == "bag_item" then -- Item in Bag
-                    if  GetContainerItemCooldown(cooldown["id"], cooldown["id2"]) ~= nil
-                    and GetContainerItemCooldown(cooldown["id"], cooldown["id2"]) > 0 then
-                        local link = GetContainerItemLink(cooldown["id"], cooldown["id2"])
-                        local itemID = select(3, string.find(link, "item:(%d+):"))
-                        local name = CoolDownButtons:getItemGroup(itemID) or select(3, string.find(link, "Hitem[^|]+|h%[([^[]+)%]"))
-                        if cooldown["name"] == name then
-                            local time = ceil(cooldown["start"] + cooldown["duration"] - GetTime())
-                            if time < 60 then
-                                cooldownframe.textFrame.text:SetText(string.format("0:%02d", time))
-                            elseif( time < 3600 ) then
-                                local m = math.floor(time / 60)
-                                local s = math.fmod(time, 60)
-                                cooldownframe.textFrame.text:SetText(string.format("%d:%02d", m, s))
-                            else
-                                local hr = math.floor(time / 3600)
-                                local m = math.floor( math.fmod(time, 3600) / 60 )
-                                cooldownframe.textFrame.text:SetText(string.format("%d.%02dhr", hr, m))
-                            end
-                            frame.texture:SetTexture(cooldown["texture"])                    
-                            cooldownframe:SetCooldown(cooldown["start"], cooldown["duration"])
-                        end
-                    else
+                    local cooldownCheck = GetContainerItemCooldown(cooldown["id"], cooldown["id2"])
+                    local itemLink = GetContainerItemLink(cooldown["id"], cooldown["id2"])
+                    if (not cooldownCheck) or cooldownCheck == 0 or (not itemLink)
+                    or cooldown["name"] ~= (CoolDownButtons:getItemGroup(select(3, string_find(itemLink, "item:(%d+):"))) or select(3, string_find(itemLink, "Hitem[^|]+|h%[([^[]+)%]"))) then
                         hideFrame = true
                     end
                 end
             else
                 local time = ceil(cooldown["start"] + cooldown["duration"] - GetTime())
-                if time > 0 then
-                    if time < 60 then
-                        cooldownframe.textFrame.text:SetText(string.format("0:%02d", time))
-                    elseif( time < 3600 ) then
-                        local m = math.floor(time / 60)
-                        local s = math.fmod(time, 60)
-                        cooldownframe.textFrame.text:SetText(string.format("%d:%02d", m, s))
-                    else
-                        local hr = math.floor(time / 3600)
-                        local m = math.floor( math.fmod(time, 3600) / 60 )
-                        cooldownframe.textFrame.text:SetText(string.format("%d.%02dhr", hr, m))
-                    end
-                    frame.texture:SetTexture(cooldown["texture"]) -- "Interface\\Icons\\INV_Misc_Food_02"               
-                    cooldownframe:SetCooldown(cooldown["start"], cooldown["duration"])
-                else
+                if time < 0 then
                     hideFrame = true
                 end
             end
-            if hideFrame then
+            if hideFrame or cooldown.forceHide then
                 if CoolDownButtons.db.profile.anchors[frame.usedInBar].usePulse then
                     if not frame.pulseActive then
                         CoolDownButtons:StartPulse(frame)
@@ -349,6 +313,24 @@ function CoolDownButtons_UPDATE(self, elapsed)
                     frame.used = false
                     frame.usedInBar = ""
                 end
+            else
+                local time = ceil(cooldown["start"] + cooldown["duration"] - GetTime())
+                if time < 0 then
+                    cooldown.forceHide = true
+                end
+                if time < 60 then
+                    cooldownframe.textFrame.text:SetText(string_format("0:%02d", time))
+                elseif( time < 3600 ) then
+                    local m = math.floor(time / 60)
+                    local s = math.fmod(time, 60)
+                    cooldownframe.textFrame.text:SetText(string_format("%d:%02d", m, s))
+                else
+                    local hr = math.floor(time / 3600)
+                    local m = math.floor( math.fmod(time, 3600) / 60 )
+                    cooldownframe.textFrame.text:SetText(string_format("%d.%02dhr", hr, m))
+                end
+                frame.texture:SetTexture(cooldown["texture"])
+                cooldownframe:SetCooldown(cooldown["start"], cooldown["duration"])
             end
 
             if frame.used then
@@ -375,7 +357,7 @@ function CoolDownButtons_UPDATE(self, elapsed)
                     local sub = CoolDownButtons.soonnum / 2
                     order = order - sub + 1
                 end
-                
+
                 local scale = CoolDownButtons.db.profile.anchors[forBar].scale
                 local alpha = CoolDownButtons.db.profile.anchors[forBar].alpha
                 local direction = CoolDownButtons.db.profile.anchors[forBar].direction
@@ -417,18 +399,18 @@ function CoolDownButtons_UPDATE(self, elapsed)
                     local pos = save[cooldown["name"]].pos
                     frame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", pos.x, pos.y)
                 else
-                    local anchorTo = CoolDownButtonAnchor
+                    local anchorTo = CoolDownButtonAnchor[1]
                     if CoolDownButtons.db.profile.splitRows then
                         if forBar == "spells" then
-                            anchorTo = CoolDownButtonAnchor
+                            anchorTo = CoolDownButtonAnchor[1]
                         elseif forBar == "items" then
-                            anchorTo = CoolDownButtonAnchor2
+                            anchorTo = CoolDownButtonAnchor[2]
                         elseif forBar == "soon" then
-                            anchorTo = CoolDownButtonAnchor3
+                            anchorTo = CoolDownButtonAnchor[3]
                         end
                     end 
                     if CoolDownButtons.db.profile.splitSoon and forBar == "soon" then
-                        anchorTo = CoolDownButtonAnchor3
+                        anchorTo = CoolDownButtonAnchor[3]
                     end
                     if direction == "left" then
                         frame:SetPoint("CENTER", anchorTo, "CENTER", - (buttonPadding * order * scale), 0)
@@ -461,66 +443,61 @@ end
 
 function CoolDownButtons:SPELL_UPDATE_COOLDOWN()
     if self.testMode then return end
-    for tabIndex = 1, MAX_SKILLLINE_TABS do
-        local tabName, tabTexture, tabSpellOffset, tabNumSpells = GetSpellTabInfo(tabIndex)
-        if not tabName then
-            break
-        end
-        for spellIndex = tabSpellOffset + 1, tabSpellOffset + tabNumSpells do
-            local spellName, spellRank = self:myGetSpellName(spellIndex)
-            local spellTexture = GetSpellTexture(spellIndex, BOOKTYPE_SPELL)
-            if (GetSpellCooldown(spellIndex, BOOKTYPE_SPELL) ~= nil and GetSpellCooldown(spellIndex, BOOKTYPE_SPELL) > 0) then
-                local start, duration, enable = GetSpellCooldown(spellIndex, BOOKTYPE_SPELL)
-                if self.db.profile.spellShowAfterMaxDurationPassed then
-                    remaining = ceil(start + duration - GetTime())
-                else
-                    remaining = duration
-                end
-                if duration > 3 and enable == 1 and cooldowns[spellName] == nil and remaining < self.db.profile.maxSpellDuration and self.db.profile.saveToPos[spellName].show then
-                -- continue only if duration > GCD AND cooldown started AND cooldown not registred yet
-                    local freeindex = self:getFreeFrame(spellName, "spells")
-                    if freeindex then
-                        local saved = nil
-                        if self.db.profile.saveToPos[spellName].default then
-                            self.db.profile.saveToPos[spellName].default = false -- added to DB!
-                            self.db.profile.saveToPos[spellName].cdtype  = "spell"
-                            CoolDownButtonsConfig:InitPositions()
-                        end
-                        if self.db.profile.saveToPos[spellName].saved then
-                            saved = 1
-                        end
-                        cooldowns[spellName] = {
-                            cdtype    = "spell",       -- "item" or "spell"
-                            id        = spellIndex,    -- itemid or spellid
-                            name      = spellName,     -- item or spell name
-                            start     = start,         -- cooldown start time
-                            duration  = duration,      -- cooldown duration
-                            texture   = spellTexture,  -- item or spell texture
-                            buttonID  = freeindex,     -- assign to button #?
-                            order     = 0,             -- display position
-                            saved     = saved,         -- position saved?
-                        }     
-                        if spellName == L["Spellgroup: Shocks"] then
-                            cooldowns[spellName].texture = "Interface\\AddOns\\CoolDownButtons\\shocks.tga"
-                        end
-                        if spellName == L["Spellgroup: Traps"] then
-                            cooldowns[spellName].texture = "Interface\\Icons\\Spell_Frost_ChainsOfIce"
-                        end
-                        --[[ for 2.4
-                        if spellName == L["Spellgroup: Shocks"] or spellName == L["Spellgroup: Traps"] then
-                            cooldowns[spellName].texture = self.spellgroups[spellName].texture
-                        end
-                        --]]
-                        
-                        self.cdbtns[freeindex].used = true
-                        if saved ~= 1 then
-                            self.cdbtns[freeindex].usedInBar = "spells"
-                        else
-                            self.cdbtns[freeindex].usedInBar = "single"
-                        end
-                    end
-                end 
+    for k, spellData in pairs(spellTable) do
+        local spellIndex = spellData.spellIndex
+        local spellName  = spellData.spellName
+        local spellTexture = GetSpellTexture(spellIndex, BOOKTYPE_SPELL)
+        local start, duration, enable = GetSpellCooldown(spellIndex, BOOKTYPE_SPELL)
+        if (start ~= nil and start > 0) then
+            if self.db.profile.spellShowAfterMaxDurationPassed then
+                remaining = ceil(start + duration - GetTime())
+            else
+                remaining = duration
             end
+            if duration > 3 and enable == 1 and cooldowns[spellName] == nil and remaining < self.db.profile.maxSpellDuration and self.db.profile.saveToPos[spellName].show then
+            -- continue only if duration > GCD AND cooldown started AND cooldown not registred yet
+                local freeindex = self:getFreeFrame(spellName, "spells")
+                if freeindex then
+                    local saved = nil
+                    if self.db.profile.saveToPos[spellName].default then
+                        self.db.profile.saveToPos[spellName].default = false -- added to DB!
+                        self.db.profile.saveToPos[spellName].cdtype  = "spell"
+                        CoolDownButtonsConfig:InitPositions()
+                    end
+                    if self.db.profile.saveToPos[spellName].saved then
+                        saved = 1
+                    end
+                    cooldowns[spellName] = {
+                        cdtype    = "spell",       -- "item" or "spell"
+                        id        = spellIndex,    -- itemid or spellid
+                        name      = spellName,     -- item or spell name
+                        start     = start,         -- cooldown start time
+                        duration  = duration,      -- cooldown duration
+                        texture   = spellTexture,  -- item or spell texture
+                        buttonID  = freeindex,     -- assign to button #?
+                        order     = 0,             -- display position
+                        saved     = saved,         -- position saved?
+                    }
+                    if spellName == L["Spellgroup: Shocks"] then
+                        cooldowns[spellName].texture = "Interface\\AddOns\\CoolDownButtons\\shocks.tga"
+                    end
+                    if spellName == L["Spellgroup: Traps"] then
+                        cooldowns[spellName].texture = "Interface\\Icons\\Spell_Frost_ChainsOfIce"
+                    end
+                    --[[ for 2.4
+                    if spellName == L["Spellgroup: Shocks"] or spellName == L["Spellgroup: Traps"] then
+                        cooldowns[spellName].texture = self.spellgroups[spellName].texture
+                    end
+                    --]]
+                    
+                    self.cdbtns[freeindex].used = true
+                    if saved ~= 1 then
+                        self.cdbtns[freeindex].usedInBar = "spells"
+                    else
+                        self.cdbtns[freeindex].usedInBar = "single"
+                    end
+                end
+            end 
         end
     end
     self:sortButtons()
@@ -538,7 +515,7 @@ function CoolDownButtons:BAG_UPDATE_COOLDOWN()
         if duration > 3 and enable == 1  and remaining < self.db.profile.maxItemDuration then
         -- continue only if duration > GCD AND cooldown started
             local link = GetInventoryItemLink("player",i)
-            local name = select(3, string.find(link, "Hitem[^|]+|h%[([^[]+)%]"))
+            local name = select(3, string_find(link, "Hitem[^|]+|h%[([^[]+)%]"))
             if cooldowns[name] == nil and self.db.profile.saveToPos[name].show then
                 local freeindex = self:getFreeFrame(name, "items")
                 if freeindex then
@@ -573,9 +550,9 @@ function CoolDownButtons:BAG_UPDATE_COOLDOWN()
             end
         end
 	end
-	for i=0,4 do
+	for i=0, 4 do
 		local slots = GetContainerNumSlots(i)
-		for j=1,slots do
+		for j=1, slots do
 			local start, duration, enable = GetContainerItemCooldown(i,j)
 			if self.db.profile.itemShowAfterMaxDurationPassed then
                 remaining = ceil(start + duration - GetTime())
@@ -585,8 +562,8 @@ function CoolDownButtons:BAG_UPDATE_COOLDOWN()
             if duration > 3 and enable == 1  and remaining < self.db.profile.maxItemDuration then
             -- continue only if duration > GCD AND cooldown started
                 local link = GetContainerItemLink(i,j)
-                local itemID = select(3, string.find(link, "item:(%d+):"))
-                local name = self:getItemGroup(itemID) or select(3, string.find(link, "Hitem[^|]+|h%[([^[]+)%]"))
+                local itemID = select(3, string_find(link, "item:(%d+):"))
+                local name = self:getItemGroup(itemID) or select(3, string_find(link, "Hitem[^|]+|h%[([^[]+)%]"))
                 if cooldowns[name] == nil and self.db.profile.saveToPos[name].show then
                     local freeindex = self:getFreeFrame(name, "items")
                     if freeindex then
@@ -627,6 +604,7 @@ function CoolDownButtons:BAG_UPDATE_COOLDOWN()
 end
 
 function CoolDownButtons:getItemGroup(itemid)
+    if not itemid then return nil end
     local group = select(2, LibStub("LibPeriodicTable-3.1"):ItemInSet(itemid, "CDB_Itemgroup"))
     for groupKey, value in pairs(self.itemgroups) do
         if type(value) == "table" then
@@ -672,7 +650,7 @@ end
 function CoolDownButtons:myGetSpellName(index)
     local spell, rank = GetSpellName(index, BOOKTYPE_SPELL)
     local spellLink   = GetSpellLink(spell)
-    local spellID     = select(3, string.find(spellLink, "spell:(%d+)"))
+    local spellID     = select(3, string_find(spellLink, "spell:(%d+)"))
     local group       = select(2, LibStub("LibPeriodicTable-3.1"):ItemInSet(spellID, "CDB_Spellgroup"))
     local groupKey    = nil
     
@@ -686,9 +664,9 @@ function CoolDownButtons:myGetSpellName(index)
         end
     end
     if groupKey then
-        return self.spellgroups[groupKey].name, rank
+        return self.spellgroups[groupKey].name, spellID
     else
-        return spell, rank
+        return spell, spellID
     end
 end
 --]]
@@ -764,15 +742,15 @@ function CoolDownButtons:createButton(i, justMove)
                                                     local time = ceil(cooldown["start"] + cooldown["duration"] - GetTime())
                                                     local formated_time
                                                     if time < 60 then
-                                                        formated_time = string.format("0:%02d", time)
+                                                        formated_time = string_format("0:%02d", time)
                                                     elseif( time < 3600 ) then
                                                         local m = math.floor(time / 60)
                                                         local s = math.fmod(time, 60)
-                                                        formated_time = string.format("%d:%02d", m, s)
+                                                        formated_time = string_format("%d:%02d", m, s)
                                                     else
                                                         local hr = math.floor(time / 3600)
                                                         local m = math.floor( math.fmod(time, 3600) / 60 )
-                                                        formated_time = string.format("%d.%02dhr", hr, m)
+                                                        formated_time = string_format("%d.%02dhr", hr, m)
                                                     end
                                                     
                                                     local chatmsg
@@ -857,7 +835,7 @@ function CoolDownButtons:createButton(i, justMove)
             break
         end
     end
-    
+
     local c  = self.db.profile.fontColor
     button.cooldown = cooldown
     button.cooldown.textFrame = CreateFrame("Frame", "CoolDownButton"..i.."CooldownText", UIParent)
@@ -868,76 +846,76 @@ function CoolDownButtons:createButton(i, justMove)
     button.cooldown.textFrame.text:SetTextColor(c.Red, c.Green,  c.Blue,  c.Alpha)
     button.cooldown.textFrame.text:SetText("00:00")
     button.cooldown.textFrame:Show()
-    
-    button:SetFrameLevel(CoolDownButtonAnchor:GetFrameLevel()-3)
-    button.cooldown:SetFrameLevel(CoolDownButtonAnchor:GetFrameLevel()-2)
-    button.cooldown.textFrame:SetFrameLevel(CoolDownButtonAnchor:GetFrameLevel()-1)
-    
+
+    button:SetFrameLevel(CoolDownButtonAnchor[1]:GetFrameLevel()-3)
+    button.cooldown:SetFrameLevel(CoolDownButtonAnchor[1]:GetFrameLevel()-2)
+    button.cooldown.textFrame:SetFrameLevel(CoolDownButtonAnchor[1]:GetFrameLevel()-1)
+
     button.pulse = CreateFrame('Frame', nil, button)
-	button.pulse:SetAllPoints(button)
-	button.pulse:SetToplevel(true)
-	button.pulse.icon = button:CreateTexture(nil, 'OVERLAY')
-	button.pulse.icon:SetPoint('CENTER')
-	button.pulse.icon:SetBlendMode('ADD')
-	button.pulse.icon:SetHeight(button:GetHeight())
-	button.pulse.icon:SetWidth(button:GetWidth())
-	button.pulse.icon:Hide()
+    button.pulse:SetAllPoints(button)
+    button.pulse:SetToplevel(true)
+    button.pulse.icon = button:CreateTexture(nil, 'OVERLAY')
+    button.pulse.icon:SetPoint('CENTER')
+    button.pulse.icon:SetBlendMode('ADD')
+    button.pulse.icon:SetHeight(button:GetHeight())
+    button.pulse.icon:SetWidth(button:GetWidth())
+    button.pulse.icon:Hide()
     button.pulseActive = false
-    
+
     button:Hide()
     return button
 end
 
 function CoolDownButtons:StartPulse(parent)
-	local icon = parent.texture
+    local icon = parent.texture
 
-	if icon and parent:IsVisible() then
-		local pulse = parent.pulse
-		if pulse then
-			pulse.scale = 1
-			pulse.icon:SetTexture(icon:GetTexture())
+    if icon and parent:IsVisible() then
+        local pulse = parent.pulse
+        if pulse then
+            pulse.scale = 1
+            pulse.icon:SetTexture(icon:GetTexture())
 
-			local r, g, b = icon:GetVertexColor()
-			pulse.icon:SetVertexColor(r, g, b, 0.7)
-			pulse.icon:Show()
+            local r, g, b = icon:GetVertexColor()
+            pulse.icon:SetVertexColor(r, g, b, 0.7)
+            pulse.icon:Show()
 
             parent.pulseActive = true
-		end
-	end
+        end
+    end
 end
 
 function CoolDownButtons:UpdatePulse(parent, elapsed)
     local pulse = parent.pulse
-	if pulse.scale >= 2 then
-		pulse.dec = 1
-	end
+    if pulse.scale >= 2 then
+        pulse.dec = 1
+    end
 
-	pulse.scale = max(min(pulse.scale + (pulse.dec and -1 or 1) * pulse.scale * (elapsed/0.5), 2), 1)
+    pulse.scale = max(min(pulse.scale + (pulse.dec and -1 or 1) * pulse.scale * (elapsed/0.5), 2), 1)
 
-	if pulse.scale <= 1 then
-		pulse.icon:Hide()
-		pulse.dec = nil
+    if pulse.scale <= 1 then
+        pulse.icon:Hide()
+        pulse.dec = nil
         parent.pulseActive = false
         return true
-	else
-		pulse.icon:SetHeight(pulse:GetHeight() * pulse.scale)
-		pulse.icon:SetWidth(pulse:GetWidth() * pulse.scale)
+    else
+        pulse.icon:SetHeight(pulse:GetHeight() * pulse.scale)
+        pulse.icon:SetWidth(pulse:GetWidth() * pulse.scale)
         return false
     end
 end
 
 function CoolDownButtons:gsub(text, variable, value)
 	if (value) then
-		text = string.gsub(text, variable, value);
-	elseif (string.find(text, " "..variable)) then
-		text = string.gsub(text, " "..variable, "");
+		text = string_gsub(text, variable, value);
+	elseif (string_find(text, " "..variable)) then
+		text = string_gsub(text, " "..variable, "");
 	else
-		text = string.gsub(text, variable, "");
+		text = string_gsub(text, variable, "");
 	end
 	return text;
 end
 
-function  CoolDownButtons:ResetCooldowns()
+function CoolDownButtons:ResetCooldowns()
     for k in pairs(cooldowns) do
         cooldowns[k] = nil
     end
@@ -987,7 +965,6 @@ function CoolDownButtons:sortButtons()
 end
 
 function CoolDownButtons:EndTestMode(force)
-    ChatFrame2:AddMessage("ende")
     CoolDownButtons.testMode = false
     CoolDownButtons:ResetCooldowns()
 	CoolDownButtons:SendMessage("CoolDownButtonsTestModeEnd")
@@ -1003,7 +980,6 @@ function CoolDownButtons:StartTestMode(mode)
     self.testModeStart = GetTime()
     self:ResetCooldowns()
     self:SetUpTestModeFakeCDS(mode)
-    ChatFrame2:AddMessage("start")
 end
 
 function CoolDownButtons:SetUpTestModeFakeCDS()
@@ -1071,8 +1047,8 @@ end
 -- http://www.wowwiki.com/HOWTO:_Do_Tricks_With_Tables#Iterate_with_sorted_keys
 function sortedpairs(t,comparator)
     local sortedKeys = {};
-	table.foreach(t, function(k,v) table.insert(sortedKeys,k) end);
-	table.sort(sortedKeys,comparator);
+	table_foreach(t, function(k,v) table_insert(sortedKeys,k) end);
+	table_sort(sortedKeys,comparator);
 	local i = 0;
 	local function _f(_s,_v)
 		i = i + 1;

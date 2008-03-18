@@ -1,10 +1,16 @@
+local LibStub = LibStub
 CoolDownButtonsConfig = CoolDownButtons:NewModule("Config","AceConsole-3.0","AceEvent-3.0")
+local CoolDownButtonsConfig = CoolDownButtonsConfig
 local L = LibStub("AceLocale-3.0"):GetLocale("CoolDown Buttons", false)
 local LSM = LibStub("LibSharedMedia-2.0")
 
 local CDBCHelper = {}
 local options = {}
 local db
+
+local string_format = string.format
+local tostring = tostring
+local tonumber = tonumber
 
 options.type = "group"
 --options.name = "CoolDown Buttons"
@@ -1220,8 +1226,8 @@ function CoolDownButtonsConfig:HideFrameToMoveSavedCD(name)
 	self.moveableframe:Hide()
 	self.moveableframe.cooldown.textFrame.text:Hide()
     
-    db.saveToPos[name].pos.x = tonumber(string.format("%.3f", self.moveableframe:GetLeft()))
-    db.saveToPos[name].pos.y = tonumber(string.format("%.3f", self.moveableframe:GetBottom()))
+    db.saveToPos[name].pos.x = tonumber(string_format("%.3f", self.moveableframe:GetLeft()))
+    db.saveToPos[name].pos.y = tonumber(string_format("%.3f", self.moveableframe:GetBottom()))
     
     local items = options.args.savetopos.args.items.args
     for k, v in pairs(items) do
