@@ -51,13 +51,14 @@ options.args.display = {
             desc = L["Toggle showing Item and Spell Cooldowns in an additional row if they are expiring soon."],
             type = "toggle",
             arg = "splitSoon",
-        },
+        }, dummy_11 = { order = 11, type = "description", name = "", },
         showTime = {
             order = 20,
             name = L["Show Time"],
             desc = L["Toggle showing Cooldown Time at the Buttons."],
             type = "toggle",
             arg = "showTime",
+            width = "full",
         },
         showCoolDownSpiral = {
             order = 21,
@@ -66,6 +67,13 @@ options.args.display = {
             type = "toggle",
             arg = "showCoolDownSpiral",
         },
+        showOmniCC = {
+            order = 22,
+            name = L["Show OmniCC Text"],
+            desc = L["Toggle showing OmniCC Text on the Buttons. (Only if it is installed!)"],
+            type = "toggle",
+            arg = "showOmniCC",
+        }, dummy_23 = { order = 23, type = "description", name = "", },
         fontColor = {
             order = 30,
             name = L["Font Color"],

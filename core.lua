@@ -19,6 +19,7 @@ local GetNumSpellTabs = GetNumSpellTabs
 local GetSpellTabInfo = GetSpellTabInfo
 local string_format = string.format
 local table_foreach = table.foreach
+local getmetatable = getmetatable
 local GetSpellName = GetSpellName
 --local GetSpellLink = GetSpellLink
 local table_insert = table.insert
@@ -32,6 +33,7 @@ local ceil = math.ceil
 local select = select
 local pairs = pairs
 local type = type
+local CDB_SetCooldown = getmetatable(CreateFrame('Cooldown', nil, nil, 'CooldownFrameTemplate')).__index.SetCooldown
 
 CoolDownButtonAnchor = {}
 local CoolDownButtonAnchor = CoolDownButtonAnchor
@@ -73,6 +75,7 @@ local defaults = {
         showTime    = true,
         showCoolDownSpiral = true,
         splitRows   = false,
+        showOmniCC  = false,
         splitSoon   = false,
         anchors     = {
             spells = {
@@ -210,9 +213,7 @@ function CoolDownButtons:ResetSpells()
             }
 		end
 	end
-    if self.cdbtns then -- Do not run ResetCooldowns() befor buttons talble is created
-        self:ResetCooldowns()
-    end
+    self:ResetCooldowns()
 end
 
 function CoolDownButtons:SaveAnchorPos(anchor)
@@ -337,7 +338,7 @@ function CoolDownButtons_UPDATE(self, elapsed)
                     cooldownframe.textFrame.text:SetText(string_format("%d.%02dhr", hr, m))
                 end
                 frame.texture:SetTexture(cooldown["texture"])
-                cooldownframe:SetCooldown(cooldown["start"], cooldown["duration"])
+                cooldownframe:SetCD(cooldown["start"], cooldown["duration"], CoolDownButtons.db.profile.showOmniCC)
             end
 
             if frame.used then
@@ -829,7 +830,17 @@ function CoolDownButtons:createButton(i, justMove)
     
     button:GetNormalTexture():SetWidth(75 * self.db.profile.scale)
     button:GetNormalTexture():SetHeight(75 * self.db.profile.scale)
-
+--[[    
+    button:GetNormalTexture():Hide()
+    if cyCircled then
+        ChatFrame2:AddMessage("aaaaaa")
+        button.border = button:CreateTexture(button:GetName().."Overlay", "OVERLAY")
+        button.border:SetTexture(cyCircled.skins[cyCircled.db.profile.skin].overlay.tex)
+        button.border:SetPoint("TOPLEFT", button, "TOPLEFT", -5, 5)
+        button.border:SetWidth(91 * self.db.profile.scale)
+        button.border:SetHeight(91 * self.db.profile.scale)
+    end
+--]]
     button.used      = false
     button.usedInBar = ""
     button.id        = i
@@ -845,7 +856,7 @@ function CoolDownButtons:createButton(i, justMove)
 
     local c  = self.db.profile.fontColor
     button.cooldown = cooldown
-    button.cooldown.textFrame = CreateFrame("Frame", "CoolDownButton"..i.."CooldownText", UIParent)
+    button.cooldown.textFrame = CreateFrame("Frame", button:GetName().."CooldownText", UIParent)
     button.cooldown.textFrame:SetAllPoints(button)
     button.cooldown.textFrame.text = cooldown.textFrame:CreateFontString(nil, "OVERLAY")
     button.cooldown.textFrame.text:SetPoint("CENTER", cooldown.textFrame, "CENTER", 0, -33 * self.db.profile.scale)
@@ -857,6 +868,16 @@ function CoolDownButtons:createButton(i, justMove)
     button:SetFrameLevel(CoolDownButtonAnchor[1]:GetFrameLevel()-3)
     button.cooldown:SetFrameLevel(CoolDownButtonAnchor[1]:GetFrameLevel()-2)
     button.cooldown.textFrame:SetFrameLevel(CoolDownButtonAnchor[1]:GetFrameLevel()-1)
+    
+    button.cooldown.SetCooldown2 = CDB_SetCooldown    
+    button.cooldown.SetCD = function(self, start, duration, showOmniCC)
+                                if showOmniCC then
+                                    self:SetCooldown(start, duration)
+                                else
+                                    self:SetCooldown(0, 0)
+                                    self:SetCooldown2(start, duration)
+                                end
+                            end
 
     button.pulse = CreateFrame('Frame', nil, button)
     button.pulse:SetAllPoints(button)
@@ -923,18 +944,20 @@ function CoolDownButtons:gsub(text, variable, value)
 end
 
 function CoolDownButtons:ResetCooldowns()
-    for k in pairs(cooldowns) do
-        cooldowns[k] = nil
-    end
-    for key, button in pairs(self.cdbtns) do
-        button:Hide()
-        button.cooldown.textFrame.text:Hide()
-        button.used = false
-        button.usedInBar = ""
-    end
-    if not self.testMode then
-        self:SPELL_UPDATE_COOLDOWN()
-        self:BAG_UPDATE_COOLDOWN()
+    if self.cdbtns then
+        for k in pairs(cooldowns) do
+            cooldowns[k] = nil
+        end
+        for key, button in pairs(self.cdbtns) do
+            button:Hide()
+            button.cooldown.textFrame.text:Hide()
+            button.used = false
+            button.usedInBar = ""
+        end
+        if not self.testMode then
+            self:SPELL_UPDATE_COOLDOWN()
+            self:BAG_UPDATE_COOLDOWN()
+        end
     end
 end
 
@@ -1087,3 +1110,6 @@ function cdb()
         ChatFrame2:AddMessage("----------------------")
     end
 end
+
+
+--/dump cyCircled.skins[cyCircled.db.profile.skin].overlay
