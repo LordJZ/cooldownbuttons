@@ -210,6 +210,7 @@ function CoolDownButtons:ResetSpells()
             }
 		end
 	end
+    self:ResetCooldowns()
 end
 
 function CoolDownButtons:SaveAnchorPos(anchor)
@@ -275,16 +276,20 @@ function CoolDownButtons_UPDATE(self, elapsed)
                 elseif cooldown["cdtype"] == "eq_item" then -- equipped Item (see Character Info)
                     local cooldownCheck = GetInventoryItemCooldown("player", cooldown["id"])
                     local itemLink = GetInventoryItemLink("player", cooldown["id"])
-                    if (not cooldownCheck) or cooldownCheck == 0 or (not itemLink)
-                    or cooldown["name"] ~= select(3, string_find(GetInventoryItemLink("player", cooldown["id"]), "Hitem[^|]+|h%[([^[]+)%]")) then
+                    if (not cooldownCheck) or cooldownCheck == 0 or (not itemLink) then
                         hideFrame = true
+                    end
+                    if (not itemLink) or cooldown["name"] ~= select(3, string_find(GetInventoryItemLink("player", cooldown["id"]), "Hitem[^|]+|h%[([^[]+)%]")) then
+                        cooldown.forceHide = true
                     end
                 elseif cooldown["cdtype"] == "bag_item" then -- Item in Bag
                     local cooldownCheck = GetContainerItemCooldown(cooldown["id"], cooldown["id2"])
                     local itemLink = GetContainerItemLink(cooldown["id"], cooldown["id2"])
-                    if (not cooldownCheck) or cooldownCheck == 0 or (not itemLink)
-                    or cooldown["name"] ~= (CoolDownButtons:getItemGroup(select(3, string_find(itemLink, "item:(%d+):"))) or select(3, string_find(itemLink, "Hitem[^|]+|h%[([^[]+)%]"))) then
+                    if (not cooldownCheck) or cooldownCheck == 0 or (not itemLink) then
                         hideFrame = true
+                    end
+                    if (not itemLink) or cooldown["name"] ~= (CoolDownButtons:getItemGroup(select(3, string_find(itemLink, "item:(%d+):"))) or select(3, string_find(itemLink, "Hitem[^|]+|h%[([^[]+)%]"))) then
+                        cooldown.forceHide = true
                     end
                 end
             else
@@ -294,7 +299,7 @@ function CoolDownButtons_UPDATE(self, elapsed)
                 end
             end
             if hideFrame or cooldown.forceHide then
-                if CoolDownButtons.db.profile.anchors[frame.usedInBar].usePulse then
+                if CoolDownButtons.db.profile.anchors[frame.usedInBar].usePulse and not cooldown.forceHide then
                     if not frame.pulseActive then
                         CoolDownButtons:StartPulse(frame)
                     else
