@@ -876,6 +876,7 @@ function CoolDownButtons:createButton(i, justMove)
 	button.pulse.icon:SetBlendMode('ADD')
 	button.pulse.icon:SetHeight(button:GetHeight())
 	button.pulse.icon:SetWidth(button:GetWidth())
+	button.pulse.icon:Hide()
     button.pulseActive = false
     
     button:Hide()
@@ -893,7 +894,7 @@ function CoolDownButtons:StartPulse(parent)
 
 			local r, g, b = icon:GetVertexColor()
 			pulse.icon:SetVertexColor(r, g, b, 0.7)
-			pulse:Show()
+			pulse.icon:Show()
 
             parent.pulseActive = true
 		end
@@ -909,7 +910,7 @@ function CoolDownButtons:UpdatePulse(parent, elapsed)
 	pulse.scale = max(min(pulse.scale + (pulse.dec and -1 or 1) * pulse.scale * (elapsed/0.5), 2), 1)
 
 	if pulse.scale <= 1 then
-		pulse:Hide()
+		pulse.icon:Hide()
 		pulse.dec = nil
         parent.pulseActive = false
         return true
