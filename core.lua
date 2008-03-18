@@ -210,7 +210,9 @@ function CoolDownButtons:ResetSpells()
             }
 		end
 	end
-    self:ResetCooldowns()
+    if self.cdbtns then -- Do not run ResetCooldowns() befor buttons talble is created
+        self:ResetCooldowns()
+    end
 end
 
 function CoolDownButtons:SaveAnchorPos(anchor)
@@ -1085,6 +1087,3 @@ function cdb()
         ChatFrame2:AddMessage("----------------------")
     end
 end
-
-
-
