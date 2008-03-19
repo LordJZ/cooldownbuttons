@@ -33,6 +33,12 @@ local opt_text_directions = {
 	["left"]  = L["Left"],
 	["right"] = L["Right"],
 }
+local opt_text_style = {
+	["00:00m"]    = "00:00[h]",
+	["00:00M"]    = "00:00[H]",
+	["0m"]    = "00[m||h]",
+	["0M"]    = "00[M||H]",
+}
 
 options.args.display = {
  	type = "group",
@@ -53,8 +59,26 @@ options.args.display = {
             type = "toggle",
             arg = "splitSoon",
         }, dummy_11 = { order = 11, type = "description", name = "", },
-        fontColor = {
+        fontToUse = {
+            order = 20,
+            name = L["Font"],
+            desc = "",
+            type = "select",
+            values = function() local fonts, newFonts = LSM:List("font"), {}; for k, v in pairs(fonts) do newFonts[v] = v; end return newFonts; end,
+            get = function( k ) return db[k.arg] end,
+            arg = "font",
+        },
+        fontSize = {
             order = 30,
+            name = L["Font size"],
+            desc = L["Set the Font size."],
+            type = "input",
+            arg = "fontSize",
+            set = function( k, v ) if not (tonumber(v) == nil) then db[k.arg] = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
+            get = function( k ) return tostring(db[k.arg]) end,
+        }, dummy_39 = { order = 39, type = "description", name = "", },
+        fontColor = {
+            order = 40,
             name = L["Font Color"],
             desc = L["Color of the CoolDown Timer Font."],
             type = "color",
@@ -73,23 +97,62 @@ options.args.display = {
                 CoolDownButtonsConfig:UpdateConfig()
             end,
         },
-        fontToUse = {
-            order = 40,
-            name = L["Font"],
+        timerStyle = {
+            order = 41,
+            name = L["Timertext Style"],
             desc = "",
             type = "select",
-            values = function() local fonts, newFonts = LSM:List("font"), {}; for k, v in pairs(fonts) do newFonts[v] = v; end return newFonts; end,
-            get = function( k ) return db[k.arg] end,
-            arg = "font",
+            values = opt_text_style,
+            arg = "timerStyle"
+        }, dummy_42 = { order = 42, type = "description", name = "", },
+        useTimedColors = {
+            order = 43,
+            name = L["Use timed colors"],
+            desc = "",
+            type = "toggle",
+            arg = "timedColors",
         },
-        fontSize = {
-            order = 41,
-            name = L["Font size"],
-            desc = L["Set the Font size."],
-            type = "input",
-            arg = "fontSize",
-            set = function( k, v ) if not (tonumber(v) == nil) then db[k.arg] = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
-            get = function( k ) return tostring(db[k.arg]) end,
+        fontColor2 = {
+            order = 44,
+            name = L["Font Color below 20 seconds"],
+            desc = L["Color of the CoolDown Timer Font for Cooldowns below 20 seconds."],
+            type = "color",
+            hasAlpha = true,
+            arg = "fontColor20sec",
+            get = function(info)
+                local t = db[info.arg]
+                return t.Red, t.Green, t.Blue, t.Alpha
+            end,
+            set = function(info, r, g, b, a)
+                local t = db[info.arg]
+                t.Red = r
+                t.Green = g
+                t.Blue = b
+                t.Alpha = a
+                CoolDownButtonsConfig:UpdateConfig()
+            end,
+            width = "full",
+        },
+        fontColor3 = {
+            order = 45,
+            name = L["Font Color below 5 seconds"],
+            desc = L["Color of the CoolDown Timer Font for Cooldowns below 5 seconds."],
+            type = "color",
+            hasAlpha = true,
+            arg = "fontColor5sec",
+            get = function(info)
+                local t = db[info.arg]
+                return t.Red, t.Green, t.Blue, t.Alpha
+            end,
+            set = function(info, r, g, b, a)
+                local t = db[info.arg]
+                t.Red = r
+                t.Green = g
+                t.Blue = b
+                t.Alpha = a
+                CoolDownButtonsConfig:UpdateConfig()
+            end,
+            width = "full",
         },
         cooldownsSpells = {
             type = "group",
@@ -206,7 +269,7 @@ options.args.display = {
                 },
                 buttonPadding = {
                     order = 100,
-                    name = L["Button Padding"],
+                    name = L["Button Spaceing"],
                     desc = L["Space Between Buttons."],
                     type = "input",
                     arg = "buttonPadding",
@@ -384,7 +447,7 @@ options.args.display = {
                 },
                 buttonPadding = {
                     order = 100,
-                    name = L["Button Padding"],
+                    name = L["Button Spaceing"],
                     desc = L["Space Between Buttons."],
                     type = "input",
                     arg = "buttonPadding",
@@ -576,7 +639,7 @@ options.args.display = {
                 },
                 buttonPadding = {
                     order = 120,
-                    name = L["Button Padding"],
+                    name = L["Button Spaceing"],
                     desc = L["Space Between Buttons."],
                     type = "input",
                     arg = "buttonPadding",

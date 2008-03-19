@@ -28,6 +28,8 @@ local CreateFrame = CreateFrame
 local string_gsub = string.gsub
 local string_find = string.find
 local table_sort = table.sort
+local math_floor = math.floor
+local math_fmod = math.fmod
 local tostring = tostring
 local tonumber = tonumber
 local ceil = math.ceil
@@ -69,6 +71,10 @@ local defaults = {
 	profile = {
         font        = "Skurri",
         fontColor   = { Red = 1, Green = 1, Blue = 1, Alpha = 1, },
+        fontColor20sec = { Red = 1, Green = 0.6, Blue = 0.25, Alpha = 1, },
+        fontColor5sec = { Red = 1, Green = 0, Blue = 0, Alpha = 1, },
+        timerStyle  = "00:00m",
+        timedColors = false,
         fontSize    = 14,
         splitRows   = false,
         splitSoon   = false,
@@ -284,6 +290,7 @@ function CoolDownButtons_UPDATE(self, elapsed)
         if type(cooldown) == "table" then
             local frame = CoolDownButtons.cdbtns[cooldown["buttonID"]]
             local hideFrame = false
+            local time = ceil(cooldown["start"] + cooldown["duration"] - GetTime())
 
             frame:Show()
             frame.text:Show()
@@ -313,7 +320,6 @@ function CoolDownButtons_UPDATE(self, elapsed)
                     end
                 end
             else
-                local time = ceil(cooldown["start"] + cooldown["duration"] - GetTime())
                 if time < 0 then
                     hideFrame = true
                 end
@@ -363,21 +369,15 @@ function CoolDownButtons_UPDATE(self, elapsed)
                     frame.usedInBar = ""
                 end
             else
-                local time = ceil(cooldown["start"] + cooldown["duration"] - GetTime())
-                if time < 0 then
-                    cooldown.forceHide = true
+                frame.text:SetText(CoolDownButtons:formatCooldownTime(cooldown, true))
+                local tC = CoolDownButtons.db.profile.timedColors
+                local c = CoolDownButtons.db.profile.fontColor
+                if tC and (time < 20) then
+                    c = CoolDownButtons.db.profile.fontColor20sec
+                elseif tC and (time < 5) then
+                    c = CoolDownButtons.db.profile.fontColor5sec
                 end
-                if time < 60 then
-                    frame.text:SetText(string_format("0:%02d", time))
-                elseif( time < 3600 ) then
-                    local m = math.floor(time / 60)
-                    local s = math.fmod(time, 60)
-                    frame.text:SetText(string_format("%d:%02d", m, s))
-                else
-                    local hr = math.floor(time / 3600)
-                    local m = math.floor( math.fmod(time, 3600) / 60 )
-                    frame.text:SetText(string_format("%d.%02dh", hr, m))
-                end
+                frame.text:SetTextColor(c.Red, c.Green,  c.Blue,  c.Alpha)
                 frame.texture:SetTexture(cooldown["texture"])
                 frame.cooldown:SetCD(cooldown["start"], cooldown["duration"], CoolDownButtons.db.profile.anchors[frame.usedInBar].showOmniCC)
             end
@@ -468,9 +468,6 @@ function CoolDownButtons_UPDATE(self, elapsed)
                         frame:SetPoint("CENTER", anchorTo, "CENTER", 0, - (buttonPadding * order * scale))
                     end
                 end
-                
-                local c  = CoolDownButtons.db.profile.fontColor
-                frame.text:SetTextColor(c.Red, c.Green,  c.Blue,  c.Alpha)
 
                 frame:SetAlpha(alpha)               
                 frame.text:SetAlpha(textAlpha)
@@ -779,20 +776,7 @@ function CoolDownButtons:createButton(i, justMove)
                                         if CoolDownButtons.db.profile.chatPost then
                                             for key, cooldown in pairs(cooldowns) do
                                                 if type(cooldown) == "table" and cooldown["buttonID"] == self.id then
-                                                    local time = ceil(cooldown["start"] + cooldown["duration"] - GetTime())
-                                                    local formated_time
-                                                    if time < 60 then
-                                                        formated_time = string_format("0:%02d", time)
-                                                    elseif( time < 3600 ) then
-                                                        local m = math.floor(time / 60)
-                                                        local s = math.fmod(time, 60)
-                                                        formated_time = string_format("%d:%02d", m, s)
-                                                    else
-                                                        local hr = math.floor(time / 3600)
-                                                        local m = math.floor( math.fmod(time, 3600) / 60 )
-                                                        formated_time = string_format("%d.%02dh", hr, m)
-                                                    end
-                                                    
+                                                    local formated_time = CoolDownButtons:formatCooldownTime(cooldown, false)
                                                     local chatmsg
                                                     if CoolDownButtons.db.profile.postdefaultmsg then
                                                         chatmsg = CoolDownButtons:gsub(L["RemainingCoolDown"], "$spell", cooldown["name"])
@@ -928,6 +912,60 @@ function CoolDownButtons:createButton(i, justMove)
 
     button:Hide()
     return button
+end
+
+function CoolDownButtons:formatCooldownTime(cooldown, applySettings)
+    local time = ceil(cooldown["start"] + cooldown["duration"] - GetTime())
+    cooldown.time = time
+    if time < 0 then
+        cooldown.forceHide = true
+        return ""
+    end
+    if applySettings then
+        return self:formatTime(time, self.db.profile.timerStyle)
+    else
+        return self:formatTime(time, "00:00m")
+    end
+end
+
+function CoolDownButtons:formatTime(time, mode)
+    if mode == "00:00m" or mode == "00:00M" then
+        if time < 60 then
+            return string_format("0:%02d", time)
+        elseif time < 3600 then
+            local m = math_floor(time / 60)
+            local s = math_fmod(time, 60)
+            return string_format("%d:%02d", m, s)
+        else
+            local hr = math_floor(time / 3600)
+            local m = math_floor( math.fmod(time, 3600) / 60 )
+            if mode == "00:00m" then
+                return string_format("%d.%02dh", hr, m)
+            else
+                return string_format("%d.%02dH", hr, m)
+            end
+        end
+    elseif mode == "0m" or mode == "0M" then
+        if time < 60 then
+            return string_format("%d", time)
+        elseif  time < 3600  then
+            local m = math_floor(time / 60)
+            if mode == "0m" then
+                return string_format("%dm", m)
+            else
+                return string_format("%dM", m)
+            end
+            
+        else
+            local hr = math_floor(time / 3600)
+            if mode == "0m" then
+                return string_format("%dh", hr)
+            else
+                return string_format("%dH", hr)
+            end
+        end
+        return floor(s + 0.5), s - floor(s)
+    end
 end
 
 function CoolDownButtons:gsub(text, variable, value)
