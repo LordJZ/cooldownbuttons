@@ -1,5 +1,5 @@
 local LibStub = LibStub
-local CoolDownButtons = LibStub("AceAddon-3.0"):GetAddon("CoolDown Buttons")
+local CoolDownButtons = _G["CoolDownButtons"]
 local L = LibStub("AceLocale-3.0"):GetLocale("CoolDown Buttons", false)
 if not LibStub("LibPeriodicTable-3.1", true) then error("LibPeriodicTable-3.1 must be loaded before data") end
 

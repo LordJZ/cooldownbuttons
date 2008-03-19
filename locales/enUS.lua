@@ -26,15 +26,18 @@ L["Direction from Anchor"] = true
 
 L["Font Color"] = true
 L["Color of the CoolDown Timer Font."] = true
+L["Font size"] = true
+L["Set the Font size."] = true
 L["Center from Anchor"] = true
 L["Toggle Anchor to be the Center of the bar."] = true
 L["Show CoolDown Spiral"] = true
 L["Toggle showing CoolDown Spiral on the Buttons."] = true
 L["Use Pulse effect"] = true
 L["Toggle Pulse effect."] = true
-L["Show OmniCC Text"] = true
-L["Toggle showing OmniCC Text on the Buttons. (Only if it is installed!)"] = true
-
+L["Enable OmniCC Settings"] = true
+L["Toggle use OmniCC settings instead of own. (Pulse effect/Timer/Cooldown Spiral)"] = true
+L["Font size"] = true
+L["Set the Font size."] = true
 
 L["Split Item Cooldowns"] = true
 L["Toggle showing Item and Spell Cooldowns as own rows or not."] = true

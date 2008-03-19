@@ -14,7 +14,6 @@
 ## X-Embeds: Ace3, LibSharedMedia-2.0, LibPeriodicTable-3.1
 
 embeds.xml
-template.xml
 
 locales\enUS.lua
 locales\deDE.lua

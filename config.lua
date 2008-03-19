@@ -1,4 +1,5 @@
 local LibStub = LibStub
+local CoolDownButtons = _G["CoolDownButtons"]
 CoolDownButtonsConfig = CoolDownButtons:NewModule("Config","AceConsole-3.0","AceEvent-3.0")
 local CoolDownButtonsConfig = CoolDownButtonsConfig
 local L = LibStub("AceLocale-3.0"):GetLocale("CoolDown Buttons", false)
@@ -12,8 +13,8 @@ local string_format = string.format
 local tostring = tostring
 local tonumber = tonumber
 
+
 options.type = "group"
---options.name = "CoolDown Buttons"
 options.name = "CoolDown Buttons r"..CoolDownButtons.rev
 options.get = function( k ) return db[k.arg] end
 options.set = function( k, v ) db[k.arg] = v; CoolDownButtonsConfig:UpdateConfig(); end
@@ -79,8 +80,16 @@ options.args.display = {
             type = "select",
             values = function() local fonts, newFonts = LSM:List("font"), {}; for k, v in pairs(fonts) do newFonts[v] = v; end return newFonts; end,
             get = function( k ) return db[k.arg] end,
-            set = function( k, v ) db[k.arg] = v; CoolDownButtonsConfig:UpdateConfig(); end,
             arg = "font",
+        },
+        fontSize = {
+            order = 41,
+            name = L["Font size"],
+            desc = L["Set the Font size."],
+            type = "input",
+            arg = "fontSize",
+            set = function( k, v ) if not (tonumber(v) == nil) then db[k.arg] = tonumber(v); CoolDownButtonsConfig:UpdateConfig(); end end,
+            get = function( k ) return tostring(db[k.arg]) end,
         },
         cooldownsSpells = {
             type = "group",
@@ -103,34 +112,37 @@ options.args.display = {
                     type = "toggle",
                     arg = "center",
                 }, dummy_0 = { order = 2, type = "description", name = "", },
-                showTime = {
+                showOmniCC = {
                     order = 3,
+                    disabled = function() return CoolDownButtons.noOmniCC end,
+                    name = L["Enable OmniCC Settings"],
+                    desc = L["Toggle use OmniCC settings instead of own. (Pulse effect/Timer/Cooldown Spiral)"],
+                    type = "toggle",
+                    arg = "showOmniCC",
+                },
+                showTime = {
+                    order = 4,
                     name = L["Show Time"],
                     desc = L["Toggle showing Cooldown Time at the Buttons."],
                     type = "toggle",
                     arg = "showTime",
-                },
+                }, dummy_5 = { order = 5, type = "description", name = "", },
                 usePulse = {
-                    order = 4,
+                    order = 6,
                     name = L["Use Pulse effect"],
                     desc = L["Toggle Pulse effect."],
+                    disabled = function() return db.anchors.spells.showOmniCC end,
                     type = "toggle",
                     arg = "usePulse",
-                }, dummy_5 = { order = 5, type = "description", name = "", },
+                }, 
                 showCoolDownSpiral = {
-                    order = 6,
+                    order = 7,
+                    disabled = function() return db.anchors.spells.showOmniCC end,
                     name = L["Show CoolDown Spiral"],
                     desc = L["Toggle showing CoolDown Spiral on the Buttons."],
                     type = "toggle",
                     arg = "showCoolDownSpiral",
-                },
-                showOmniCC = {
-                    order = 7,
-                    name = L["Show OmniCC Text"],
-                    desc = L["Toggle showing OmniCC Text on the Buttons. (Only if it is installed!)"],
-                    type = "toggle",
-                    arg = "showOmniCC",
-                }, dummy_8 = { order = 8, type = "description", name = "", },
+                },dummy_8 = { order = 8, type = "description", name = "", },
                 xpos = {
                     order = 10,
                     name = L["X - Axis"],
@@ -176,7 +188,7 @@ options.args.display = {
                     name = L["Button Scale"],
                     desc = L["Button scaling, this lets you enlarge or shrink your Buttons."],
                     type = "range",
-                    min = 0.5, max = 1.5, step = 0.05,
+                    min = 0.5, max = 2.5, step = 0.05,
                     arg = "scale",
                 },
                 buttonAlpha = {
@@ -242,7 +254,7 @@ options.args.display = {
                     name = L["Text Scale"],
                     desc = L["Text scaling, this lets you enlarge or shrink your Text."],
                     type = "range",
-                    min = 0.5, max = 1.5, step = 0.05,
+                    min = 0.5, max = 2.5, step = 0.05,
                     arg = "textScale",
                 },
                 textAlpha = {
@@ -278,34 +290,37 @@ options.args.display = {
                     type = "toggle",
                     arg = "center",
                 }, dummy_2 = { order = 2, type = "description", name = "", },
-                showTime = {
+                showOmniCC = {
                     order = 3,
+                    disabled = function() return CoolDownButtons.noOmniCC end,
+                    name = L["Enable OmniCC Settings"],
+                    desc = L["Toggle use OmniCC settings instead of own. (Pulse effect/Timer/Cooldown Spiral)"],
+                    type = "toggle",
+                    arg = "showOmniCC",
+                },
+                showTime = {
+                    order = 4,
                     name = L["Show Time"],
                     desc = L["Toggle showing Cooldown Time at the Buttons."],
                     type = "toggle",
                     arg = "showTime",
-                },
+                }, dummy_5 = { order = 5, type = "description", name = "", },
                 usePulse = {
-                    order = 4,
+                    order = 6,
                     name = L["Use Pulse effect"],
                     desc = L["Toggle Pulse effect."],
+                    disabled = function() return db.anchors.items.showOmniCC end,
                     type = "toggle",
                     arg = "usePulse",
-                }, dummy_5 = { order = 5, type = "description", name = "", },
+                }, 
                 showCoolDownSpiral = {
-                    order = 6,
+                    order = 7,
+                    disabled = function() return db.anchors.items.showOmniCC end,
                     name = L["Show CoolDown Spiral"],
                     desc = L["Toggle showing CoolDown Spiral on the Buttons."],
                     type = "toggle",
                     arg = "showCoolDownSpiral",
-                },
-                showOmniCC = {
-                    order = 7,
-                    name = L["Show OmniCC Text"],
-                    desc = L["Toggle showing OmniCC Text on the Buttons. (Only if it is installed!)"],
-                    type = "toggle",
-                    arg = "showOmniCC",
-                }, dummy_8 = { order = 8, type = "description", name = "", },
+                },dummy_8 = { order = 8, type = "description", name = "", },
                 xpos = {
                     order = 10,
                     name = L["X - Axis"],
@@ -351,7 +366,7 @@ options.args.display = {
                     name = L["Button Scale"],
                     desc = L["Button scaling, this lets you enlarge or shrink your Buttons."],
                     type = "range",
-                    min = 0.5, max = 1.5, step = 0.05,
+                    min = 0.5, max = 2.5, step = 0.05,
                     arg = "scale",
                 },
                 buttonAlpha = {
@@ -417,7 +432,7 @@ options.args.display = {
                     name = L["Text Scale"],
                     desc = L["Text scaling, this lets you enlarge or shrink your Text."],
                     type = "range",
-                    min = 0.5, max = 1.5, step = 0.05,
+                    min = 0.5, max = 2.5, step = 0.05,
                     arg = "textScale",
                 },
                 textAlpha = {
@@ -453,34 +468,37 @@ options.args.display = {
                     type = "toggle",
                     arg = "center",
                 }, dummy_1 = { order = 2, type = "description", name = "", },
-                showTime = {
+                showOmniCC = {
                     order = 3,
+                    disabled = function() return CoolDownButtons.noOmniCC end,
+                    name = L["Enable OmniCC Settings"],
+                    desc = L["Toggle use OmniCC settings instead of own. (Pulse effect/Timer/Cooldown Spiral)"],
+                    type = "toggle",
+                    arg = "showOmniCC",
+                },
+                showTime = {
+                    order = 4,
                     name = L["Show Time"],
                     desc = L["Toggle showing Cooldown Time at the Buttons."],
                     type = "toggle",
                     arg = "showTime",
-                },
+                }, dummy_5 = { order = 5, type = "description", name = "", },
                 usePulse = {
-                    order = 4,
+                    order = 6,
                     name = L["Use Pulse effect"],
                     desc = L["Toggle Pulse effect."],
+                    disabled = function() return db.anchors.soon.showOmniCC end,
                     type = "toggle",
                     arg = "usePulse",
-                }, dummy_5 = { order = 5, type = "description", name = "", },
+                }, 
                 showCoolDownSpiral = {
-                    order = 6,
+                    order = 7,
+                    disabled = function() return db.anchors.soon.showOmniCC end,
                     name = L["Show CoolDown Spiral"],
                     desc = L["Toggle showing CoolDown Spiral on the Buttons."],
                     type = "toggle",
                     arg = "showCoolDownSpiral",
-                },
-                showOmniCC = {
-                    order = 7,
-                    name = L["Show OmniCC Text"],
-                    desc = L["Toggle showing OmniCC Text on the Buttons. (Only if it is installed!)"],
-                    type = "toggle",
-                    arg = "showOmniCC",
-                }, dummy_8 = { order = 8, type = "description", name = "", },
+                },dummy_8 = { order = 8, type = "description", name = "", },
                 timeToSplit = {
                     order = 10,
                     name = L["Show X seconds before ready"],
@@ -540,7 +558,7 @@ options.args.display = {
                     name = L["Button Scale"],
                     desc = L["Button scaling, this lets you enlarge or shrink your Buttons."],
                     type = "range",
-                    min = 0.5, max = 1.5, step = 0.05,
+                    min = 0.5, max = 2.5, step = 0.05,
                     arg = "scale",
                 },
                 buttonAlpha = {
@@ -606,7 +624,7 @@ options.args.display = {
                     name = L["Text Scale"],
                     desc = L["Text scaling, this lets you enlarge or shrink your Text."],
                     type = "range",
-                    min = 0.5, max = 1.5, step = 0.05,
+                    min = 0.5, max = 2.5, step = 0.05,
                     arg = "textScale",
                 },
                 textAlpha = {
@@ -627,40 +645,43 @@ options.args.display = {
             set = function( k, v ) db.anchors.single[k.arg] = v; CoolDownButtonsConfig:UpdateConfig(); end,
             get = function( k ) return db.anchors.single[k.arg] end,
             args = {
-                showTime = {
+                showOmniCC = {
                     order = 3,
+                    disabled = function() return CoolDownButtons.noOmniCC end,
+                    name = L["Enable OmniCC Settings"],
+                    desc = L["Toggle use OmniCC settings instead of own. (Pulse effect/Timer/Cooldown Spiral)"],
+                    type = "toggle",
+                    arg = "showOmniCC",
+                },
+                showTime = {
+                    order = 4,
                     name = L["Show Time"],
                     desc = L["Toggle showing Cooldown Time at the Buttons."],
                     type = "toggle",
                     arg = "showTime",
-                },
+                }, dummy_5 = { order = 5, type = "description", name = "", },
                 usePulse = {
-                    order = 4,
+                    order = 6,
                     name = L["Use Pulse effect"],
                     desc = L["Toggle Pulse effect."],
+                    disabled = function() return db.anchors.single.showOmniCC end,
                     type = "toggle",
                     arg = "usePulse",
-                }, dummy_5 = { order = 5, type = "description", name = "", },
+                }, 
                 showCoolDownSpiral = {
-                    order = 6,
+                    order = 7,
+                    disabled = function() return db.anchors.single.showOmniCC end,
                     name = L["Show CoolDown Spiral"],
                     desc = L["Toggle showing CoolDown Spiral on the Buttons."],
                     type = "toggle",
                     arg = "showCoolDownSpiral",
-                },
-                showOmniCC = {
-                    order = 7,
-                    name = L["Show OmniCC Text"],
-                    desc = L["Toggle showing OmniCC Text on the Buttons. (Only if it is installed!)"],
-                    type = "toggle",
-                    arg = "showOmniCC",
-                }, dummy_8 = { order = 8, type = "description", name = "", },
+                },dummy_8 = { order = 8, type = "description", name = "", },
                 buttonScale = {
                     order = 40,
                     name = L["Button Scale"],
                     desc = L["Button scaling, this lets you enlarge or shrink your Buttons."],
                     type = "range",
-                    min = 0.5, max = 1.5, step = 0.05,
+                    min = 0.5, max = 2.5, step = 0.05,
                     arg = "scale",
                 },
                 buttonAlpha = {
@@ -717,7 +738,7 @@ options.args.display = {
                     name = L["Text Scale"],
                     desc = L["Text scaling, this lets you enlarge or shrink your Text."],
                     type = "range",
-                    min = 0.5, max = 1.5, step = 0.05,
+                    min = 0.5, max = 2.5, step = 0.05,
                     arg = "textScale",
                 },
                 textAlpha = {

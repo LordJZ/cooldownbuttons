@@ -17,6 +17,7 @@ local GetSpellCooldown = GetSpellCooldown
 local GetSpellTexture = GetSpellTexture
 local GetNumSpellTabs = GetNumSpellTabs
 local GetSpellTabInfo = GetSpellTabInfo
+local IsAddOnLoaded = IsAddOnLoaded
 local string_format = string.format
 local table_foreach = table.foreach
 local getmetatable = getmetatable
@@ -68,10 +69,7 @@ local defaults = {
 	profile = {
         font        = "Skurri",
         fontColor   = { Red = 1, Green = 1, Blue = 1, Alpha = 1, },
-        scale       = 0.85,
-        alpha       = 1,
-		direction   = "right",
-        maxbuttons  = 10,
+        fontSize    = 14,
         splitRows   = false,
         splitSoon   = false,
         anchors     = {
@@ -79,73 +77,73 @@ local defaults = {
                 show          = true,
                 center        = false,
                 usePulse      = false,
-                showTime    = true,
+                showTime      = true,
                 showCoolDownSpiral = true,
-                showOmniCC  = false,
+                showOmniCC    = false,
                 maxbuttons    = 10,
-                scale         = 0.85,
+                scale         = 1,
                 alpha         = 1,
                 direction     = "right",
                 pos           = { x = 100, y = 300, },
                 textSettings  = false,
                 textSide      = "down",
-                textScale     = 0.85,
+                textScale     = 1,
                 textAlpha     = 1,
-                buttonPadding = 50,
-                textPadding   = 33,
+                buttonPadding = 45,
+                textPadding   = 28,
             },
             items = {
                 show          = true,
                 center        = false,
                 usePulse      = false,
-                showTime    = true,
+                showTime      = true,
                 showCoolDownSpiral = true,
-                showOmniCC  = false,
+                showOmniCC    = false,
                 maxbuttons    = 10,
-                scale         = 0.85,
+                scale         = 1,
                 alpha         = 1,
                 direction     = "right",
                 pos           = { x = 100, y = 250, },
                 textSettings  = false,
                 textSide      = "down",
-                textScale     = 0.85,
+                textScale     = 1,
                 textAlpha     = 1,
-                buttonPadding = 50,
-                textPadding   = 33,
+                buttonPadding = 45,
+                textPadding   = 28,
             },
             soon = {
                 show          = true,
                 center        = false,
                 usePulse      = false,
-                showTime    = true,
+                showTime      = true,
                 showCoolDownSpiral = true,
-                showOmniCC  = false,
+                showOmniCC    = false,
                 timeToSplit   = 5,
                 maxbuttons    = 10,
-                scale         = 0.85,
+                scale         = 1,
                 alpha         = 1,
                 direction     = "right",
                 pos           = { x = 100, y = 350, },
                 textSettings  = false,
                 textSide      = "down",
-                textScale     = 0.85,
+                textScale     = 1,
                 textAlpha     = 1,
-                buttonPadding = 50,
-                textPadding   = 33,
+                buttonPadding = 45,
+                textPadding   = 28,
             },
             single = {
                 usePulse      = false,
-                showTime    = true,
+                showTime      = true,
                 showCoolDownSpiral = true,
-                showOmniCC  = false,
-                scale         = 0.85,
+                showOmniCC    = false,
+                scale         = 1,
                 alpha         = 1,
                 textSettings  = false,
                 textSide      = "down",
-                textScale     = 0.85,
+                textScale     = 1,
                 textAlpha     = 1,
-                buttonPadding =  0,
-                textPadding   = 33,
+                buttonPadding = 0,
+                textPadding   = 28,
             },
         }, 
         chatPost    = false,
@@ -189,19 +187,31 @@ function CoolDownButtons:OnEnable()
     self.testModeStart = 0
     self.testModeData = {}
     
+    self.cydb = nil
+    if IsAddOnLoaded("cyCircled") and cyCircled_CoolDownButtons then
+        self.cydb = cyCircled:AcquireDBNamespace("CoolDownButtons")
+    end
+    if not IsAddOnLoaded("OmniCC") then
+        self.noOmniCC = true
+        for k,v in pairs(self.db.profile.anchors) do
+            self.db.profile.anchors[k].showOmniCC = false
+        end
+    end
+
     self.spellnum = 0
     self.itemsnum = 0
     self.soonnum  = 0
 
     self.numcooldownbuttons = 1
     self.cdbtns = {}
-    
+
     for i = 1, self.numcooldownbuttons do
         self.cdbtns[i] = self:createButton(i)
     end
+
     -- Hack to keep code "dry" :)
     self:CoolDownButtonsConfigChanged()    
-    
+
     local frame = CreateFrame("Frame"); frame:SetScript("OnUpdate", CoolDownButtons_UPDATE)
 end
 
@@ -273,12 +283,10 @@ function CoolDownButtons_UPDATE(self, elapsed)
     for key, cooldown in pairs(cooldowns) do
         if type(cooldown) == "table" then
             local frame = CoolDownButtons.cdbtns[cooldown["buttonID"]]
-            local cooldownframe = frame.cooldown
             local hideFrame = false
 
             frame:Show()
-            cooldownframe:SetAlpha(1)
-            cooldownframe.textFrame.text:Show()
+            frame.text:Show()
             if not CoolDownButtons.testMode then
                 if cooldown["cdtype"] == "spell" then -- spell
                     local cooldownCheck = GetSpellCooldown(cooldown["id"], BOOKTYPE_SPELL)
@@ -311,21 +319,45 @@ function CoolDownButtons_UPDATE(self, elapsed)
                 end
             end
             if hideFrame or cooldown.forceHide then
-                if CoolDownButtons.db.profile.anchors[frame.usedInBar].usePulse and not cooldown.forceHide then
+                frame.pulse.icon:Hide() -- Should avoid bugged pulses
+                if CoolDownButtons.db.profile.anchors[frame.usedInBar].usePulse and not cooldown.forceHide and not CoolDownButtons.db.profile.anchors[frame.usedInBar].showOmniCC then
                     if not frame.pulseActive then
-                        CoolDownButtons:StartPulse(frame)
+                        local icon = frame.texture
+                        if icon and frame:IsVisible() then
+                            local pulse = frame.pulse
+                            if pulse then
+                                pulse.scale = 1
+                                pulse.icon:SetTexture(icon:GetTexture())
+                                local r, g, b = icon:GetVertexColor()
+                                pulse.icon:SetVertexColor(r, g, b, 0.7)
+                                frame.pulseActive = true
+                            end
+                        end
                     else
-                        if CoolDownButtons:UpdatePulse(frame, elapsed) then -- returns true if pulse is finish
+                        local pulse = frame.pulse
+                        if pulse.scale >= 2 then
+                            pulse.dec = 1
+                        end
+                        pulse.scale = max(min(pulse.scale + (pulse.dec and -1 or 1) * pulse.scale * (elapsed/0.5), 2), 1)
+                        if pulse.scale <= 1 then
+                            pulse.icon:Hide()
+                            pulse.dec = nil
+                            frame.pulseActive = false
+
                             frame:Hide()
-                            cooldownframe.textFrame.text:Hide()
+                            frame.text:Hide()
                             cooldowns[key] = nil
                             frame.used = false
                             frame.usedInBar = ""
+                        else
+                            pulse.icon:Show()
+                            pulse.icon:SetHeight(pulse:GetHeight() * pulse.scale)
+                            pulse.icon:SetWidth(pulse:GetWidth() * pulse.scale)
                         end
                     end
                 else
                     frame:Hide()
-                    cooldownframe.textFrame.text:Hide()
+                    frame.text:Hide()
                     cooldowns[key] = nil
                     frame.used = false
                     frame.usedInBar = ""
@@ -336,20 +368,19 @@ function CoolDownButtons_UPDATE(self, elapsed)
                     cooldown.forceHide = true
                 end
                 if time < 60 then
-                    cooldownframe.textFrame.text:SetText(string_format("0:%02d", time))
+                    frame.text:SetText(string_format("0:%02d", time))
                 elseif( time < 3600 ) then
                     local m = math.floor(time / 60)
                     local s = math.fmod(time, 60)
-                    cooldownframe.textFrame.text:SetText(string_format("%d:%02d", m, s))
+                    frame.text:SetText(string_format("%d:%02d", m, s))
                 else
                     local hr = math.floor(time / 3600)
                     local m = math.floor( math.fmod(time, 3600) / 60 )
-                    cooldownframe.textFrame.text:SetText(string_format("%d.%02dhr", hr, m))
+                    frame.text:SetText(string_format("%d.%02dh", hr, m))
                 end
                 frame.texture:SetTexture(cooldown["texture"])
-                cooldownframe:SetCD(cooldown["start"], cooldown["duration"], CoolDownButtons.db.profile.anchors[frame.usedInBar].showOmniCC)
+                frame.cooldown:SetCD(cooldown["start"], cooldown["duration"], CoolDownButtons.db.profile.anchors[frame.usedInBar].showOmniCC)
             end
-
             if frame.used then
                 local order = cooldown["order"] - 1
                 local forBar = frame.usedInBar
@@ -391,22 +422,20 @@ function CoolDownButtons_UPDATE(self, elapsed)
                     textDirection = "down"
                 end
 
-                frame:SetWidth (45 * scale)
-                frame:SetHeight(45 * scale)
-                frame:GetNormalTexture():SetWidth(75 * scale)
-                frame:GetNormalTexture():SetHeight(75 * scale)
+                frame:SetScale(scale)
 
-                cooldownframe.textFrame.text:ClearAllPoints()
-                cooldownframe.textFrame.text:SetFont(LSM:Fetch("font", CoolDownButtons.db.profile.font), 15 * textScale, "OUTLINE")
+                frame.text:ClearAllPoints()
+                frame.textFrame:SetScale(textScale)
+                frame.text:SetFont(LSM:Fetch("font", CoolDownButtons.db.profile.font), CoolDownButtons.db.profile.fontSize, "OUTLINE")
 
                 if textDirection == "left" then
-                    cooldownframe.textFrame.text:SetPoint("CENTER", cooldownframe.textFrame, "CENTER", - (textPadding * scale), 0)
+                    frame.text:SetPoint("CENTER", frame, "CENTER", - (textPadding * scale), 0)
                 elseif textDirection == "right" then
-                    cooldownframe.textFrame.text:SetPoint("CENTER", cooldownframe.textFrame, "CENTER", (textPadding * scale), 0)
+                    frame.text:SetPoint("CENTER", frame, "CENTER", (textPadding * scale), 0)
                 elseif textDirection == "up" then
-                    cooldownframe.textFrame.text:SetPoint("CENTER", cooldownframe.textFrame, "CENTER", 0, (textPadding * scale))
+                    frame.text:SetPoint("CENTER", frame, "CENTER", 0, (textPadding * scale))
                 elseif textDirection == "down" then 
-                    cooldownframe.textFrame.text:SetPoint("CENTER", cooldownframe.textFrame, "CENTER", 0, - (textPadding * scale))
+                    frame.text:SetPoint("CENTER", frame, "CENTER", 0, - (textPadding * scale))
                 end
 
                 frame:ClearAllPoints()
@@ -441,15 +470,12 @@ function CoolDownButtons_UPDATE(self, elapsed)
                 end
                 
                 local c  = CoolDownButtons.db.profile.fontColor
-                cooldownframe.textFrame.text:SetTextColor(c.Red, c.Green,  c.Blue,  c.Alpha)
+                frame.text:SetTextColor(c.Red, c.Green,  c.Blue,  c.Alpha)
 
                 frame:SetAlpha(alpha)               
-                cooldownframe.textFrame:SetAlpha(textAlpha)
+                frame.text:SetAlpha(textAlpha)
                 if not CoolDownButtons.db.profile.anchors[forBar].showTime then
-                    cooldownframe.textFrame.text:Hide()
-                end
-                if not CoolDownButtons.db.profile.anchors[forBar].showCoolDownSpiral then
-                    cooldownframe:SetAlpha(0)
+                   frame.text:Hide()
                 end
             end
         end
@@ -736,11 +762,8 @@ function CoolDownButtons:setupFrame(num)
 end
 
 function CoolDownButtons:createButton(i, justMove)
-    local button = CreateFrame("Button", "CoolDownButton"..i, UIParent, "CoolDownButtonTemplate")
-    button:SetWidth(45 * self.db.profile.scale); button:SetHeight(45 * self.db.profile.scale); button:SetID(i)
-    button:EnableMouse(true)
+    local button = CreateFrame("Button", "CoolDownButton"..i, UIParent, "ActionButtonTemplate")
     button:SetClampedToScreen(true)
-    button:SetParent("UIParent")
     if not justMove then
         button:SetScript("OnLeave", function() GameTooltip:Hide() end)
         button:SetScript("OnEnter", function(self) 
@@ -767,7 +790,7 @@ function CoolDownButtons:createButton(i, justMove)
                                                     else
                                                         local hr = math.floor(time / 3600)
                                                         local m = math.floor( math.fmod(time, 3600) / 60 )
-                                                        formated_time = string_format("%d.%02dhr", hr, m)
+                                                        formated_time = string_format("%d.%02dh", hr, m)
                                                     end
                                                     
                                                     local chatmsg
@@ -832,51 +855,51 @@ function CoolDownButtons:createButton(i, justMove)
                                         end
                                     end)
     end -- if not justMove
-
-    button.texture = button:CreateTexture(nil,"BACKGROUND")
-    button.texture:SetTexture("Interface\\Icons\\Spell_Nature_WispSplode")
-    button.texture:SetAllPoints(button)
     
-    button:GetNormalTexture():SetWidth(75 * self.db.profile.scale)
-    button:GetNormalTexture():SetHeight(75 * self.db.profile.scale)
---[[    
-    button:GetNormalTexture():Hide()
-    if cyCircled then
-        ChatFrame2:AddMessage("aaaaaa")
-        button.border = button:CreateTexture(button:GetName().."Overlay", "OVERLAY")
-        button.border:SetTexture(cyCircled.skins[cyCircled.db.profile.skin].overlay.tex)
-        button.border:SetPoint("TOPLEFT", button, "TOPLEFT", -5, 5)
-        button.border:SetWidth(91 * self.db.profile.scale)
-        button.border:SetHeight(91 * self.db.profile.scale)
+    
+    if self.db.profile.chatPost then
+        button:EnableMouse(true)
+    else
+        button:EnableMouse(false)
     end
---]]
+    
+    button:SetID(i)
     button.used      = false
     button.usedInBar = ""
     button.id        = i
+    
+--[[
+	frame.border = _G[("%sBorder"):format(name)]
+	frame.macroName = _G[("%sName"):format(name)]
+	frame.hotkey = _G[("%sHotKey"):format(name)]
+	frame.count = _G[("%sCount"):format(name)]
+	frame.flash = _G[("%sFlash"):format(name)]
+	frame.flash:Hide()
+--]]
 
-    local cooldown -- Get Cooldown Frame
-    local kids = { button:GetChildren() };
-    for _, child in ipairs(kids) do
-        if child:GetObjectType() == "Cooldown" then
-            cooldown = child
-            break
-        end
-    end
+	button.texture  = _G[("%sIcon"):format(button:GetName())]
+    button.texture:SetTexture("Interface\\Icons\\Spell_Nature_WispSplode")
+
+    button.cooldown = _G[("%sCooldown"):format(button:GetName())]
 
     local c  = self.db.profile.fontColor
-    button.cooldown = cooldown
-    button.cooldown.textFrame = CreateFrame("Frame", button:GetName().."CooldownText", UIParent)
-    button.cooldown.textFrame:SetAllPoints(button)
-    button.cooldown.textFrame.text = cooldown.textFrame:CreateFontString(nil, "OVERLAY")
-    button.cooldown.textFrame.text:SetPoint("CENTER", cooldown.textFrame, "CENTER", 0, -33 * self.db.profile.scale)
-    button.cooldown.textFrame.text:SetFont(LSM:Fetch("font", self.db.profile.font), 15 * self.db.profile.scale, "OUTLINE")
-    button.cooldown.textFrame.text:SetTextColor(c.Red, c.Green,  c.Blue,  c.Alpha)
-    button.cooldown.textFrame.text:SetText("00:00")
-    button.cooldown.textFrame:Show()
 
-    button:SetFrameLevel(CoolDownButtonAnchor[1]:GetFrameLevel()-3)
-    button.cooldown:SetFrameLevel(CoolDownButtonAnchor[1]:GetFrameLevel()-2)
-    button.cooldown.textFrame:SetFrameLevel(CoolDownButtonAnchor[1]:GetFrameLevel()-1)
+    if self.cydb then
+		if self.cydb.profile["CoolDown Buttons"] ~= nil then
+            if i ~= 1 then cyCircled_CoolDownButtons:AddElement(i) end
+            cyCircled_CoolDownButtons:ApplySkin()
+            if not button.overlay then
+                button.overlay = _G[button:GetName() .. "Overlay"]
+            end
+		end
+	end
+    
+    button.textFrame = CreateFrame("Frame", "CoolDownButton"..i.."CooldownText", UIParent)
+    button.textFrame:SetAllPoints(button)
+    button.textFrame:SetFrameLevel(button.cooldown:GetFrameLevel() + 1)
+    button.text = button.textFrame:CreateFontString(nil, "OVERLAY")
+    button.text:SetFont(LSM:Fetch("font", self.db.profile.font), self.db.profile.fontSize, "OUTLINE")
+    button.text:SetTextColor(c.Red, c.Green,  c.Blue,  c.Alpha)
     
     button.cooldown.SetCooldown2 = CDB_SetCooldown    
     button.cooldown.SetCD = function(self, start, duration, showOmniCC)
@@ -885,6 +908,10 @@ function CoolDownButtons:createButton(i, justMove)
                                 else
                                     self:SetCooldown(0, 0)
                                     self:SetCooldown2(start, duration)
+                                    self:SetAlpha(1)
+                                    if not CoolDownButtons.db.profile.anchors[self:GetParent().usedInBar].showCoolDownSpiral then
+                                        self:SetAlpha(0)
+                                    end
                                 end
                             end
 
@@ -901,44 +928,6 @@ function CoolDownButtons:createButton(i, justMove)
 
     button:Hide()
     return button
-end
-
-function CoolDownButtons:StartPulse(parent)
-    local icon = parent.texture
-
-    if icon and parent:IsVisible() then
-        local pulse = parent.pulse
-        if pulse then
-            pulse.scale = 1
-            pulse.icon:SetTexture(icon:GetTexture())
-
-            local r, g, b = icon:GetVertexColor()
-            pulse.icon:SetVertexColor(r, g, b, 0.7)
-            pulse.icon:Show()
-
-            parent.pulseActive = true
-        end
-    end
-end
-
-function CoolDownButtons:UpdatePulse(parent, elapsed)
-    local pulse = parent.pulse
-    if pulse.scale >= 2 then
-        pulse.dec = 1
-    end
-
-    pulse.scale = max(min(pulse.scale + (pulse.dec and -1 or 1) * pulse.scale * (elapsed/0.5), 2), 1)
-
-    if pulse.scale <= 1 then
-        pulse.icon:Hide()
-        pulse.dec = nil
-        parent.pulseActive = false
-        return true
-    else
-        pulse.icon:SetHeight(pulse:GetHeight() * pulse.scale)
-        pulse.icon:SetWidth(pulse:GetWidth() * pulse.scale)
-        return false
-    end
 end
 
 function CoolDownButtons:gsub(text, variable, value)
@@ -959,7 +948,7 @@ function CoolDownButtons:ResetCooldowns()
         end
         for key, button in pairs(self.cdbtns) do
             button:Hide()
-            button.cooldown.textFrame.text:Hide()
+            button.text:Hide()
             button.used = false
             button.usedInBar = ""
         end
@@ -1119,6 +1108,3 @@ function cdb()
         ChatFrame2:AddMessage("----------------------")
     end
 end
-
-
---/dump cyCircled.skins[cyCircled.db.profile.skin].overlay
