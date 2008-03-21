@@ -2,7 +2,7 @@
 ## Title: CoolDown Buttons
 ## Author: Dodge
 ## Notes: Shows simple Buttons for your Cooldowns :)
-## Version: $Rev$
+## Version: $Revision$
 ## X-ReleaseDate: "$Date$"
 ## X-Category: Interface Enhancements
 ## X-Website: http://www.wowace.com/wiki/CoolDownButtons

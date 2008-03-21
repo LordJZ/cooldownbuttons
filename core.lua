@@ -66,6 +66,8 @@ end
 
 local cooldowns = {}
 local spellTable = {}
+--local spellTreeTable = {}
+spellTreeTable = {}
 
 local defaults = {
 	profile = {
@@ -208,12 +210,8 @@ function CoolDownButtons:OnEnable()
     self.itemsnum = 0
     self.soonnum  = 0
 
-    self.numcooldownbuttons = 1
+    self.numcooldownbuttons = 0
     self.cdbtns = {}
-
-    for i = 1, self.numcooldownbuttons do
-        self.cdbtns[i] = self:createButton(i)
-    end
 
     -- Hack to keep code "dry" :)
     self:CoolDownButtonsConfigChanged()    
@@ -225,17 +223,27 @@ function CoolDownButtons:ResetSpells()
 	for k in pairs(spellTable) do
 		spellTable[k] = nil
 	end
+	for k in pairs(spellTreeTable) do
+		spellTreeTable[k] = nil
+	end
 	for spellTree = 1, GetNumSpellTabs() do
-		local _, _, offset, num = GetSpellTabInfo(spellTree)
+		local treeName, treeTexture, offset, num = GetSpellTabInfo(spellTree)
 		for j = 1, num do
 			local spellIndex = offset + j
 			local spellName, spellID  = self:myGetSpellName(spellIndex)
-			spellTable[spellName] = {
-                spellName  = spellName,
-                spellIndex = spellIndex,
-                spellID    = spellID,
-                spellTree  = spellTree,
-            }
+            if not spellTable[spellName] then
+                spellTable[spellName] = {
+                    spellName   = spellName,
+                    spellIndex  = spellIndex,
+                    spellID     = spellID,
+                    spellTexture = GetSpellTexture(spellIndex, BOOKTYPE_SPELL),
+                    spellTree   = {
+                        treeIndex   = spellTree,
+                        treeName    = treeName,
+                        treeTexture = treeTexture,
+                    },
+                }
+            end
 		end
 	end
     self:ResetCooldowns()
@@ -291,6 +299,13 @@ function CoolDownButtons_UPDATE(self, elapsed)
             local frame = CoolDownButtons.cdbtns[cooldown["buttonID"]]
             local hideFrame = false
             local time = ceil(cooldown["start"] + cooldown["duration"] - GetTime())
+            local forBar = frame.usedInBar
+            if not CoolDownButtons.db.profile.splitRows and forBar == "items" then
+                forBar = "spells"                    
+            end
+            if not CoolDownButtons.db.profile.splitSoon and forBar == "soon" then
+                forBar = "spells"                    
+            end
 
             frame:Show()
             frame.text:Show()
@@ -326,7 +341,7 @@ function CoolDownButtons_UPDATE(self, elapsed)
             end
             if hideFrame or cooldown.forceHide then
                 frame.pulse.icon:Hide() -- Should avoid bugged pulses
-                if CoolDownButtons.db.profile.anchors[frame.usedInBar].usePulse and not cooldown.forceHide and not CoolDownButtons.db.profile.anchors[frame.usedInBar].showOmniCC then
+                if CoolDownButtons.db.profile.anchors[forBar].usePulse and not cooldown.forceHide and not CoolDownButtons.db.profile.anchors[forBar].showOmniCC then
                     if not frame.pulseActive then
                         local icon = frame.texture
                         if icon and frame:IsVisible() then
@@ -372,25 +387,17 @@ function CoolDownButtons_UPDATE(self, elapsed)
                 frame.text:SetText(CoolDownButtons:formatCooldownTime(cooldown, true))
                 local tC = CoolDownButtons.db.profile.timedColors
                 local c = CoolDownButtons.db.profile.fontColor
-                if tC and (time < 20) then
+                if tC and (time < 20) and (time > 5) then
                     c = CoolDownButtons.db.profile.fontColor20sec
-                elseif tC and (time < 5) then
+                elseif tC and (time <= 5) then
                     c = CoolDownButtons.db.profile.fontColor5sec
                 end
                 frame.text:SetTextColor(c.Red, c.Green,  c.Blue,  c.Alpha)
                 frame.texture:SetTexture(cooldown["texture"])
-                frame.cooldown:SetCD(cooldown["start"], cooldown["duration"], CoolDownButtons.db.profile.anchors[frame.usedInBar].showOmniCC)
+                frame.cooldown:SetCD(cooldown["start"], cooldown["duration"], CoolDownButtons.db.profile.anchors[forBar].showOmniCC)
             end
             if frame.used then
                 local order = cooldown["order"] - 1
-                local forBar = frame.usedInBar
-                
-                if not CoolDownButtons.db.profile.splitRows and forBar == "items" then
-                    forBar = "spells"                    
-                end
-                if not CoolDownButtons.db.profile.splitSoon and forBar == "soon" then
-                    forBar = "spells"                    
-                end
                 
                 local center = CoolDownButtons.db.profile.anchors[forBar].center
                 if center and forBar == "spells" then
@@ -443,7 +450,7 @@ function CoolDownButtons_UPDATE(self, elapsed)
                 local save = CoolDownButtons.db.profile.saveToPos
                 if save[cooldown["name"]] and save[cooldown["name"]].saved then
                     local pos = save[cooldown["name"]].pos
-                    frame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", pos.x, pos.y)
+                    frame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", pos.x / scale, pos.y / scale)
                 else
                     local anchorTo = CoolDownButtonAnchor[1]
                     if CoolDownButtons.db.profile.splitRows then
@@ -486,9 +493,9 @@ function CoolDownButtons:SPELL_UPDATE_COOLDOWN()
     for k, spellData in pairs(spellTable) do
         local spellIndex = spellData.spellIndex
         local spellName  = spellData.spellName
-        local spellTexture = GetSpellTexture(spellIndex, BOOKTYPE_SPELL)
+        local spellTexture = spellData.spellTexture
         local start, duration, enable = GetSpellCooldown(spellIndex, BOOKTYPE_SPELL)
-        if (start ~= nil and start > 0) then
+        if (start ~= nil and start > 0) and not cooldowns[spellName] then
             if self.db.profile.spellShowAfterMaxDurationPassed then
                 remaining = ceil(start + duration - GetTime())
             else
@@ -507,6 +514,25 @@ function CoolDownButtons:SPELL_UPDATE_COOLDOWN()
                     if self.db.profile.saveToPos[spellName].saved then
                         saved = 1
                     end
+                    
+                    
+                    
+                    
+                    if not spellTreeTable[spellData.spellTree.treeName] then 
+                        spellTreeTable[spellData.spellTree.treeName] = {}
+                        spellTreeTable[spellData.spellTree.treeName][start*duration] = 1 
+                    else
+                        local treeCD = spellTreeTable[spellData.spellTree.treeName][start*duration]
+                        if treeCD then
+                            treeCD = treeCD + 1 
+                        else
+                            treeCD = 1
+                        end
+                    end
+                    
+                    
+                    
+                    
                     cooldowns[spellName] = {
                         cdtype    = "spell",       -- "item" or "spell"
                         id        = spellIndex,    -- itemid or spellid
@@ -712,7 +738,7 @@ end
 --]]
 
 function CoolDownButtons:getFreeFrame(forThis, whatBar)
-    local x
+    local x = 0
     if self.testMode then
         for i = 1, self.numcooldownbuttons do
             x = i
@@ -872,9 +898,6 @@ function CoolDownButtons:createButton(i, justMove)
 		if self.cydb.profile["CoolDown Buttons"] ~= nil then
             if i ~= 1 then cyCircled_CoolDownButtons:AddElement(i) end
             cyCircled_CoolDownButtons:ApplySkin()
-            if not button.overlay then
-                button.overlay = _G[button:GetName() .. "Overlay"]
-            end
 		end
 	end
     
@@ -1087,7 +1110,7 @@ function CoolDownButtons:SetUpTestModeFakeCDS()
                     local freeindex = self:getFreeFrame(nil, v)
                     if freeindex then
                         cooldowns["TestCooldown_"..v.."_"..i] = {
-                            cdtype    = "single",
+                            cdtype    = "single",                            
                             id        = nil,
                             name      = name,
                             start     = self.testModeStart,

@@ -1346,7 +1346,7 @@ function CoolDownButtonsConfig:ShowFrameToMoveSavedCD(name)
         self:createMovableFrame()
     end
 	self.moveableframe:Show() 
-	self.moveableframe.cooldown.textFrame.text:Show()
+	self.moveableframe.text:Show()
     self.moveableframe:ClearAllPoints() 
 	self.moveableframe:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", db.saveToPos[name].pos.x, db.saveToPos[name].pos.y) 
     local items = options.args.savetopos.args.items.args
@@ -1371,13 +1371,17 @@ function CoolDownButtonsConfig:ShowFrameToMoveSavedCD(name)
             end
         end
     end
+    self.moveableframe.cooldownname = name
+    self:setupMovableFrameDesign()
 end
+
 function CoolDownButtonsConfig:HideFrameToMoveSavedCD(name)
 	self.moveableframe:Hide()
-	self.moveableframe.cooldown.textFrame.text:Hide()
-    
-    db.saveToPos[name].pos.x = tonumber(string_format("%.3f", self.moveableframe:GetLeft()))
-    db.saveToPos[name].pos.y = tonumber(string_format("%.3f", self.moveableframe:GetBottom()))
+	self.moveableframe.text:Hide()
+        
+    local scale = CoolDownButtons.db.profile.anchors["single"].scale
+    db.saveToPos[name].pos.x = tonumber(string_format("%.3f", self.moveableframe:GetLeft() * scale))
+    db.saveToPos[name].pos.y = tonumber(string_format("%.3f", self.moveableframe:GetBottom() * scale))
     
     local items = options.args.savetopos.args.items.args
     for k, v in pairs(items) do
@@ -1397,6 +1401,9 @@ end
 
 function CoolDownButtonsConfig:CoolDownButtonsConfigChanged()
 	db = CoolDownButtons.db.profile
+    if self.moveableframe and self.moveableframe:IsShown() then
+        self:setupMovableFrameDesign()
+    end
 end
 
 function CoolDownButtonsConfig:CHANNEL_UI_UPDATE()
@@ -1423,5 +1430,56 @@ function CoolDownButtonsConfig:createMovableFrame()
     self.moveableframe:SetScript("OnDragStart", function(self) self:StartMoving() end)
     self.moveableframe:SetScript("OnDragStop",  function(self) self:StopMovingOrSizing(); end)
     self.moveableframe:SetFrameStrata("HIGH")
+    self.moveableframe.text:SetText(CoolDownButtons:formatCooldownTime({["start"] = GetTime(), ["duration"] = 817}, true))
     self.moveableframe:Hide()
+end
+
+function CoolDownButtonsConfig:setupMovableFrameDesign()
+    local frame = self.moveableframe
+    local name = frame.cooldownname
+    local forBar = "single"
+    frame.text:Show()
+    
+    local scale = CoolDownButtons.db.profile.anchors[forBar].scale
+    local alpha = CoolDownButtons.db.profile.anchors[forBar].alpha
+    local direction = CoolDownButtons.db.profile.anchors[forBar].direction
+    local buttonPadding = CoolDownButtons.db.profile.anchors[forBar].buttonPadding
+
+    local textScale = CoolDownButtons.db.profile.anchors[forBar].textScale
+    local textAlpha = CoolDownButtons.db.profile.anchors[forBar].textAlpha
+    local textDirection = CoolDownButtons.db.profile.anchors[forBar].textSide
+    local textPadding = CoolDownButtons.db.profile.anchors[forBar].textPadding                
+
+    if not CoolDownButtons.db.profile.anchors[forBar].textSettings then
+        textScale     = scale
+        textAlpha     = alpha
+        textDirection = "down"
+    end
+
+    frame:SetScale(scale)
+
+    frame.text:ClearAllPoints()
+    frame.textFrame:SetScale(textScale)
+    frame.text:SetFont(LSM:Fetch("font", CoolDownButtons.db.profile.font), CoolDownButtons.db.profile.fontSize, "OUTLINE")
+
+    if textDirection == "left" then
+        frame.text:SetPoint("CENTER", frame, "CENTER", - (textPadding * scale), 0)
+    elseif textDirection == "right" then
+        frame.text:SetPoint("CENTER", frame, "CENTER", (textPadding * scale), 0)
+    elseif textDirection == "up" then
+        frame.text:SetPoint("CENTER", frame, "CENTER", 0, (textPadding * scale))
+    elseif textDirection == "down" then 
+        frame.text:SetPoint("CENTER", frame, "CENTER", 0, - (textPadding * scale))
+    end
+
+    frame:ClearAllPoints()
+
+    local pos = CoolDownButtons.db.profile.saveToPos[name].pos
+    frame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", pos.x / scale, pos.y / scale)
+
+    frame:SetAlpha(alpha)               
+    frame.text:SetAlpha(textAlpha)
+    if not CoolDownButtons.db.profile.anchors[forBar].showTime then
+       frame.text:Hide()
+    end
 end
