@@ -185,6 +185,10 @@ function CoolDownButtons:OnInitialize()
     self:RegisterMessage("CoolDownButtonsConfigChanged")
 end
 
+function CoolDownButtons:GetNumButtons()
+    return self.numcooldownbuttons
+end
+
 function CoolDownButtons:OnEnable()
 
     self.spellTable = spellTable
@@ -214,7 +218,7 @@ function CoolDownButtons:OnEnable()
     self.cdbtns = {}
 
     -- Hack to keep code "dry" :)
-    self:CoolDownButtonsConfigChanged()    
+    self:CoolDownButtonsConfigChanged()
 
     local frame = CreateFrame("Frame"); frame:SetScript("OnUpdate", CoolDownButtons_UPDATE)
 end
@@ -896,7 +900,7 @@ function CoolDownButtons:createButton(i, justMove)
 
     if self.cydb then
 		if self.cydb.profile["CoolDown Buttons"] ~= nil then
-            if i ~= 1 then cyCircled_CoolDownButtons:AddElement(i) end
+            cyCircled_CoolDownButtons:AddElement(i)
             cyCircled_CoolDownButtons:ApplySkin()
 		end
 	end
