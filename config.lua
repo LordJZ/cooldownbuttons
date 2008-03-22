@@ -1296,7 +1296,7 @@ function CoolDownButtonsConfig:InitPositions(state)
                     get = function( k ) return db.saveToPos[k.arg].show end,
                     arg = name,
                 }
-            else
+            elseif data.cdtype == "item" then
                 options.args.savetopos.args.items.args["obj"..idx] = arg
                 options.args.savetopos.args.hideitems.args["obj"..idx] = {
                     order = idx,
