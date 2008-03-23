@@ -1156,8 +1156,6 @@ function CoolDownButtons:gsub(text, variable, value)
 end
 
 function CoolDownButtons:ResetCooldowns()
---    spellTreeTable = deepDel(spellTreeTable)
---    spellTreeTable = newList({},{},{},{})
     if self.cdbtns then
         cooldowns = deepDel(cooldowns)
         cooldowns = newList()
@@ -1173,6 +1171,7 @@ function CoolDownButtons:ResetCooldowns()
         end
     end
 end
+
 function CoolDownButtons:sortButtons()
     local timeToSplit = self.db.profile.anchors.soon.timeToSplit
     local sortMe = newList()
@@ -1181,31 +1180,32 @@ function CoolDownButtons:sortButtons()
     sortMe["soon"]   = newList()
     for key, cooldown in pairs(cooldowns) do
         if cooldown["saved"] ~= 1 then
-            local remaining = cooldown["start"] + cooldown["duration"] - GetTime()
+            local remaining = tonumber(string.format("%.3f", cooldown["start"] + cooldown["duration"] - GetTime() ))
             if self.db.profile.splitSoon and remaining < timeToSplit then
                 self.cdbtns[cooldown["buttonID"]].usedInBar = "soon"
-                sortMe["soon"][remaining] = cooldown["name"]
+                table_insert(sortMe["soon"], newList(remaining, cooldown["name"]))
             else
                 if self.db.profile.splitRows then
                     if cooldown.cdtype == "spell" then
-                        sortMe["spells"][remaining] = cooldown["name"]
+                        table_insert(sortMe["spells"], newList(remaining, cooldown["name"]))
                     elseif cooldown.cdtype == "eq_item" or cooldown.cdtype == "bag_item" then
-                        sortMe["items"][remaining] = cooldown["name"]
+                        table_insert(sortMe["items"], newList(remaining, cooldown["name"]))
                     end
                 else
-                    sortMe["spells"][remaining] = cooldown["name"]
+                    table_insert(sortMe["spells"], newList(remaining, cooldown["name"]))
                 end
             end
         end
     end
-
+    
     local counts = newList()
     counts["spells"] = 1
     counts["items"]  = 1
     counts["soon"]   = 1
     for bar in pairs(sortMe) do
-        for time, spell in sortedpairs(sortMe[bar]) do
-            cooldowns[spell].order = counts[bar]
+        table_sort(sortMe[bar], function(a, b) return a[1] < b[1] end)
+        for _, data in pairs(sortMe[bar]) do
+            cooldowns[data[2]].order = counts[bar]
             counts[bar] = counts[bar] + 1
         end
     end
@@ -1298,8 +1298,8 @@ end
 
 -- http://www.wowwiki.com/HOWTO:_Do_Tricks_With_Tables#Iterate_with_sorted_keys
 function sortedpairs(t,comparator)
-    local sortedKeys = newList();
-	table_foreach(t, function(k,v) table_insert(sortedKeys,k) end);
+    local sortedKeys = newList()
+    table_foreach(t, function(k,v) table_insert(sortedKeys,k) end);
 	table_sort(sortedKeys,comparator);
 	local i = 0;
 	local function _f(_s,_v)
