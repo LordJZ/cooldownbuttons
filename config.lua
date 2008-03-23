@@ -1,3 +1,14 @@
+--[[
+Autor: Dodge (Netrox @ Sen'Jin-EU)
+
+  by using this piece of software, you accept that it
+  has no warranty at all, use it at your own risk.
+
+  - all rights reserved -
+  
+Date: $Date$
+]]
+
 local LibStub = LibStub
 local CoolDownButtons = _G["CoolDownButtons"]
 CoolDownButtonsConfig = CoolDownButtons:NewModule("Config","AceConsole-3.0","AceEvent-3.0")

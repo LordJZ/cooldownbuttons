@@ -1,17 +1,17 @@
 ## Interface: 20300
 ## Title: CoolDown Buttons
-## Author: Dodge
+## Author: Dodge (Netrox @ Sen'Jin-EU)
 ## Notes: Shows simple Buttons for your Cooldowns :)
 ## Version: $Revision$
 ## X-ReleaseDate: "$Date$"
 ## X-Category: Interface Enhancements
 ## X-Website: http://www.wowace.com/wiki/CoolDownButtons
-# X-AceForum: 11951
+## X-AceForum: 11951
 
 ## SavedVariables: CoolDownButtonsDB
 ## DefaultState: Enabled
 ## OptionalDeps: Ace3, LibSharedMedia-2.0, LibPeriodicTable-3.1
-## X-Embeds: Ace3, LibSharedMedia-2.0, LibPeriodicTable-3.1
+## X-Embeds:     Ace3, LibSharedMedia-2.0, LibPeriodicTable-3.1
 
 embeds.xml
 
