@@ -51,7 +51,7 @@ local CDB_SetCooldown = getmetatable(CreateFrame('Cooldown', nil, nil, 'Cooldown
 
 -- from ckknight's LibDogTag-3.0, with his permission:
 local poolNum = 0
-local newList, del, deepDel
+local newList, del, deepDel, deepCopy
 do
 	local pool = setmetatable({}, {__mode='k'})
     function newList(...)
@@ -116,6 +116,17 @@ do
 			deepDel_data = del(deepDel_data)
 		end
 		return nil
+	end
+	function deepCopy(t)
+		if type(t) ~= "table" then
+			return t
+		else
+			local u = newList()
+			for k, v in pairs(t) do
+				u[deepCopy(k)] = deepCopy(v)
+			end
+			return u
+		end
 	end
 end
 -- end of ckknight's code
@@ -1149,38 +1160,47 @@ function CoolDownButtons:ResetCooldowns()
         end
     end
 end
-
 function CoolDownButtons:sortButtons()
-    local spells = 1
-    local items = 1
-    local soon = 1
     local timeToSplit = self.db.profile.anchors.soon.timeToSplit
+    local sortMe = newList()
+    sortMe["spells"] = newList()
+    sortMe["items"]  = newList()
+    sortMe["soon"]   = newList()
     for key, cooldown in pairs(cooldowns) do
         if cooldown["saved"] ~= 1 then
             local remaining = cooldown["start"] + cooldown["duration"] - GetTime()
             if self.db.profile.splitSoon and remaining < timeToSplit then
                 self.cdbtns[cooldown["buttonID"]].usedInBar = "soon"
-                cooldown["order"] = soon
-                soon = soon + 1                
+                sortMe["soon"][remaining] = cooldown["name"]
             else
                 if self.db.profile.splitRows then
                     if cooldown.cdtype == "spell" then
-                        cooldown["order"] = spells
-                        spells = spells + 1
+                        sortMe["spells"][remaining] = cooldown["name"]
                     elseif cooldown.cdtype == "eq_item" or cooldown.cdtype == "bag_item" then
-                        cooldown["order"] = items
-                        items = items + 1
+                        sortMe["items"][remaining] = cooldown["name"]
                     end
                 else
-                    cooldown["order"] = spells
-                    spells = spells + 1
+                    sortMe["spells"][remaining] = cooldown["name"]
                 end
             end
         end
     end
-    self.spellnum = spells
-    self.itemsnum = items
-    self.soonnum  = soon
+    local counts = newList()
+    counts["spells"] = 1
+    counts["items"]  = 1
+    counts["soon"]   = 1
+    for bar in pairs(sortMe) do
+        for time, spell in sortedpairs(sortMe[bar]) do
+            cooldowns[spell].order = counts[bar]
+            counts[bar] = counts[bar] + 1
+        end
+    end
+    
+    self.spellnum = counts["spells"]
+    self.itemsnum = counts["items"]
+    self.soonnum  = counts["soon"]
+    counts = del(counts)
+    sortMe = deepDel(sortMe)
 end
 
 function CoolDownButtons:EndTestMode(force)
@@ -1300,3 +1320,4 @@ function cdb()
     end
 end
 
+-- Rock("LibRockConsole-1.0"):PrintLiteral(CoolDownButtons)
