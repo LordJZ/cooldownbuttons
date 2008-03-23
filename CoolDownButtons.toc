@@ -10,8 +10,8 @@
 
 ## SavedVariables: CoolDownButtonsDB
 ## DefaultState: Enabled
-## OptionalDeps: Ace3, LibSharedMedia-2.0, LibPeriodicTable-3.1
-## X-Embeds:     Ace3, LibSharedMedia-2.0, LibPeriodicTable-3.1
+## OptionalDeps: Ace3, LibSharedMedia-2.0, LibPeriodicTable-3.1, LibSink-2.0
+## X-Embeds:     Ace3, LibSharedMedia-2.0, LibPeriodicTable-3.1, LibSink-2.0
 
 embeds.xml
 

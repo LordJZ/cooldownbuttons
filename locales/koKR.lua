@@ -18,6 +18,7 @@ L["Explosive Trap"] = "폭발의 덫"
 
 L["Click to Post Cooldown"] = "재사용 대기시간을 알림: 클릭"
 
+L["Cooldown on $obj ready!"] = true
 
 -- config.lua
 L["Display Settings"] = "디스플레이 설정"
@@ -50,6 +51,7 @@ L["Toggle showing Item and Spell Cooldowns in an additional row if they are expi
 L["Spell Cooldowns"] = "주문 재사용 대기시간"
 L["Item Cooldowns"] = "아이템 재사용 대기시간"
 L["Seperated Cooldowns"] = "분리된 재사용 대기시간"
+L["Announcements"] = true
 
 L["Show Anchor"] = "앵커 보이기"
 L["Toggle showing Anchor."] = "앵커를 보여줍니다."

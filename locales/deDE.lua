@@ -18,6 +18,7 @@ L["Explosive Trap"] = "Sprengfalle"
 
 L["Click to Post Cooldown"] = true
 
+L["Cooldown on $obj ready!"] = true
 
 -- config.lua
 L["Display Settings"] = true
@@ -50,6 +51,7 @@ L["Toggle showing Item and Spell Cooldowns in an additional row if they are expi
 L["Spell Cooldowns"] = true
 L["Item Cooldowns"] = true
 L["Seperated Cooldowns"] = true
+L["Announcements"] = true
 
 L["Show Anchor"] = true
 L["Toggle showing Anchor."] = true

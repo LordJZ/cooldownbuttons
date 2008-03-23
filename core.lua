@@ -17,6 +17,7 @@ CoolDownButtons.rev = rev
 local L = LibStub("AceLocale-3.0"):GetLocale("CoolDown Buttons", false)
 local LSM = LibStub("LibSharedMedia-2.0")
 LSM:Register("font", "Skurri", [[Interface\AddOns\CoolDownButtons\skurri.ttf]])
+local LS2 = LibStub("LibSink-2.0")
 
 local GetInventoryItemCooldown = GetInventoryItemCooldown
 local GetContainerItemCooldown = GetContainerItemCooldown
@@ -264,6 +265,8 @@ local defaults = {
         spellShowAfterMaxDurationPassed = true,
         maxItemDuration  = 1800,
         itemShowAfterMaxDurationPassed  = true,
+        chatSink = { sink20OutputSink = "None" },
+        useSink = true,
 	},
 }
 
@@ -281,7 +284,10 @@ function CoolDownButtons:GetNumButtons()
 end
 
 function CoolDownButtons:OnEnable()
-
+    if LS2 then
+        LS2.SetSinkStorage(self, self.db.profile.chatSink)
+    end
+    
     self.spellTable = spellTable
     self:ResetSpells()
 
@@ -458,7 +464,10 @@ function CoolDownButtons_UPDATE(self, elapsed)
                             pulse.icon:Hide()
                             pulse.dec = nil
                             frame.pulseActive = false
-
+                            if LS2 and CoolDownButtons.db.profile.useSink then
+                                local message = CoolDownButtons:gsub(L["Cooldown on $obj ready!"], "$obj", cooldown["name"])
+                                LS2.Pour(CoolDownButtons, message)
+                            end
                             frame:Hide()
                             frame.text:Hide()
                             cooldowns[key] = del(cooldowns[key])
@@ -471,6 +480,10 @@ function CoolDownButtons_UPDATE(self, elapsed)
                         end
                     end
                 else
+                    if LS2 and CoolDownButtons.db.profile.useSink then
+                        local message = CoolDownButtons:gsub(L["Cooldown on $obj ready!"], "$obj", cooldown["name"])
+                        LS2.Pour(CoolDownButtons, message)
+                    end
                     frame:Hide()
                     frame.text:Hide()
                     cooldowns[key] = del(cooldowns[key])
@@ -1185,6 +1198,7 @@ function CoolDownButtons:sortButtons()
             end
         end
     end
+
     local counts = newList()
     counts["spells"] = 1
     counts["items"]  = 1
@@ -1195,7 +1209,6 @@ function CoolDownButtons:sortButtons()
             counts[bar] = counts[bar] + 1
         end
     end
-    
     self.spellnum = counts["spells"]
     self.itemsnum = counts["items"]
     self.soonnum  = counts["soon"]

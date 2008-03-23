@@ -15,6 +15,7 @@ CoolDownButtonsConfig = CoolDownButtons:NewModule("Config","AceConsole-3.0","Ace
 local CoolDownButtonsConfig = CoolDownButtonsConfig
 local L = LibStub("AceLocale-3.0"):GetLocale("CoolDown Buttons", false)
 local LSM = LibStub("LibSharedMedia-2.0")
+local LS2 = LibStub("LibSink-2.0")
 
 local CDBCHelper = {}
 local options = {}
@@ -829,6 +830,10 @@ options.args.display = {
     },
 }
 
+if LS2 then
+    options.args.display.args.chatSink = LS2.GetSinkAce3OptionsDataTable(CoolDownButtons)
+    options.args.display.args.chatSink.name = L["Announcements"]
+end
 
 options.args.display.args.testMode = {
  	type = "group",
