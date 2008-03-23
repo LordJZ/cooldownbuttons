@@ -5,6 +5,7 @@ if not L then return end
 L["Click to Move"] = true
 L["RemainingCoolDown"] = "Cooldown on $spell active for $time."
 
+L["Spellgroup: Divine Shields"] = true
 L["Spellgroup: Shocks"] = true
 L["Earth Shock"] = "Choque de tierra"
 L["Flame Shock"] = "Choque de llamas"

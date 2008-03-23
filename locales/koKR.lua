@@ -5,6 +5,7 @@ if not L then return end
 L["Click to Move"] = "이동: 드래그"
 L["RemainingCoolDown"] = "$spell 의 재사용 대기간이 $time 남았습니다."
 
+L["Spellgroup: Divine Shields"] = true
 L["Spellgroup: Shocks"] = "주문그룹: 충격"
 L["Earth Shock"] = "대지 충격"
 L["Flame Shock"] = "화염 충격"

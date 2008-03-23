@@ -174,8 +174,9 @@ for i = 1, 3 do
     CoolDownButtonAnchor[i].texture:SetAllPoints(CoolDownButtonAnchor[i])
 end
 
-cooldowns = newList()
-spellTable = newList()
+local cooldowns = newList()
+local spellTable = newList()
+local cooldownsChanged = false
 
 local defaults = {
 	profile = {
@@ -489,6 +490,7 @@ function CoolDownButtons_UPDATE(self, elapsed)
                             cooldowns[key] = del(cooldowns[key])
                             frame.used = false
                             frame.usedInBar = ""
+                            cooldownsChanged = true
                         else
                             pulse.icon:Show()
                             pulse.icon:SetHeight(pulse:GetHeight() * pulse.scale)
@@ -505,6 +507,7 @@ function CoolDownButtons_UPDATE(self, elapsed)
                     cooldowns[key] = del(cooldowns[key])
                     frame.used = false
                     frame.usedInBar = ""
+                    cooldownsChanged = true
                 end
             else
                 frame.text:SetText(CoolDownButtons:formatCooldownTime(cooldown, true))
@@ -676,13 +679,14 @@ function CoolDownButtons:SPELL_UPDATE_COOLDOWN()
                         cooldowns[treeName].buttonID  = freeindex     -- assign to button #?
                         cooldowns[treeName].order     = 0             -- display position
                         cooldowns[treeName].saved     = saved         -- position saved?
-
                         self.cdbtns[freeindex].used = true
                         if saved ~= 1 then
                             self.cdbtns[freeindex].usedInBar = "spells"
                         else
                             self.cdbtns[freeindex].usedInBar = "single"
                         end
+
+                        cooldownsChanged = true
                     end
                 end
             end
@@ -721,7 +725,7 @@ function CoolDownButtons:SPELL_UPDATE_COOLDOWN()
                 cooldowns[spellName].texture = "Interface\\Icons\\Spell_Frost_ChainsOfIce"
             end
             --[[ for 2.4
-            if spellName == L["Spellgroup: Shocks"] or spellName == L["Spellgroup: Traps"] then
+            if spellName == L["Spellgroup: Shocks"] or spellName == L["Spellgroup: Traps"] or spellName == L["Spellgroup: Divine Shields"] then
                 cooldowns[spellName].texture = self.spellgroups[spellName].texture
             end
             --]]
@@ -732,6 +736,8 @@ function CoolDownButtons:SPELL_UPDATE_COOLDOWN()
             else
                 self.cdbtns[freeindex].usedInBar = "single"
             end
+
+            cooldownsChanged = true
         end
         
     end
@@ -782,6 +788,8 @@ function CoolDownButtons:BAG_UPDATE_COOLDOWN()
                     else
                         self.cdbtns[freeindex].usedInBar = "single"
                     end
+
+                    cooldownsChanged = true
                 end
             end
         end
@@ -830,6 +838,8 @@ function CoolDownButtons:BAG_UPDATE_COOLDOWN()
                         else
                             self.cdbtns[freeindex].usedInBar = "single"
                         end
+
+                        cooldownsChanged = true
                     end
                 end
             end
@@ -1173,6 +1183,7 @@ end
 
 function CoolDownButtons:ResetCooldowns()
     if self.cdbtns then
+        cooldownsChanged = true
         cooldowns = deepDel(cooldowns)
         cooldowns = newList()
         for key, button in pairs(self.cdbtns) do
@@ -1194,7 +1205,8 @@ function CoolDownButtons:sortButtons()
         numCooldowns = true
         break
     end
-    if numCooldowns then
+    if numCooldowns and cooldownsChanged then
+        cooldownsChanged = false
         local timeToSplit = self.db.profile.anchors.soon.timeToSplit
         local sortMe = newList()
         sortMe["spells"] = newList()
