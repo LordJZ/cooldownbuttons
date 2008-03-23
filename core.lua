@@ -52,7 +52,7 @@ local CDB_SetCooldown = getmetatable(CreateFrame('Cooldown', nil, nil, 'Cooldown
 
 -- from ckknight's LibDogTag-3.0, with his permission:
 local poolNum = 0
-local newList, del, deepDel, deepCopy
+local newList, newDict, del, deepDel, deepCopy
 do
 	local pool = setmetatable({}, {__mode='k'})
     function newList(...)
@@ -68,6 +68,22 @@ do
 		end
 		-- if TABLE_DEBUG and pool == normalPool then
 		-- 	TABLE_DEBUG[#TABLE_DEBUG+1] = { '***', "newList", poolNum, tostring(t), debugstack() }
+		-- end
+		return t
+	end
+	function newDict(...)
+		poolNum = poolNum + 1
+		local t = next(pool)
+		if t then
+			pool[t] = nil
+		else
+			t = {}
+		end
+		for i = 1, select('#', ...), 2 do
+			t[select(i, ...)] = select(i+1, ...)
+		end
+		-- if TABLE_DEBUG and pool == normalPool then
+		-- 	TABLE_DEBUG[#TABLE_DEBUG+1] = { '***', "newDict", poolNum, tostring(t), debugstack() }
 		-- end
 		return t
 	end
@@ -158,8 +174,8 @@ for i = 1, 3 do
     CoolDownButtonAnchor[i].texture:SetAllPoints(CoolDownButtonAnchor[i])
 end
 
-local cooldowns = newList()
-local spellTable = newList()
+cooldowns = newList()
+spellTable = newList()
 
 local defaults = {
 	profile = {
@@ -329,17 +345,17 @@ function CoolDownButtons:ResetSpells()
 			local spellIndex = offset + j
 			local spellName, spellID  = self:myGetSpellName(spellIndex)
             if not spellTable[spellName] then
-                spellTable[spellName] = {
-                    spellName   = spellName,
-                    spellIndex  = spellIndex,
-                    spellID     = spellID,
-                    spellTexture = GetSpellTexture(spellIndex, BOOKTYPE_SPELL),
-                    spellTree   = {
-                        treeIndex   = spellTree,
-                        treeName    = treeName,
-                        treeTexture = treeTexture,
-                    },
-                }
+                spellTable[spellName] = newDict(
+                    "spellName"    , spellName,
+                    "spellIndex"   , spellIndex,
+                    "spellID"      , spellID,
+                    "spellTexture" , GetSpellTexture(spellIndex, BOOKTYPE_SPELL),
+                    "spellTree"    , newDict(
+                        "treeIndex"   , spellTree,
+                        "treeName"    , treeName,
+                        "treeTexture" , treeTexture
+                    )
+                )
             end
 		end
 	end
@@ -1173,47 +1189,54 @@ function CoolDownButtons:ResetCooldowns()
 end
 
 function CoolDownButtons:sortButtons()
-    local timeToSplit = self.db.profile.anchors.soon.timeToSplit
-    local sortMe = newList()
-    sortMe["spells"] = newList()
-    sortMe["items"]  = newList()
-    sortMe["soon"]   = newList()
+    local numCooldowns = false
     for key, cooldown in pairs(cooldowns) do
-        if cooldown["saved"] ~= 1 then
-            local remaining = tonumber(string.format("%.3f", cooldown["start"] + cooldown["duration"] - GetTime() ))
-            if self.db.profile.splitSoon and remaining < timeToSplit then
-                self.cdbtns[cooldown["buttonID"]].usedInBar = "soon"
-                table_insert(sortMe["soon"], newList(remaining, cooldown["name"]))
-            else
-                if self.db.profile.splitRows then
-                    if cooldown.cdtype == "spell" then
-                        table_insert(sortMe["spells"], newList(remaining, cooldown["name"]))
-                    elseif cooldown.cdtype == "eq_item" or cooldown.cdtype == "bag_item" then
-                        table_insert(sortMe["items"], newList(remaining, cooldown["name"]))
-                    end
+        numCooldowns = true
+        break
+    end
+    if numCooldowns then
+        local timeToSplit = self.db.profile.anchors.soon.timeToSplit
+        local sortMe = newList()
+        sortMe["spells"] = newList()
+        sortMe["items"]  = newList()
+        sortMe["soon"]   = newList()
+        for key, cooldown in pairs(cooldowns) do
+            if cooldown["saved"] ~= 1 then
+                local remaining = tonumber(string.format("%.3f", cooldown["start"] + cooldown["duration"] - GetTime() ))
+                if self.db.profile.splitSoon and remaining < timeToSplit then
+                    self.cdbtns[cooldown["buttonID"]].usedInBar = "soon"
+                    table_insert(sortMe["soon"], newList(remaining, cooldown["name"]))
                 else
-                    table_insert(sortMe["spells"], newList(remaining, cooldown["name"]))
+                    if self.db.profile.splitRows then
+                        if cooldown.cdtype == "spell" then
+                            table_insert(sortMe["spells"], newList(remaining, cooldown["name"]))
+                        elseif cooldown.cdtype == "eq_item" or cooldown.cdtype == "bag_item" then
+                            table_insert(sortMe["items"], newList(remaining, cooldown["name"]))
+                        end
+                    else
+                        table_insert(sortMe["spells"], newList(remaining, cooldown["name"]))
+                    end
                 end
             end
         end
-    end
-    
-    local counts = newList()
-    counts["spells"] = 1
-    counts["items"]  = 1
-    counts["soon"]   = 1
-    for bar in pairs(sortMe) do
-        table_sort(sortMe[bar], function(a, b) return a[1] < b[1] end)
-        for _, data in pairs(sortMe[bar]) do
-            cooldowns[data[2]].order = counts[bar]
-            counts[bar] = counts[bar] + 1
+        
+        local counts = newList()
+        counts["spells"] = 1
+        counts["items"]  = 1
+        counts["soon"]   = 1
+        for bar in pairs(sortMe) do
+            table_sort(sortMe[bar], function(a, b) return a[1] < b[1] end)
+            for _, data in pairs(sortMe[bar]) do
+                cooldowns[data[2]].order = counts[bar]
+                counts[bar] = counts[bar] + 1
+            end
         end
+        self.spellnum = counts["spells"]
+        self.itemsnum = counts["items"]
+        self.soonnum  = counts["soon"]
+        counts = del(counts)
+        sortMe = deepDel(sortMe)
     end
-    self.spellnum = counts["spells"]
-    self.itemsnum = counts["items"]
-    self.soonnum  = counts["soon"]
-    counts = del(counts)
-    sortMe = deepDel(sortMe)
 end
 
 function CoolDownButtons:EndTestMode(force)
