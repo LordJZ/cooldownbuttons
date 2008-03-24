@@ -5,7 +5,7 @@ if not L then return end
 L["Click to Move"] = "이동: 드래그"
 L["RemainingCoolDown"] = "$spell 의 재사용 대기간이 $time 남았습니다."
 
-L["Spellgroup: Divine Shields"] = true
+L["Spellgroup: Divine Shields"] = "주문그룹: 천상의 보호막"
 L["Spellgroup: Shocks"] = "주문그룹: 충격"
 L["Earth Shock"] = "대지 충격"
 L["Flame Shock"] = "화염 충격"
@@ -19,7 +19,7 @@ L["Explosive Trap"] = "폭발의 덫"
 
 L["Click to Post Cooldown"] = "재사용 대기시간을 알림: 클릭"
 
-L["Cooldown on $obj ready!"] = true
+L["Cooldown on $obj ready!"] = "$obj 재사용 대기시간 완료!"
 
 -- config.lua
 L["Display Settings"] = "디스플레이 설정"
@@ -52,7 +52,7 @@ L["Toggle showing Item and Spell Cooldowns in an additional row if they are expi
 L["Spell Cooldowns"] = "주문 재사용 대기시간"
 L["Item Cooldowns"] = "아이템 재사용 대기시간"
 L["Seperated Cooldowns"] = "분리된 재사용 대기시간"
-L["Announcements"] = true
+L["Announcements"] = "알림글"
 
 L["Show Anchor"] = "앵커 보이기"
 L["Toggle showing Anchor."] = "앵커를 보여줍니다."
@@ -73,10 +73,10 @@ L["Test Items"] = "아이템 테스트"
 L["Test expiring Soon"] = "잠시후 완료 테스트"
 L["Test Single"] = "고정된 고유 테스트"
 
-L["Posting Settings"] = "알림 설정"
+L["Posting Settings"] = "출력 설정"
 L["Post to:"] = "출력할 곳:"
-L["Enable Chatpost"] = "대화창 알림 사용"
-L["Toggle posting to Chat."] = "여기에 알림"
+L["Enable Chatpost"] = "대화창 출력 사용"
+L["Toggle posting to Chat."] = "여기에 출력"
 L["Set the Text to post."] = "출력 문자를 설정합니다."
 
 L["Message Settings"] = "메세지 설정"
@@ -86,7 +86,7 @@ L["Custom Message"] = "사용자 메세지"
 L["Set the Text to post."] = "출력할 문자를 입력합니다."
 L["The default message is: |cFFFFFFFF$RemainingCoolDown|r"] = "기본 메세지: |cFFFFFFFF$RemainingCoolDown|r"
 L["Use |cFFFFFFFF$spell|r for spell name and |cFFFFFFFF$time|r for cooldowntime."] = "|cFFFFFFFF$spell|r 은 주문 이름 , |cFFFFFFFF$time|r 은 재사용 대기 시간 입니다."
-L["If \'|cFFFFFFFF$defaultmsg|r\' is disabled use the following Text"] = "만약 \'|cFFFFFFFF$defaultmsg|r\' 을 비활성화 할 경우, 하단에 사용할 알림글을 입력하세요."
+L["If \'|cFFFFFFFF$defaultmsg|r\' is disabled use the following Text"] = "만약 \'|cFFFFFFFF$defaultmsg|r\' 을 비활성화 할 경우, 하단에 사용할 문자를 입력하세요."
 
 L["Up"]    = "위"
 L["Down"]  = "아래"
