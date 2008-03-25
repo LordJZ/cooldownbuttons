@@ -20,6 +20,7 @@ locales\deDE.lua
 locales\esES.lua
 locales\frFR.lua
 locales\koKR.lua
+locales\zhCN.lua
 
 core.lua
 itemgroups.lua
