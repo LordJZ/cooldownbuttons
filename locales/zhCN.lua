@@ -1,5 +1,5 @@
-﻿local L = LibStub("AceLocale-3.0"):NewLocale("CoolDown Buttons","zhCN")
-
+local L = LibStub("AceLocale-3.0"):NewLocale("CoolDown Buttons","zhCN")
+if not L then return end
 
 -- core.lua
 L["Click to Move"] = "点击移动"
