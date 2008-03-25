@@ -34,7 +34,7 @@ local string_format = string.format
 local table_foreach = table.foreach
 local getmetatable = getmetatable
 local GetSpellName = GetSpellName
---local GetSpellLink = GetSpellLink
+local GetSpellLink = GetSpellLink
 local table_insert = table.insert
 local CreateFrame = CreateFrame
 local string_gsub = string.gsub
@@ -717,18 +717,10 @@ function CoolDownButtons:SPELL_UPDATE_COOLDOWN()
             cooldowns[spellName].buttonID  = freeindex     -- assign to button #?
             cooldowns[spellName].order     = 0             -- display position
             cooldowns[spellName].saved     = saved         -- position saved?
-            
-            if spellName == L["Spellgroup: Shocks"] then
-                cooldowns[spellName].texture = "Interface\\AddOns\\CoolDownButtons\\shocks.tga"
-            end
-            if spellName == L["Spellgroup: Traps"] then
-                cooldowns[spellName].texture = "Interface\\Icons\\Spell_Frost_ChainsOfIce"
-            end
-            --[[ for 2.4
+
             if spellName == L["Spellgroup: Shocks"] or spellName == L["Spellgroup: Traps"] or spellName == L["Spellgroup: Divine Shields"] then
                 cooldowns[spellName].texture = self.spellgroups[spellName].texture
             end
-            --]]
             
             self.cdbtns[freeindex].used = true
             if saved ~= 1 then
@@ -876,22 +868,7 @@ function CoolDownButtons:PLAYER_ENTERING_WORLD()
     self:BAG_UPDATE_COOLDOWN()
 end
 
-function CoolDownButtons:myGetSpellName(index)
-    local spell, rank = GetSpellName(index, BOOKTYPE_SPELL)
-    -- Shaman shocks
-    if spell == L["Earth Shock"] or spell == L["Flame Shock"] or spell == L["Frost Shock"] then
-        spell = L["Spellgroup: Shocks"]
-    end
-    -- Hunter traps
-    if spell == L["Immolation Trap"] or spell == L["Freezing Trap"]
-    or spell == L["Frost Trap"] or spell == L["Snake Trap"] or spell == L["Explosive Trap"] then
-        spell = L["Spellgroup: Traps"]
-    end
 
-    return spell, rank
-end
-
---[[ for 2.4
 function CoolDownButtons:myGetSpellName(index)
     local spell, rank = GetSpellName(index, BOOKTYPE_SPELL)
     local spellLink   = GetSpellLink(spell)
@@ -914,7 +891,6 @@ function CoolDownButtons:myGetSpellName(index)
         return spell, spellID
     end
 end
---]]
 
 function CoolDownButtons:getFreeFrame(forThis, whatBar)
     local x = 0

@@ -1,4 +1,4 @@
-## Interface: 20300
+## Interface: 20400
 ## Title: CoolDown Buttons
 ## Author: Dodge (Netrox @ Sen'Jin-EU)
 ## Notes: Shows simple Buttons for your Cooldowns :)

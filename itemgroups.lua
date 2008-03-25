@@ -38,7 +38,6 @@ CoolDownButtons.itemgroups[L["Healthstone"]] = {
     ids = { "CDB_Itemgroup.Healthstone", },
 }
 
---[[ for 2.4
 CoolDownButtons.spellgroups = {}
 CoolDownButtons.spellgroups[L["Spellgroup: Traps"] ] = {
     name = L["Spellgroup: Traps"],
@@ -78,9 +77,8 @@ LibStub("LibPeriodicTable-3.1"):AddData("CDB_Spellgroup", "$Rev$", {
 	["CDB_Spellgroup.Shocks.Flame_Shock"]    = "8050:" ..GetSpellInfo(8050) ..",8052:" ..GetSpellInfo(8052) ..",8053:" ..GetSpellInfo(8053) ..",10447:"..GetSpellInfo(10447)..",10448:"..GetSpellInfo(10448)..",29228:"..GetSpellInfo(29228)..",25457:"..GetSpellInfo(25457),
 	["CDB_Spellgroup.Shocks.Earth_Shock"]    = "8042:" ..GetSpellInfo(8042) ..",8044:" ..GetSpellInfo(8044) ..",8045:" ..GetSpellInfo(8045) ..",8046:" ..GetSpellInfo(8046) ..",10412:"..GetSpellInfo(10412)..",10413:"..GetSpellInfo(10413)..",10414:"..GetSpellInfo(10414)..",25454:"..GetSpellInfo(25454),
     -- Paladin Shields
-	["CDB_Spellgroup.Shields.Divine_Shield"]    = "642:"  ..GetSpellInfo(642)  ..",5573:" ..GetSpellInfo(5573) ..",498:"  ..GetSpellInfo(498)  ..",1020:" ..GetSpellInfo(1020),
+	["CDB_Spellgroup.Shields.Divine_Shield"] = "642:"  ..GetSpellInfo(642)  ..",5573:" ..GetSpellInfo(5573) ..",498:"  ..GetSpellInfo(498)  ..",1020:" ..GetSpellInfo(1020),
 })
---]]
 
 LibStub("LibPeriodicTable-3.1"):AddData("CDB_Itemgroup", "$Rev$", {
     -- Healing potions

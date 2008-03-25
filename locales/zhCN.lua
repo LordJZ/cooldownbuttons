@@ -7,15 +7,7 @@ L["RemainingCoolDown"] = "$spell的冷却时间剩余$time秒"
 
 L["Spellgroup: Divine Shields"] = "法术组：圣盾术"
 L["Spellgroup: Shocks"] = "法术组：震击"
-L["Earth Shock"] = "地震术"
-L["Flame Shock"] = "烈焰震击"
-L["Frost Shock"] = "冰霜震击"
 L["Spellgroup: Traps"] = "法术组：陷阱"
-L["Freezing Trap"] = "冰冻陷阱"
-L["Frost Trap"] = "冰霜陷阱"
-L["Immolation Trap"] = "献祭陷阱"
-L["Snake Trap"] = "毒蛇陷阱"
-L["Explosive Trap"] = "爆炸陷阱"
 
 L["Click to Post Cooldown"] = "点击发送法术冷却"
 

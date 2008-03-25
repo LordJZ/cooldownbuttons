@@ -7,15 +7,7 @@ L["RemainingCoolDown"] = "$spell 의 재사용 대기간이 $time 남았습니�
 
 L["Spellgroup: Divine Shields"] = "주문그룹: 천상의 보호막"
 L["Spellgroup: Shocks"] = "주문그룹: 충격"
-L["Earth Shock"] = "대지 충격"
-L["Flame Shock"] = "화염 충격"
-L["Frost Shock"] = "냉기 충격"
 L["Spellgroup: Traps"] = "주문그룹: 덫"
-L["Freezing Trap"] = "얼음의 덫"
-L["Frost Trap"] = "냉기의 덫"
-L["Immolation Trap"] = "제물의 덫"
-L["Snake Trap"] = "뱀 덫"
-L["Explosive Trap"] = "폭발의 덫"
 
 L["Click to Post Cooldown"] = "재사용 대기시간을 알림: 클릭"
 

@@ -7,15 +7,7 @@ L["RemainingCoolDown"] = "Cooldown on $spell active for $time."
 
 L["Spellgroup: Divine Shields"] = true
 L["Spellgroup: Shocks"] = true
-L["Earth Shock"] = true
-L["Flame Shock"] = true
-L["Frost Shock"] = true
 L["Spellgroup: Traps"] = true
-L["Freezing Trap"] = true
-L["Frost Trap"] = true
-L["Immolation Trap"] = true
-L["Snake Trap"] = true
-L["Explosive Trap"] = true
 
 L["Click to Post Cooldown"] = true
 
