@@ -349,7 +349,6 @@ function CoolDownButtons:ResetSpells()
                 spellTable[spellName] = newDict(
                     "spellName"    , spellName,
                     "spellIndex"   , spellIndex,
-                    "spellID"      , spellID,
                     "spellTexture" , GetSpellTexture(spellIndex, BOOKTYPE_SPELL),
                     "spellTree"    , newDict(
                         "treeIndex"   , spellTree,
@@ -510,6 +509,10 @@ function CoolDownButtons_UPDATE(self, elapsed)
                     cooldownsChanged = true
                 end
             else
+                local remaining = tonumber(string.format("%.3f", cooldown["start"] + cooldown["duration"] - GetTime() ))
+                if CoolDownButtons.db.profile.splitSoon and remaining < CoolDownButtons.db.profile.anchors.soon.timeToSplit then
+                    cooldownsChanged = true
+                end
                 frame.text:SetText(CoolDownButtons:formatCooldownTime(cooldown, true))
                 local tC = CoolDownButtons.db.profile.timedColors
                 local c = CoolDownButtons.db.profile.fontColor
@@ -871,11 +874,17 @@ end
 
 function CoolDownButtons:myGetSpellName(index)
     local spell, rank = GetSpellName(index, BOOKTYPE_SPELL)
-    local spellLink   = GetSpellLink(spell)
-    local spellID     = select(3, string_find(spellLink, "spell:(%d+)"))
-    local group       = select(2, LibStub("LibPeriodicTable-3.1"):ItemInSet(spellID, "CDB_Spellgroup"))
+    local spellLink   = GetSpellLink(spell) or "invalid"
+
+    local spellID = 1
+    local group   = ""
     local groupKey    = nil
-    
+
+    if spellLink ~= "invalid" then -- Known Bugged Spells where GetSpellLink returns nil: "Faerie Fire (Feral)"
+        spellID = select(3, string_find(spellLink, "spell:(%d+)"))
+        group   = select(2, LibStub("LibPeriodicTable-3.1"):ItemInSet(spellID, "CDB_Spellgroup"))
+    end
+
     for key, value in pairs(self.spellgroups) do
         if type(value) == "table" then
             for _, curid in pairs(value.ids) do
