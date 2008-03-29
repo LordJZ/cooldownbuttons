@@ -1330,19 +1330,19 @@ function cdb()
     for key, cooldown in sortedpairs(cooldowns) do
         local frame = CoolDownButtons.cdbtns[cooldown["buttonID"]]
         local remaining = cooldown["start"] + cooldown["duration"] - GetTime()
-        ChatFrame2:AddMessage(cooldown["name"].." @ "..string_format("%.2f", remaining).." of "..cooldown["duration"])
-        ChatFrame2:AddMessage("Assgined to Button: "..cooldown["buttonID"] .." / "..CoolDownButtons.numcooldownbuttons)
+        ChatFrame3:AddMessage(cooldown["name"].." @ "..string_format("%.2f", remaining).." of "..cooldown["duration"])
+        ChatFrame3:AddMessage("Assgined to Button: "..cooldown["buttonID"] .." / "..CoolDownButtons.numcooldownbuttons)
         if frame.usedInBar == "spells" then
-            ChatFrame2:AddMessage("Position in the row: "..cooldown["order"].." / "..CoolDownButtons.spellnum - 1)
+            ChatFrame3:AddMessage("Position in the row: "..cooldown["order"].." / "..CoolDownButtons.spellnum - 1)
         end
         if frame.usedInBar == "items" then
-            ChatFrame2:AddMessage("Position in the row: "..cooldown["order"].." / "..CoolDownButtons.itemsnum - 1)
+            ChatFrame3:AddMessage("Position in the row: "..cooldown["order"].." / "..CoolDownButtons.itemsnum - 1)
         end
         if frame.usedInBar == "soon" then
-            ChatFrame2:AddMessage("Position in the row: "..cooldown["order"].." / "..CoolDownButtons.soonnum - 1)
+            ChatFrame3:AddMessage("Position in the row: "..cooldown["order"].." / "..CoolDownButtons.soonnum - 1)
         end
-        ChatFrame2:AddMessage("Used in the row: "..frame.usedInBar)
-        ChatFrame2:AddMessage("----------------------")
+        ChatFrame3:AddMessage("Used in the row: "..frame.usedInBar)
+        ChatFrame3:AddMessage("----------------------")
     end
 end
 
