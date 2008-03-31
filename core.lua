@@ -484,6 +484,10 @@ lastUpdate = 0
                                     frame.pulseActive = true
                                 end
                             end
+                            if LS2 and CoolDownButtons.db.profile.useSink then
+                                local message = CoolDownButtons:gsub(L["Cooldown on $obj ready!"], "$obj", cooldown["name"])
+                                LS2.Pour(CoolDownButtons, message, 1, 1, 1, nil, nil, nil, nil, nil, cooldown.texture)
+                            end                            
                         else
                             local pulse = frame.pulse
                             if pulse.scale >= 2 then
@@ -494,10 +498,6 @@ lastUpdate = 0
                                 pulse.icon:Hide()
                                 pulse.dec = nil
                                 frame.pulseActive = false
-                                if LS2 and CoolDownButtons.db.profile.useSink then
-                                    local message = CoolDownButtons:gsub(L["Cooldown on $obj ready!"], "$obj", cooldown["name"])
-                                    LS2.Pour(CoolDownButtons, message)
-                                end
                                 frame:Hide()
                                 frame.text:Hide()
                                 cooldowns[key] = del(cooldowns[key])
@@ -513,7 +513,7 @@ lastUpdate = 0
                     else
                         if LS2 and CoolDownButtons.db.profile.useSink then
                             local message = CoolDownButtons:gsub(L["Cooldown on $obj ready!"], "$obj", cooldown["name"])
-                            LS2.Pour(CoolDownButtons, message)
+                            LS2.Pour(CoolDownButtons, message, 1, 1, 1, nil, nil, nil, nil, nil, cooldown.texture)
                         end
                         frame:Hide()
                         frame.text:Hide()
