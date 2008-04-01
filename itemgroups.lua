@@ -60,7 +60,7 @@ CoolDownButtons.spellgroups[L["Spellgroup: Shocks"] ] = {
 }
 
 CoolDownButtons.spellgroups[L["Spellgroup: Divine Shields"] ] = {
-    name = L["Spellgroup: Shocks"],
+    name = L["Spellgroup: Divine Shields"],
     texture = "Interface\\Icons\\Spell_Holy_DivineIntervention",
     ids = { "CDB_Spellgroup.Shields.Divine_Shield", },
 }
