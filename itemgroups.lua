@@ -38,6 +38,11 @@ CoolDownButtons.itemgroups[L["Healthstone"]] = {
     ids = { "CDB_Itemgroup.Healthstone", },
 }
 
+CoolDownButtons.itemgroups[L["Drums (Leatherworking)"]] = {
+    texture = "Interface\\Icons\\INV_Misc_Drum_02",
+    ids = { "CDB_Itemgroup.Drums", },
+}
+
 CoolDownButtons.spellgroups = {}
 CoolDownButtons.spellgroups[L["Spellgroup: Traps"] ] = {
     name = L["Spellgroup: Traps"],
@@ -98,4 +103,6 @@ LibStub("LibPeriodicTable-3.1"):AddData("CDB_Itemgroup", "$Rev$", {
     -- Healtstones
     ["CDB_Itemgroup.Healthstone"]="5509:500,5510:800,5511:250,5512:100,9421:1200,19004:110,19005:120,19006:275,19007:300,19008:550,19009:600,19010:880,19011:960,19012:1320,19013:1440,22103:2080,22104:2288,22105:2496",
     
+    -- Drums (Leatherworking)
+    ["CDB_Itemgroup.Drums"]="29528:1,29530:2,29531:3,29532:4,29529:5",
 })

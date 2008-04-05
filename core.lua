@@ -42,6 +42,7 @@ local string_find = string.find
 local table_sort = table.sort
 local math_floor = math.floor
 local math_fmod = math.fmod
+local math_ceil = math.ceil
 local tostring = tostring
 local tonumber = tonumber
 local select = select
@@ -184,7 +185,7 @@ local defaults = {
         font        = "Skurri",
         fontColor   = { Red = 1, Green = 1, Blue = 1, Alpha = 1, },
         fontColor20sec = { Red = 1, Green = 0.6, Blue = 0.25, Alpha = 1, },
-        fontColor5sec = { Red = 1, Green = 0, Blue = 0, Alpha = 1, },
+        fontColor5sec  = { Red = 1, Green = 0, Blue = 0, Alpha = 1, },
         timerStyle  = "00:00m",
         timedColors = false,
         fontSize    = 14,
@@ -266,7 +267,7 @@ local defaults = {
         }, 
         chatPost    = false,
         posttochats = {
-            ["*"] = false,
+            ["**"] = false,
         },
         postdefaultmsg = true,
         postcustom = L["RemainingCoolDown"],
@@ -832,7 +833,7 @@ function CoolDownButtons:BAG_UPDATE_COOLDOWN()
                         if self.db.profile.saveToPos[name].saved then
                             saved = 1
                         end
-                        local itemTexture = self:getItemGroupTexture(name) or select(1, GetContainerItemInfo(i,j)	)
+                        local itemTexture = self:getItemGroupTexture(name) or select(1, GetContainerItemInfo(i,j))
                         cooldowns[name] = newList()
                         cooldowns[name].cdtype    = "bag_item"   -- "item" or "spell"
                         cooldowns[name].id        = i            -- bag
@@ -1145,7 +1146,7 @@ function CoolDownButtons:formatTime(time, mode)
         if time < 60 then
             return string_format("%d", time)
         elseif  time < 3600  then
-            local m = math_floor(time / 60)
+            local m = math_ceil(time / 60)
             if mode == "0m" then
                 return string_format("%dm", m)
             else
@@ -1153,7 +1154,7 @@ function CoolDownButtons:formatTime(time, mode)
             end
             
         else
-            local hr = math_floor(time / 3600)
+            local hr = math_ceil(time / 3600)
             if mode == "0m" then
                 return string_format("%dh", hr)
             else
