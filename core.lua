@@ -1072,6 +1072,7 @@ function CoolDownButtons:createButton(i, justMove)
 		if self.cydb.profile["CoolDown Buttons"] ~= nil then
             cyCircled_CoolDownButtons:AddElement(i)
             cyCircled_CoolDownButtons:ApplySkin()
+            cyCircled_CoolDownButtons:ApplyColors()
 		end
 	end
     
