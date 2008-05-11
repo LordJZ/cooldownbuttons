@@ -60,6 +60,6 @@ options.args.faq.args.text = {
                  .."me in IRC (#wowace on irc.freenode.net)\n"
                  .."or post in the official Forumthread (http://www.wowace.com/forums/index.php?topic="..GetAddOnMetadata("CooldownButtons", "X-AceForum")..")\n\n"
 
-           .."|r".."\n\n\n\n|cFFBFBFBFLast FAQ/Info Update:|r 2008-05-10",
+           .."|r".."\n\n\n\n|cFFBFBFBFLast FAQ/Info Update:|r 2008-05-12",
             order = 0,
 }
