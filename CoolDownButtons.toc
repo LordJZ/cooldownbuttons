@@ -1,0 +1,47 @@
+## Interface: 20400
+## Title: Cooldown Buttons
+## Author: Dodge (Netrox @ Sen'Jin-EU)
+## Notes: Shows simple Buttons for your Cooldowns :)
+## Version: v2.0
+## X-ReleaseDate: "$Date$"
+## X-Category: Interface Enhancements
+## X-Website: http://www.wowace.com/wiki/CooldownButtons
+## X-AceForum: 11951
+
+## SavedVariables: CooldownButtonsDB, CooldownButtonsSavedDB
+## DefaultState: Enabled
+## OptionalDeps: Ace3, LibSharedMedia-3.0, LibPeriodicTable-3.1, LibSink-2.0
+## X-Embeds:     Ace3, LibSharedMedia-3.0, LibPeriodicTable-3.1, LibSink-2.0
+
+# Loading Embedded Libs
+embeds.xml
+
+# Localizations
+Locales\enUS.lua
+
+# Core Files
+Core.lua
+
+# Miscellaneous
+Misc\Deformat-3.0.lua
+
+# Prototypes
+Prototypes\Bar_Managing.lua
+Prototypes\Button_Managing.lua
+Prototypes\Cooldown_Managing.lua
+
+# Modules
+Modules\Layout.lua
+Modules\Config.lua
+Modules\Saved_Cooldowns.lua
+Modules\Spell_Cooldowns.lua
+Modules\Item_Cooldowns.lua
+
+# Additional Config Modules
+Modules\Config\__API__.lua
+Modules\Config\BarSettings.lua
+Modules\Config\CooldownSettings.lua
+Modules\Config\ItemCooldownGrouping.lua
+Modules\Config\AnnouncementsSettings.lua
+Modules\Config\TestMode.lua
+Modules\Config\FAQ.lua
