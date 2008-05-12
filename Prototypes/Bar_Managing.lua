@@ -124,7 +124,7 @@ function BarEngine:OnUpdate()
         end
     end
     if self.anchorVisible and not self:GetButton(self.anchorID).movin then
-        self:DrawButton(self.anchorID, ((not self.db.showCenter and 0) or (0.5 + (self:GetNumCooldowns() / 2))) + 1)
+        self:DrawButton(self.anchorID, ((not self.db.showCenter and 1) or (0.5 + (self:GetNumCooldowns() / 2))))
     end
 end
 
@@ -210,7 +210,7 @@ function BarEngine:ShowAnchor()
     anchor:SetMovable(true)
     anchor.used = true
     anchor:SetFrameStrata("HIGH")
-    self:DrawButton(id, ((not self.db.showCenter and 0) or (0.5 + (self:GetNumCooldowns() / 2))) + 1)
+    self:DrawButton(id, ((not self.db.showCenter and 1) or (0.5 + (self:GetNumCooldowns() / 2))))
 end
 
 function BarEngine:HideAnchor()
