@@ -136,35 +136,37 @@ function createBarSettings(title, moduleName, db, myOrder, savedMenu)
                     module:HideAnchor()
                 end
                 LibStub("AceConfigRegistry-3.0"):NotifyChange("Cooldown Buttons")
-            end, nil, nil, savedMenu),
-
+            end, nil, function() return db.disableBar end, savedMenu),
+            disableBar = createToggle(L["Disable"], L["Disable this Buttonbar."], "disableBar", nil, nil, savedMenu),
+            
             header_00 = createHeader(L["Position"], savedMenu),
-            pos_x = createInput(L["X - Axis"], L["Set the Position on X-Axis."], "posx", nil, nil, savedMenu),
-            pos_y = createInput(L["Y - Axis"], L["Set the Position on Y-Axis."], "posy", nil, nil, savedMenu),
+            pos_x = createInput(L["X - Axis"], L["Set the Position on X-Axis."], "posx", nil, function() return db.disableBar end, savedMenu),
+            pos_y = createInput(L["Y - Axis"], L["Set the Position on Y-Axis."], "posy", nil, function() return db.disableBar end, savedMenu),
             header_01 = createHeader(L["Alpha & Scale"]),
-            buttonScale = createRange(L["Button Scale"], L["Set the Button scaling."], "buttonScale", {0.5, 2.5, 0.05}),
-            buttonAlpha = createRange(L["Button Alpha"], L["Set the Button transparency."], "buttonAlpha", {0.1, 1, 0.05}),
+            buttonScale = createRange(L["Button Scale"], L["Set the Button scaling."], "buttonScale", {0.5, 2.5, 0.05}, nil, function() return db.disableBar end),
+            buttonAlpha = createRange(L["Button Alpha"], L["Set the Button transparency."], "buttonAlpha", {0.1, 1, 0.05}, nil, function() return db.disableBar end),
 
             header_10 = createHeader(L["Layout"], savedMenu),
-            buttonCount = createInput(L["Max Buttons"], L["Maximal number of Buttons to display."], "buttonCount", nil, nil, savedMenu),
-            buttonDirection = createSelect(L["Direction"], L["Direction from Anchor."], "buttonDirection", opt_directions, nil, nil, savedMenu),
-            showCenter = createToggle(L["Center from Anchor"], L["Toggle Anchor to be the Center of the bar."], "showCenter", nil, nil, savedMenu),
+            buttonCount = createInput(L["Max Buttons"], L["Maximal number of Buttons to display."], "buttonCount", nil, function() return db.disableBar end, savedMenu),
+            buttonDirection = createSelect(L["Direction"], L["Direction from Anchor."], "buttonDirection", opt_directions, nil, function() return db.disableBar end, savedMenu),
+            showCenter = createToggle(L["Center from Anchor"], L["Toggle Anchor to be the Center of the bar."], "showCenter", nil, function() return db.disableBar end, savedMenu),
             desc = createDescription(L["If you enable the \"Center from Anchor\" you can set \"Direction\" to Up/Down for vertical and Left/Right for horizontal grow."], savedMenu),
 
             header_20 = createHeader(L["Multi Row Layout"], savedMenu),
-            buttonMultiRow = createToggle(L["Use Multirow"], L["Toggle useing Multirow."], "buttonMultiRow", nil, nil, savedMenu),
+            buttonMultiRow = createToggle(L["Use Multirow"], L["Toggle useing Multirow."], "buttonMultiRow", nil, function() return db.disableBar end, savedMenu),
             break_20 = createDescription("", savedMenu),
-            buttonCountPerRow = createInput(L["Max Buttons per Row"], L["Maximal number of Buttons per Row to display."], "buttonCountPerRow", nil, nil, savedMenu),
-            buttonMRDirection = createSelect(L["Direction"], L["Direction from primary Row."], "buttonMRDirection", opt_mr_directions, nil, nil, savedMenu),
+            buttonCountPerRow = createInput(L["Max Buttons per Row"], L["Maximal number of Buttons per Row to display."], "buttonCountPerRow", nil, function() return db.disableBar end, savedMenu),
+            buttonMRDirection = createSelect(L["Direction"], L["Direction from primary Row."], "buttonMRDirection", opt_mr_directions, nil, function() return db.disableBar end, savedMenu),
 
             header_30 = createHeader(L["Spacing"], savedMenu),
-            buttonSpacing = createInput(L["Button Spacing"], L["Set the spacing between Buttons."], "buttonSpacing", nil, nil, savedMenu),
-            buttonRowSpacing = createInput(L["Row Spacing"], L["Set the spacing between Rows."], "buttonRowSpacing", nil, nil, savedMenu),
+            buttonSpacing = createInput(L["Button Spacing"], L["Set the spacing between Buttons."], "buttonSpacing", nil, function() return db.disableBar end, savedMenu),
+            buttonRowSpacing = createInput(L["Row Spacing"], L["Set the spacing between Rows."], "buttonRowSpacing", nil, function() return db.disableBar end, savedMenu),
 
             timerSettings = {
                 type = "group",
                 name = L["Timer Settings"],
                 order = getOrder(),
+                disabled =  function() return db.disableBar end,
                 args = {
                     header_00 = createHeader(L["Extras"]),
                     showOmniCC = createToggle(L["Enable OmniCC Settings (Req. OCC >= 2.1.1)"], L["Switch to OmniCC settings."], "showOmniCC", true, function() return CooldownButtons.noOmniCC end),
@@ -186,7 +188,7 @@ function createBarSettings(title, moduleName, db, myOrder, savedMenu)
                 type = "group",
                 name = L["Font Settings"],
                 order = getOrder(),
-                disabled =  function() return db.showOmniCC end,
+                disabled =  function() return db.showOmniCC or db.disableBar end,
                 args = {
                     header_00 = createHeader(L["Font Layout"]),
                     fontFace = createSelect(L["Font Face"], L["Set the Font type."], "fontFace", function() local fonts, newFonts = LSM:List("font"), {}; for k, v in pairs(fonts) do newFonts[v] = v; end return newFonts; end),

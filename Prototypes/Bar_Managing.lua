@@ -56,7 +56,7 @@ function CooldownButtons.defaultModulePrototype:InitBarEngine(noUpdate)
             if not LibStub("AceTimer-3.0").embeds[self] then
                 LibStub("AceTimer-3.0"):Embed(self)
             end
-            OnUpdateList[handle] = self:ScheduleRepeatingTimer("OnUpdate", 0.25)
+            OnUpdateList[handle] = self:ScheduleRepeatingTimer("OnUpdate", 0.2)
             -- Add Bar to ButtonFacade/cyCircled Support
             CooldownButtons:GetModule("Layout"):AddBar(self:GetName())
         elseif noUpdate == "save" then
@@ -64,7 +64,7 @@ function CooldownButtons.defaultModulePrototype:InitBarEngine(noUpdate)
             if not LibStub("AceTimer-3.0").embeds[self] then
                 LibStub("AceTimer-3.0"):Embed(self)
             end
-            OnUpdateList[handle] = self:ScheduleRepeatingTimer("OnUpdateSaved", 0.25)
+            OnUpdateList[handle] = self:ScheduleRepeatingTimer("OnUpdateSaved", 0.2)
             -- Add Bar to ButtonFacade/cyCircled Support
             CooldownButtons:GetModule("Layout"):AddBar(self:GetName())
         else
@@ -112,7 +112,7 @@ function BarEngine:OnUpdate()
                     self:unregisterCooldown(cooldownName)
                 end
             else
-                if cooldownData["order"] <= self.db.buttonCount then
+                if not self.db.disableBar and (cooldownData["order"] <= self.db.buttonCount) then
                     self:DrawButton(cooldownData["buttonID"], cooldownData["order"])
                     self:ButtonUpdateTimer(cooldownData["buttonID"], time)
                 else

@@ -173,7 +173,7 @@ function CooldownEngine:GetCooldownText(name, trigger)
     local handle = self.name
     if cooldownList[handle][name] then
         local start, duration = self:GetCooldown(name)
-        return formatCooldownTime((start + duration - GetTime()) ,trigger)
+        return self:formatCooldownTime((start + duration - GetTime()) ,trigger)
     else
         return ""
     end

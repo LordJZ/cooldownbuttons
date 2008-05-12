@@ -255,6 +255,7 @@ defaults = {
 
         barSettings = {
             ["**"] ={
+                disableBar = false,
                 -- Position
                 pos = { x = 450, y = 550, },
                 -- LBF Config
