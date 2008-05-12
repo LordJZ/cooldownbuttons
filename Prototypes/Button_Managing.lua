@@ -78,14 +78,15 @@ function ButtonEngine:NewButton()
         if self.module == "Saved" then
             local kind = (((self.cd.type == "Item") and "Items") or (((self.cd.type == "Spell") or (self.cd.type == "PetAction")) and "Spells"))
             local db = CooldownButtons.savedDB.profile[kind][self.cd.name]
-            db.pos.x = self:GetLeft()
-            db.pos.y = self:GetBottom()
+            local module = CooldownButtons:GetModule(self.module)
+            db.pos.x = self:GetLeft() * module.db.buttonScale
+            db.pos.y = self:GetBottom() * module.db.buttonScale
             self.anchorPos.x = db.pos.x
             self.anchorPos.y = db.pos.y
         else
             local module = CooldownButtons:GetModule(self.module)
-            module.db.pos.x = self:GetLeft()
-            module.db.pos.y = self:GetBottom()
+            module.db.pos.x = self:GetLeft() * module.db.buttonScale
+            module.db.pos.y = self:GetBottom() * module.db.buttonScale
         end
         LibStub("AceConfigRegistry-3.0"):NotifyChange("Cooldown Buttons")
         self.movin = false
