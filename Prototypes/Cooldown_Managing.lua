@@ -188,27 +188,52 @@ function CooldownEngine:formatCooldownTime(time, trigger)
     end
 end
 
+local _formatString_
 function formatTime(time, mode)
     if mode == "00:00m" or mode == "00:00M" then
         if time < 3600 then
-            return date("%M:%S", 82800 + time)
+            _formatString_ = date("%M:%S", 82800 + time)
+            if string.sub(_formatString_, 1, 1) == "0" then
+                _formatString_ = string.sub(_formatString_, 2)
+            end
+            return _formatString_
         else
-            return date("%H:%M:%S", 82800 + time)
+            _formatString_ = date("%H:%M", 82800 + time)
+            if string.sub(_formatString_, 1, 1) == "0" then
+                _formatString_ = string.sub(_formatString_, 2)
+            end
+            if mode == "00:00m" then
+                return _formatString_.."h"
+            else
+                return _formatString_.."H"
+            end
         end
     elseif mode == "0m" or mode == "0M" then
         if time < 60 then
-            return date("%S", 82800 + time)
+            _formatString_ = date("%S", 82800 + time)
+            if string.sub(_formatString_, 1, 1) == "0" then
+                _formatString_ = string.sub(_formatString_, 2)
+            end
+            return _formatString_
         elseif  time < 3600  then
+            _formatString_ = date("%M", 82800 + time)
+            if string.sub(_formatString_, 1, 1) == "0" then
+                _formatString_ = string.sub(_formatString_, 2)
+            end
             if mode == "0m" then
-                return date("%Mm", 82800 + time)
+                return _formatString_.."m"
             else
-                return date("%MM", 82800 + time)
+                return _formatString_.."M"
             end
         else
+            _formatString_ = date("%H", 82800 + time)
+            if string.sub(_formatString_, 1, 1) == "0" then
+                _formatString_ = string.sub(_formatString_, 2)
+            end
             if mode == "0m" then
-                return date("%Hh", 82800 + time)
+                return _formatString_.."h"
             else
-                return date("%HH", 82800 + time)
+                return _formatString_.."H"
             end
         end
     end
