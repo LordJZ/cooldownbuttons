@@ -18,6 +18,7 @@ embeds.xml
 
 # Localizations
 Locales\enUS.lua
+Locales\koKR.lua
 
 # Core Files
 Core.lua
