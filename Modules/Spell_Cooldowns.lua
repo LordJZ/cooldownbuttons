@@ -79,16 +79,7 @@ function CooldownButtonsSpells:SPELL_UPDATE_COOLDOWN()
         local spellName  = spellData.spellName
         local spellIndex = spellData.spellIndex
         local start, duration, enable = GetSpellCooldown(spellIndex, BOOKTYPE_SPELL)
---        local remaining = 0
---        if self.db.profile.spellShowAfterMaxDurationPassed then
---            remaining = start + duration - GetTime()
---        else
---            remaining = duration
---        end
-        local check = enable == 1 and start > 0 and duration > 3 -- GCD
---        check = check and remaining < self.db.profile.maxSpellDuration 
---        check = check and self.db.profile.saveToPos[spellName].show
-        if check then
+        if enable == 1 and start > 0 and duration > 3 then
             spellTreeTable[spellData.spellTree][start*duration] = 1 + (spellTreeTable[spellData.spellTree][start*duration] or 0)
             if not self:IsCooldown(spellName) then
                 spellsToAdd[spellName] = newList(self.spellTable[spellName].spellIndex, start, duration)
@@ -130,16 +121,7 @@ function CooldownButtonsSpells:PET_BAR_UPDATE_COOLDOWN()
         local spellName  = GetPetActionInfo(spellIndex)
         if spellName ~= nil then
             local start, duration, enable = GetPetActionCooldown(spellIndex)
-            local remaining = 0
-    --        if self.db.profile.spellShowAfterMaxDurationPassed then
-    --            remaining = start + duration - GetTime()
-    --        else
-    --            remaining = duration
-    --        end
-            local check = enable == 1 and start > 0 and duration > 3 -- GCD
-    --        check = check and remaining < self.db.profile.maxSpellDuration 
-    --        check = check and self.db.profile.saveToPos[spellName].show
-            if check then
+            if enable == 1 and start > 0 and duration > 3 then
                 self:registerCooldown("PetAction", spellName, spellIndex, select(3, GetSpellInfo(spellName)))
             end
         end

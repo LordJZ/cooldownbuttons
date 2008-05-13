@@ -74,8 +74,7 @@ function CooldownEngine:registerCooldown(kind, name, id, texture, saveCall)
                 "id"       , id,
                 "buttonID" , buttonIndex,
                 "texture"  , texture,
-                "order"    , 0,
-                "saved"    , 0
+                "order"    , 0
             )
             button.used  = true
 
@@ -148,25 +147,37 @@ function CooldownEngine:IterateCooldowns()
     return pairs(cooldownList[self.name])
 end
 
-function CooldownEngine:sortCooldowns()
-    local handle = self.name
-    local sortMe = newList()
-    for k, v in self:IterateCooldowns() do
-        local cooldownName = k
-        local cooldownData = v
-        if cooldownData["saved"] == 0 then -- at the moment always 0 ^^
-            local start, duration = self:GetCooldown(cooldownName)
-            local remaining = tonumber(string_format("%.3f", start + duration - GetTime() ))
-            table_insert(sortMe, newList(remaining, cooldownName))
+function CooldownEngine:checkDurationLimit(start, duration)
+    if self.db.enableDurationLimit then
+        if self.db.showAfterLimit then
+            return (start + duration - GetTime()) < self.db.durationTime
+        else
+            return duration < self.db.durationTime
         end
+    else
+        return true
     end
-    local counts = 1
+end
+
+function CooldownEngine:sortCooldowns()
+    local sortMe = newList()
+    for cooldownName, cooldownData in self:IterateCooldowns() do
+        local start, duration = self:GetCooldown(cooldownName)
+        if self:checkDurationLimit(start, duration) then
+            table_insert(sortMe, newList(tonumber(string_format("%.3f", start + duration - GetTime())), cooldownName))
+            cooldownData.hide = false
+        else
+            cooldownData.hide = true
+        end
+        cooldownData.order = 0
+    end
+    local order = 1
     table_sort(sortMe, function(a, b) return a[1] < b[1] end)
     for _, data in pairs(sortMe) do
-        cooldownList[handle][data[2]].order = counts
-        counts = counts + 1
+        cooldownList[self.name][data[2]].order = order
+        order = order + 1
     end
-    sortMe = del(sortMe)
+    sortMe = deepDel(sortMe)
 end
 
 function CooldownEngine:GetCooldownText(name, trigger)

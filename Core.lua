@@ -302,6 +302,11 @@ defaults = {
                 showPulse  = false,
                 showOmniCC = false,
                 showCenter = false,
+
+                -- Limitations
+                enableDurationLimit = false,
+                showAfterLimit = true,
+                durationTime = 0,
             },
         },
     },

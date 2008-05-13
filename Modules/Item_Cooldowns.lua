@@ -59,12 +59,7 @@ end
 function CooldownButtonsItems:BAG_UPDATE_COOLDOWN()
     for i = 1, 18 do
         local start, duration, enable = GetInventoryItemCooldown("player", i)
---        if self.db.profile.itemShowAfterMaxDurationPassed then
---            remaining = start + duration - GetTime()
---        else
---            remaining = duration
---        end
-        if duration > 3 and enable == 1 then--and remaining < self.db.profile.maxItemDuration then
+        if enable == 1 and start > 0 and duration > 3 then
             local link = GetInventoryItemLink("player",i)
             local itemName = select(3, string_find(link, "Hitem[^|]+|h%[([^[]+)%]"))
             local itemID   = select(3, string_find(link, "Hitem:(%d+)"))
@@ -76,12 +71,7 @@ function CooldownButtonsItems:BAG_UPDATE_COOLDOWN()
         local slots = GetContainerNumSlots(i)
         for j = 1, slots do
             local start, duration, enable = GetContainerItemCooldown(i,j)
---            if self.db.profile.itemShowAfterMaxDurationPassed then
---                remaining = start + duration - GetTime()
---            else
---                remaining = duration
---            end
-            if duration > 3 and enable == 1 then--and remaining < self.db.profile.maxItemDuration then
+            if enable == 1 and start > 0 and duration > 3 then
                 local link = GetContainerItemLink(i,j)
                 local itemID   = select(3, string_find(link, "Hitem:(%d+)"))
                 local itemName = self:getItemName(itemID)

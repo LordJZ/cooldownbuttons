@@ -81,6 +81,13 @@ L["Bar Settings"] = true
     L["Set the flash Font color 1."] = true
     L["Flash Color 2"] = true
     L["Set the flash Font color 2."] = true
+  L["Time Limit"] = true
+   L["Enable Time Limit"] = true
+   L["Toggle hiding long Cooldowns."] = true
+   L["Show after Limit"] = true
+   L["Toggle showing the Cooldowns after passing the Limit."] = true
+   L["Limit (in seconds)"] = true
+   L["Maximum Cooldown duration to show (in seconds)."] = true
 
 L["Announcements Settings"] = true
  L["Announcement"] = true

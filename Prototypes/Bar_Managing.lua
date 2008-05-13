@@ -82,7 +82,9 @@ end
 
 local pulseHandler
 function BarEngine:OnUpdate()
-    --local handle = self.name
+    if not self.thisIsTheUpdateHandlerForSortCooldowns then
+        self.thisIsTheUpdateHandlerForSortCooldowns = self:ScheduleRepeatingTimer("sortCooldowns", 0.75)
+    end
     for k, v in self:IterateCooldowns() do
         local cooldownName = k
         local cooldownData = v
@@ -92,8 +94,7 @@ function BarEngine:OnUpdate()
         else
             local start, duration = self:GetCooldown(cooldownName)
             local time = start + duration - GetTime()
-            local hideFrame = false or ((not start) or (start == 0))
-            if hideFrame then
+            if false or ((not start) or (start == 0)) then--hideFrame
                 if self.db.showPulse then
                     local button = self:GetButton(cooldownData["buttonID"])
                     if not button.pulseActive then
@@ -112,7 +113,7 @@ function BarEngine:OnUpdate()
                     self:unregisterCooldown(cooldownName)
                 end
             else
-                if not self.db.disableBar and (cooldownData["order"] <= self.db.buttonCount) then
+                if not self.db.disableBar and (cooldownData["order"] <= self.db.buttonCount) and not cooldownData["hide"] then
                     self:DrawButton(cooldownData["buttonID"], cooldownData["order"])
                     self:ButtonUpdateTimer(cooldownData["buttonID"], time)
                 else
@@ -129,6 +130,9 @@ function BarEngine:OnUpdate()
 end
 
 function BarEngine:OnUpdateSaved()
+    if not self.thisIsTheUpdateHandlerForSortCooldowns then
+        self.thisIsTheUpdateHandlerForSortCooldowns = self:ScheduleRepeatingTimer("sortCooldowns", 0.75)
+    end
     for k, v in self:IterateCooldowns() do
         local cooldownName = k
         local cooldownData = v
@@ -139,14 +143,13 @@ function BarEngine:OnUpdateSaved()
         else
             local start, duration = self:GetCooldown(cooldownName)
             local time = start + duration - GetTime()
-            local hideFrame = false or ((not start) or (start == 0))
-            if hideFrame then
+            if false or ((not start) or (start == 0)) then --hideFrame
                 if LS2 then
                     local message = CooldownButtons:gsub(CooldownButtons.db.profile.LibSinkAnnouncmentMessage, "$cooldown", cooldownName)
                     LS2.Pour(CooldownButtons, message, 1, 1, 1, nil, nil, nil, nil, nil, cooldownData["texture"])
                 end
                 if self.db.showPulse then
-                    local button = self:GetButton(cooldownData["buttonID"]) -- <- this is line 35
+                    local button = self:GetButton(cooldownData["buttonID"])
                     if not button.pulseActive then
                         button.pulse.cooldownName = cooldownName
                         button.pulse:SetScript("OnUpdate", function(self, elapsed) pulseHandler(self.cooldownName, self.module, elapsed) end)
@@ -155,8 +158,14 @@ function BarEngine:OnUpdateSaved()
                     self:unregisterCooldown(cooldownName)
                 end
             else
-                self:DrawButton(cooldownData["buttonID"], 0, {x = db.pos.x, y = db.pos.y})
-                self:ButtonUpdateTimer(cooldownData["buttonID"], time)
+                if cooldownData["hide"] then
+                    local button = self:GetButton(cooldownData["buttonID"])
+                    button:Hide()
+                    button.text:Hide()
+                else
+                    self:DrawButton(cooldownData["buttonID"], 0, {x = db.pos.x, y = db.pos.y})
+                    self:ButtonUpdateTimer(cooldownData["buttonID"], time)
+                end
             end
         end
     end

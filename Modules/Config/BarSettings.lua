@@ -89,7 +89,8 @@ function createBarSettings(title, moduleName, db, myOrder, savedMenu)
                     or k.arg == "buttonSpacing"
                     or k.arg == "buttonRowSpacing" 
                     or k.arg == "textDistance"
-                    or k.arg == "colorFlashStartTime" then
+                    or k.arg == "colorFlashStartTime"
+                    or k.arg == "durationTime" then
                     if not (tonumber(v) == nil) then
                         db[k.arg] = tonumber(v);
                     end
@@ -114,7 +115,8 @@ function createBarSettings(title, moduleName, db, myOrder, savedMenu)
                     or k.arg == "buttonSpacing"
                     or k.arg == "buttonRowSpacing"
                     or k.arg == "textDistance"
-                    or k.arg == "colorFlashStartTime" then
+                    or k.arg == "colorFlashStartTime"
+                    or k.arg == "durationTime" then
                     return tostring(db[k.arg])
                 elseif k.arg == "fontColorBase"
                     or k.arg == "fontColorFlash1"
@@ -206,6 +208,19 @@ function createBarSettings(title, moduleName, db, myOrder, savedMenu)
                     colorFlashStartTime = createInput(L["Start Time"], L["Time when the flashing should start (in seconds)."], "colorFlashStartTime"),
                     fontColorFlash1 = createColor(L["Flash Color 1"], L["Set the flash Font color 1."], "fontColorFlash1", false),
                     fontColorFlash2 = createColor(L["Flash Color 2"], L["Set the flash Font color 2."], "fontColorFlash2", false),
+                },
+            },
+
+            limitationSettings = {
+                type = "group",
+                name = L["Time Limit"],
+                order = getOrder(),
+                disabled =  function() return db.showOmniCC or db.disableBar end,
+                args = {
+                    header_00 = createHeader(L["Time Limit"]),
+                    enableLimit = createToggle(L["Enable Time Limit"], L["Toggle hiding long Cooldowns."], "enableDurationLimit"),
+                    showAfterLimit = createToggle(L["Show after Limit"], L["Toggle showing the Cooldowns after passing the Limit."], "showAfterLimit"),
+                    limitTime = createInput(L["Limit (in seconds)"], L["Maximum Cooldown duration to show (in seconds)."], "durationTime"),
                 },
             },
         },
