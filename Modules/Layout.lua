@@ -57,6 +57,7 @@ function CooldownButtons_Layout:Setup()
         for name, func in pairs(cyTemplate) do
             _G.cyCircled_CooldownButtons[name] = func
         end
+        _G.cyCircled_CooldownButtons:AddBar() -- AddBar On Setup
     end
 end
 
@@ -70,8 +71,8 @@ function CooldownButtons_Layout:AddBar(barName)
         barGroup.Backdrop = db.LBF_Data.Backdrop
         barGroup.Gloss    = db.LBF_Data.Gloss
         self:SetLBFBarGroup(barName, barGroup)
-    elseif self.LayoutMod == "cyCircled" then
-        _G.cyCircled_CooldownButtons:AddBar(barName)
+--    elseif self.LayoutMod == "cyCircled" then
+--        _G.cyCircled_CooldownButtons:AddBar()
     end
 end
 
@@ -82,7 +83,7 @@ function CooldownButtons_Layout:AddElement(barName, buttonName)
         local barGroup = self:GetLBFBarGroup(barName)
         barGroup:AddButton(_G[buttonName])
     elseif self.LayoutMod == "cyCircled" then
-        _G.cyCircled_CooldownButtons:AddElement(barName, buttonName)
+        _G.cyCircled_CooldownButtons:AddElement(buttonName)
     end
 end
 
@@ -116,10 +117,10 @@ function cyTemplate:GetElements()
     return self.defaultCfg
 end
 
-function cyTemplate:AddBar(barName)
-    self.defaultCfg[barName] = true
+function cyTemplate:AddBar()
+    self.defaultCfg["Cooldowns"] = true
     self.elements = {
-        [barName] = {
+        ["Cooldowns"] = {
             args = {
                 button = { width = 35, height = 35, },
                 parentname = false,
@@ -129,8 +130,8 @@ function cyTemplate:AddBar(barName)
     }
 end
 
-function cyTemplate:AddElement(barName, buttonName)
-    table_insert(self.elements[barName].elements, buttonName)
+function cyTemplate:AddElement(buttonName)
+    table_insert(self.elements["Cooldowns"].elements, buttonName)
     self:ApplySkin()
     self:ApplyColors()
 end
