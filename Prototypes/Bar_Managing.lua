@@ -217,6 +217,7 @@ function BarEngine:ShowAnchor()
     self.anchorVisible = true
     anchor.texture:SetTexture("Interface\\Icons\\Spell_Nature_WispSplode")
     anchor:SetMovable(true)
+    anchor:EnableMouse(true)
     anchor.used = true
     anchor:SetFrameStrata("HIGH")
     self:DrawButton(id, ((not self.db.showCenter and 1) or (0.5 + (self:GetNumCooldowns() / 2))))
@@ -226,6 +227,7 @@ function BarEngine:HideAnchor()
     local anchor, id = self:GetButton(self.anchorID)
     self.anchorVisible = false
     anchor:SetMovable(false)
+    anchor:EnableMouse(false)
     anchor.used = false
     anchor:SetFrameStrata("MEDIUM")
     anchor:Hide()
@@ -238,6 +240,7 @@ function BarEngine:ShowSavedAnchor(db, kind, name)
     anchor.anchorPos = newDict("x", db.pos.x, "y", db.pos.y)
     anchor.texture:SetTexture("Interface\\Icons\\Spell_Nature_WispSplode")
     anchor:SetMovable(true)
+    anchor:EnableMouse(true)
     anchor.used = true
     anchor.cd = newDict("type", kind, "name", name)
     anchor:SetFrameStrata("HIGH")
@@ -249,6 +252,7 @@ function BarEngine:HideSavedAnchor()
     self.anchorVisible = false
     anchor.anchorPos = del(anchor.anchorPos)
     anchor:SetMovable(false)
+    anchor:EnableMouse(false)
     anchor.used = false
     anchor.cd = del(anchor.cd)
     anchor:SetFrameStrata("MEDIUM")

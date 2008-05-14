@@ -70,7 +70,7 @@ function ButtonEngine:NewButton()
     button:SetClampedToScreen(true)
 
     button.module = self:GetName()
-    button:EnableMouse(true)
+    button:EnableMouse(false)
     button:RegisterForDrag("LeftButton")
     button:SetScript("OnDragStart", function(self) if self:IsMovable() then self.movin = true; self:StartMoving(); end end)
     button:SetScript("OnDragStop",  function(self) if self:IsMovable() then self:StopMovingOrSizing(); self:SaveAnchorPos() end end )
