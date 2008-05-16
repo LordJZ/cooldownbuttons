@@ -166,11 +166,15 @@ function CooldownEngine:checkDurationLimit(start, duration)
     end
 end
 
+local function getForcedHiddenbyName(name)
+    return CooldownButtons.savedDB.profile.Spells[name].hide
+end
+
 function CooldownEngine:sortCooldowns()
     local sortMe = newList()
     for cooldownName, cooldownData in self:IterateCooldowns() do
         local start, duration = self:GetCooldown(cooldownName)
-        if self:checkDurationLimit(start, duration) then
+        if self:checkDurationLimit(start, duration) and not getForcedHiddenbyName(cooldownName) then
             table_insert(sortMe, newList(tonumber(string_format("%.3f", start + duration - GetTime())), cooldownName))
             cooldownData.hide = false
         else

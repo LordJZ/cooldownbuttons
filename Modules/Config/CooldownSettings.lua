@@ -38,11 +38,11 @@ local getOrder, createHeader, createDescription, createInput, createRange, creat
 
 function CooldownButtonsConfig:SavedCooldownsConfig()
     self.SavedCooldownsConfigIsSet = true
-    
+
     local options = self.options
     options.args.cooldownSettings.args.saved = {
         type = "group",
-        name = L["Save Cooldowns"],
+        name = L["Save or Hide"],
         order = getOrder(),
         args = {
             spells = {
@@ -97,11 +97,13 @@ hidden = true,
                       end,
                 args = {
                     header_00 = createHeader(cooldownName),
+                    radioHide = createToggle(L["Hide Button"], "", "hide", true),
+                    radioSave = createToggle(L["Save Button Position"], "", "save", nil ,function() return db.hide end),
+
                     desc = createDescription(L["Here you can Setup at what position the Cooldown Button for the selected Spell should be drawn to."]),
-                    radioSave = createToggle(L["Save Button Position"], "", "save", true),
-                    pos_x = createInput(L["X - Axis"], L["Set the Position on X-Axis."], "posx"),
-                    pos_y = createInput(L["Y - Axis"], L["Set the Position on Y-Axis."], "posy"),
-                    
+                    pos_x = createInput(L["X - Axis"], L["Set the Position on X-Axis."], "posx", nil ,function() return db.hide end),
+                    pos_y = createInput(L["Y - Axis"], L["Set the Position on Y-Axis."], "posy", nil ,function() return db.hide end),
+
                     showAnchor = createExecute(L["Show Movable Button"], "", cooldownName, function(k)
                         local module = CooldownButtons:GetModule("Saved")
                         if not module.anchorVisible then
@@ -112,7 +114,7 @@ hidden = true,
                             module:HideSavedAnchor(db)
                         end
                         LibStub("AceConfigRegistry-3.0"):NotifyChange("Cooldown Buttons")
-                    end),
+                    end, nil ,function() return db.hide end),
                 },
             }
         end

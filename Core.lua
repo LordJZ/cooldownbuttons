@@ -317,12 +317,14 @@ defaultSaved = {
         ["Spells"] = {
             ["**"] ={
                 save = false,
+                hide = false,
                 pos  = { x = 400, y = 400, },
             },
         },
         ["Items"] = {
             ["**"] ={
                 save = false,
+                hide = false,
                 pos  = { x = 400, y = 400, },
             },
         },

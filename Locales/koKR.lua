@@ -107,10 +107,11 @@ L["Cooldown Settings"] = "재사용 대기시간 설정"
  L["Save Cooldowns"] = "재사용 대기시간 저장"
   L["Spells"] = "주문"
   L["Items"] = "아이템"
-  L["Here you can Setup at what position the Cooldown Button for the selected Spell should be drawn to."] = "여기서 따로 빼낸 선택한 주문의 재사용 대기시간 버튼의 위치를 설정할 수 있습니다."
-  L["Save Button Position"] = "버튼 위치 저장"
-  L["Show Movable Button"] = "이동 버튼 보기"
-  L["Hide Movable Button"] = "이동 버튼 숨김"
+   L["Hide Button"] = true
+   L["Save Button Position"] = "버튼 위치 저장"
+   L["Here you can Setup at what position the Cooldown Button for the selected Spell should be drawn to."] = "여기서 따로 빼낸 선택한 주문의 재사용 대기시간 버튼의 위치를 설정할 수 있습니다."
+   L["Show Movable Button"] = "이동 버튼 보기"
+   L["Hide Movable Button"] = "이동 버튼 숨김"
 
 
 -- Directions

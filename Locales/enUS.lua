@@ -103,11 +103,12 @@ L["Announcements Settings"] = true
    L["Announcement Area"] = true
 
 L["Cooldown Settings"] = true
- L["Save Cooldowns"] = true
+ L["Save or Hide"] = true
   L["Spells"] = true
   L["Items"] = true
-   L["Here you can Setup at what position the Cooldown Button for the selected Spell should be drawn to."] = true
+   L["Hide Button"] = true
    L["Save Button Position"] = true
+   L["Here you can Setup at what position the Cooldown Button for the selected Spell should be drawn to."] = true
    L["Show Movable Button"] = true
    L["Hide Movable Button"] = true
 
