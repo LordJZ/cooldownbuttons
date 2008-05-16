@@ -246,9 +246,10 @@ end
 -- Default settings
 defaults = {
     profile = {
-        splitItems    = false,
         splitExpiring = false,
         splitExpTime  = 10,--1800, -- 1800 Seconds = 30 Minutes
+
+        moveItemsToSpells = false,
 
         LibSinkAnnouncmentMessage = L["Cooldown on $cooldown ready!"],
         LibSinkAnnouncmentConfig  = { sink20OutputSink = "None" },

@@ -1,7 +1,12 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("Cooldown Buttons","enUS",true)
 
+-- Hi Translators, please keep the "Layout" of this file, thanks.
+
 -- configuration
 L["Bar Settings"] = true
+ L["General Settings"] = true
+  L["Item to Spells"] = true
+  L["Move Items to Spells Cooldown Bar"] = true
  L["Spells"] = true
  L["Items"] = true
  L["Expiring"] = true
@@ -95,7 +100,7 @@ L["Announcements Settings"] = true
    L["Cooldown on $cooldown ready!"] = true
    L["Use \'$cooldown\' to add Cooldown name."] = true
    L["Default Message: "] = true
-  L["Announcement Area"] = true
+   L["Announcement Area"] = true
 
 L["Cooldown Settings"] = true
  L["Save Cooldowns"] = true

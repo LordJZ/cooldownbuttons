@@ -92,34 +92,48 @@ function BarEngine:OnUpdate()
         if db.save == true then -- drop Cooldown from normal loop becouse it is saved
             self:unregisterCooldown(cooldownName, true)
         else
-            local start, duration = self:GetCooldown(cooldownName)
-            local time = start + duration - GetTime()
-            if false or ((not start) or (start == 0)) then--hideFrame
-                if self.db.showPulse then
-                    local button = self:GetButton(cooldownData["buttonID"])
-                    if not button.pulseActive then
+            local hadToUnregister = false
+            if CooldownButtons.db.profile.moveItemsToSpells then
+                if self:GetName() == "Items" then
+                    self:unregisterCooldown(cooldownName, true)
+                    hadToUnregister = true
+                end
+            else
+                if self:GetName() == "Spells" and cooldownData["type"] == "Item" then
+                    self:unregisterCooldown(cooldownName, true)
+                    hadToUnregister = true
+                end
+            end
+            if not hadToUnregister then
+                local start, duration = self:GetCooldown(cooldownName)
+                local time = start + duration - GetTime()
+                if false or ((not start) or (start == 0)) then--hideFrame
+                    if self.db.showPulse then
+                        local button = self:GetButton(cooldownData["buttonID"])
+                        if not button.pulseActive then
+                            if LS2 then
+                                local message = CooldownButtons:gsub(CooldownButtons.db.profile.LibSinkAnnouncmentMessage, "$cooldown", cooldownName)
+                                LS2.Pour(CooldownButtons, message, 1, 1, 1, nil, nil, nil, nil, nil, cooldownData["texture"])
+                            end
+                            button.pulse.cooldownName = cooldownName
+                            button.pulse:SetScript("OnUpdate", function(self, elapsed) pulseHandler(self.cooldownName, self.module, elapsed) end)
+                        end
+                    else
                         if LS2 then
                             local message = CooldownButtons:gsub(CooldownButtons.db.profile.LibSinkAnnouncmentMessage, "$cooldown", cooldownName)
                             LS2.Pour(CooldownButtons, message, 1, 1, 1, nil, nil, nil, nil, nil, cooldownData["texture"])
                         end
-                        button.pulse.cooldownName = cooldownName
-                        button.pulse:SetScript("OnUpdate", function(self, elapsed) pulseHandler(self.cooldownName, self.module, elapsed) end)
+                        self:unregisterCooldown(cooldownName)
                     end
                 else
-                    if LS2 then
-                        local message = CooldownButtons:gsub(CooldownButtons.db.profile.LibSinkAnnouncmentMessage, "$cooldown", cooldownName)
-                        LS2.Pour(CooldownButtons, message, 1, 1, 1, nil, nil, nil, nil, nil, cooldownData["texture"])
+                    if not self.db.disableBar and (cooldownData["order"] <= self.db.buttonCount) and not cooldownData["hide"] then
+                        self:DrawButton(cooldownData["buttonID"], cooldownData["order"])
+                        self:ButtonUpdateTimer(cooldownData["buttonID"], time)
+                    else
+                        local frame = self:GetButton(cooldownData["buttonID"])
+                        frame:Hide()
+                        frame.text:Hide()
                     end
-                    self:unregisterCooldown(cooldownName)
-                end
-            else
-                if not self.db.disableBar and (cooldownData["order"] <= self.db.buttonCount) and not cooldownData["hide"] then
-                    self:DrawButton(cooldownData["buttonID"], cooldownData["order"])
-                    self:ButtonUpdateTimer(cooldownData["buttonID"], time)
-                else
-                    local frame = self:GetButton(cooldownData["buttonID"])
-                    frame:Hide()
-                    frame.text:Hide()
                 end
             end
         end

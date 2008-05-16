@@ -98,6 +98,23 @@ function CooldownButtonsConfig:OnInitialize()
     if LS2 then
         self:LibSinkConfig()
     end
+    
+    local createHeader = select(2, self:GetWidgetAPI())
+    local createToggle = select(7, self:GetWidgetAPI())
+    options.args.barSettings.args["general__Bar_Settings_Stuff"] = {
+        type = "group",
+        name = L["General Settings"],
+        order = 0,
+        set = function(k,v) 
+                db[k.arg] = v 
+                db.barSettings.Items.disableBar = v
+              end,
+        get = function(k) return db[k.arg] end,
+        args = {
+            header_00 = createHeader(L["Item to Spells"]),
+            toggleMoving = createToggle(L["Move Items to Spells Cooldown Bar"], "", "moveItemsToSpells", true, nil, nil),
+        },
+    }
 
     LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable("Cooldown Buttons", options)
 

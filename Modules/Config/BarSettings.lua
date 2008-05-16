@@ -65,6 +65,9 @@ local opt_text_style = {
 
 function CooldownButtonsConfig:AddBarSettings(title, moduleName, db, myOrder, savedMenu)
     self.options.args.barSettings.args[title] = createBarSettings(title, moduleName, db, myOrder, savedMenu)
+    if moduleName == "Items" then
+        self.options.args.barSettings.args[title].disabled = function() return CooldownButtons.db.profile.moveItemsToSpells end
+    end
 --        expiringSettings = getBarLayoutOptions("expiring", L["Expiring"]),
 --        savedSettings    = getBarLayoutOptions("---", L["Saved"]),
 --        dotSettings      = getBarLayoutOptions("---", L["HoTs/DoTs"]),

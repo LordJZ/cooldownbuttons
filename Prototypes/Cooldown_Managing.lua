@@ -63,7 +63,14 @@ function CooldownEngine:registerCooldown(kind, name, id, texture, saveCall)
     local handle = self.name
     -- register saved Cooldowns in Saved Module!
     if CooldownButtons.savedDB.profile.Spells[name].save and not saveCall then
-        return CooldownButtons:GetModule("Saved"):registerCooldown(kind, name, id, texture, true)
+        if CooldownButtons:GetModule("Saved").registerCooldown then -- Fix nil error
+            return CooldownButtons:GetModule("Saved"):registerCooldown(kind, name, id, texture, true)
+        end
+    end
+    if CooldownButtons.db.profile.moveItemsToSpells and self:GetName() == "Items"  then
+        if CooldownButtons:GetModule("Spells").registerCooldown then -- Fix nil error
+            return CooldownButtons:GetModule("Spells"):registerCooldown(kind, name, id, texture)
+        end
     end
     if not cooldownList[handle][name] then
         local button, buttonIndex = self:GetFreeButton()
