@@ -36,6 +36,7 @@ local L = CooldownButtons.L
 local newList, newDict, del, deepDel, deepCopy = CooldownButtons.GetRecyclingFunctions()
 local getOrder, createHeader, createDescription, createInput, createRange, createSelect, createToggle, creteExecute, createColor = CooldownButtonsConfig:GetWidgetAPI()
 
+local createSpellConfigStuff
 function CooldownButtonsConfig:SavedCooldownsConfig()
     self.SavedCooldownsConfigIsSet = true
 
@@ -65,75 +66,67 @@ hidden = true,
     }
     local SpellsModule = CooldownButtons:GetModule("Spells")
     local spellArgs = options.args.cooldownSettings.args.saved.args.spells.args
+    local spellTree = SpellsModule.treeTable
+    for i = 2, 4 do
+        spellArgs["SpellTree_NR_"..i] = createSpellConfigStuff(spellTree[i].treeName, true)
+    end
     for k, v in SpellsModule:IterateSpellTable() do
         if v.spellknownCD then
-            local cooldownName = k
-            local db = CooldownButtons.savedDB.profile.Spells[cooldownName]
-            spellArgs[v.spellID] = {
-                type = "group",
-                name = cooldownName,
-                order = getOrder(),
-                set = function( k, v )
-                        if k.arg == "posx" then
-                            if not (tonumber(v) == nil) then
-                                db.pos.x = tonumber(v);
-                            end
-                        elseif k.arg == "posy" then
-                            if not (tonumber(v) == nil) then
-                                db.pos.y = tonumber(v);
-                            end
-                        else
-                            db[k.arg] = v
-                        end
-                      end,
-                get = function( k )
-                        if k.arg == "posx" then
-                            return tostring(db.pos.x)
-                        elseif k.arg == "posy" then
-                            return tostring(db.pos.y)
-                        else
-                            return db[k.arg]
-                        end
-                      end,
-                args = {
-                    header_00 = createHeader(cooldownName),
-                    radioHide = createToggle(L["Hide Button"], "", "hide", true),
-                    radioSave = createToggle(L["Save Button Position"], "", "save", nil ,function() return db.hide end),
-
-                    desc = createDescription(L["Here you can Setup at what position the Cooldown Button for the selected Spell should be drawn to."]),
-                    pos_x = createInput(L["X - Axis"], L["Set the Position on X-Axis."], "posx", nil ,function() return db.hide end),
-                    pos_y = createInput(L["Y - Axis"], L["Set the Position on Y-Axis."], "posy", nil ,function() return db.hide end),
-
-                    showAnchor = createExecute(L["Show Movable Button"], "", cooldownName, function(k)
-                        local module = CooldownButtons:GetModule("Saved")
-                        if not module.anchorVisible then
-                            k.option.name = L["Hide Movable Button"]
-                            module:ShowSavedAnchor(db, "Spell", cooldownName)
-                        else
-                            k.option.name = L["Show Movable Button"]
-                            module:HideSavedAnchor(db)
-                        end
-                        LibStub("AceConfigRegistry-3.0"):NotifyChange("Cooldown Buttons")
-                    end, nil ,function() return db.hide end),
-                },
-            }
+            spellArgs[v.spellID] = createSpellConfigStuff(k)
         end
     end
+    --Items INC
 end
 
+function createSpellConfigStuff(cooldownName, isSpellTree)
+    local db = CooldownButtons.savedDB.profile.Spells[cooldownName]
+    local confname = (isSpellTree and "|c0000EB3F"..L["Spelltree: "].."|r"..cooldownName) or cooldownName
+    return {
+        type = "group",
+        name = confname,
+        order = getOrder(),
+        set = function( k, v )
+                if k.arg == "posx" then
+                    if not (tonumber(v) == nil) then
+                        db.pos.x = tonumber(v);
+                    end
+                elseif k.arg == "posy" then
+                    if not (tonumber(v) == nil) then
+                        db.pos.y = tonumber(v);
+                    end
+                else
+                    db[k.arg] = v
+                end
+              end,
+        get = function( k )
+                if k.arg == "posx" then
+                    return tostring(db.pos.x)
+                elseif k.arg == "posy" then
+                    return tostring(db.pos.y)
+                else
+                    return db[k.arg]
+                end
+              end,
+        args = {
+            header_00 = createHeader(confname),
+            radioHide = createToggle(L["Hide Button"], "", "hide", true),
+            radioSave = createToggle(L["Save Button Position"], "", "save", nil ,function() return db.hide end),
 
+            desc = createDescription(L["Here you can Setup at what position the Cooldown Button for the selected Spell should be drawn to."]),
+            pos_x = createInput(L["X - Axis"], L["Set the Position on X-Axis."], "posx", nil ,function() return db.hide end),
+            pos_y = createInput(L["Y - Axis"], L["Set the Position on Y-Axis."], "posy", nil ,function() return db.hide end),
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            showAnchor = createExecute(L["Show Movable Button"], "", cooldownName, function(k)
+                local module = CooldownButtons:GetModule("Saved")
+                if not module.anchorVisible then
+                    k.option.name = L["Hide Movable Button"]
+                    module:ShowSavedAnchor(db, "Spell", cooldownName)
+                else
+                    k.option.name = L["Show Movable Button"]
+                    module:HideSavedAnchor(db)
+                end
+                LibStub("AceConfigRegistry-3.0"):NotifyChange("Cooldown Buttons")
+            end, nil ,function() return db.hide end),
+        },
+    }
+end
