@@ -5,9 +5,9 @@ if not L then return end
 
 -- configuration
 L["Bar Settings"] = "바 설정"
- L["General Settings"] = true
-  L["Item to Spells"] = true
-  L["Move Items to Spells Cooldown Bar"] = true
+ L["General Settings"] = "일반 설정"
+  L["Item to Spells"] = "주문 아이템"
+  L["Move Items to Spells Cooldown Bar"] = "주문 아이템 재사용 대기시간 바 이동"
  L["Spells"] = "주문"
  L["Items"] = "아이템"
  L["Expiring"] = "완료"
@@ -87,13 +87,13 @@ L["Bar Settings"] = "바 설정"
    L["Set the flash Font color 1."] = "깜빡임 글꼴 색상 1을 설정합니다."
    L["Flash Color 2"] = "깜빡임 색상 2"
    L["Set the flash Font color 2."] = "깜빡임 글꼴 색상 2를 설정합니다."
-  L["Time Limit"] = true
-   L["Enable Time Limit"] = true
-   L["Toggle hiding long Cooldowns."] = true
-   L["Show after Limit"] = true
-   L["Toggle showing the Cooldowns after passing the Limit."] = true
-   L["Limit (in seconds)"] = true
-   L["Maximum Cooldown duration to show (in seconds)."] = true
+  L["Time Limit"] = "경계 시간"
+   L["Enable Time Limit"] = "경계 시간 활성화"
+   L["Toggle hiding long Cooldowns."] = "긴 재사용 대기시간 숨김을 전환합니다."
+   L["Show after Limit"] = "경계 이후 보기"
+   L["Toggle showing the Cooldowns after passing the Limit."] = "재사용 대기시간이 경계 이후에 보기를 전환합니다."
+   L["Limit (in seconds)"] = "경계 (초단위)"
+   L["Maximum Cooldown duration to show (in seconds)."] = "최대 재사용 대기시간 지속 보기 (초단위)"
 
 L["Announcements Settings"] = "알림 설정"
  L["Announcement"] = "알림"
@@ -107,8 +107,8 @@ L["Cooldown Settings"] = "재사용 대기시간 설정"
  L["Save or Hide"] = "재사용 대기시간 저장"
   L["Spells"] = "주문"
   L["Items"] = "아이템"
-  L["Spelltree: "] = true
-   L["Hide Button"] = true
+  L["Spelltree: "] = "주문특성: "
+   L["Hide Button"] = "버튼 숨김"
    L["Save Button Position"] = "버튼 위치 저장"
    L["Here you can Setup at what position the Cooldown Button for the selected Spell should be drawn to."] = "여기서 따로 빼낸 선택한 주문의 재사용 대기시간 버튼의 위치를 설정할 수 있습니다."
    L["Show Movable Button"] = "이동 버튼 보기"
