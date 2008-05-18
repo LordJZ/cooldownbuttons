@@ -47,10 +47,11 @@ function CooldownButtonsConfig:ItemCooldownGroupingConfig()
         order = getOrder(),
         set = setName,
         get = getName,
+        hidden = true,
         args = {
             bla = createDescription("Under construction ..."),
---            groupName = createInput("New Group", "Enter a Group Name.", "newGroupName"),
---            createGroupe = createExecute("Create Group", "", "newGroupName", createNewGroup),
+            groupName = createInput("New Group", "Enter a Group Name.", "newGroupName"),
+            createGroupe = createExecute("Create Group", "", "newGroupName", createNewGroup),
         },
     }
 --    for iterate itemgroups .... do
@@ -58,7 +59,7 @@ function CooldownButtonsConfig:ItemCooldownGroupingConfig()
 --        }
 --    end
 end
---[[
+
 do
     local groupName = ""
     function createNewGroup()
@@ -73,4 +74,3 @@ do
         groupName = v
     end
 end
---]]

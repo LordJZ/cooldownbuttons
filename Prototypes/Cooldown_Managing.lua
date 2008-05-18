@@ -67,6 +67,11 @@ function CooldownEngine:registerCooldown(kind, name, id, texture, saveCall)
             return CooldownButtons:GetModule("Saved"):registerCooldown(kind, name, id, texture, true)
         end
     end
+    if CooldownButtons.savedDB.profile.Items[id].save and not saveCall then
+        if CooldownButtons:GetModule("Saved").registerCooldown then -- Fix nil error
+            return CooldownButtons:GetModule("Saved"):registerCooldown(kind, name, id, texture, true)
+        end
+    end
     if CooldownButtons.db.profile.moveItemsToSpells and self:GetName() == "Items"  then
         if CooldownButtons:GetModule("Spells").registerCooldown then -- Fix nil error
             return CooldownButtons:GetModule("Spells"):registerCooldown(kind, name, id, texture)
@@ -166,15 +171,19 @@ function CooldownEngine:checkDurationLimit(start, duration)
     end
 end
 
-local function getForcedHiddenbyName(name)
-    return CooldownButtons.savedDB.profile.Spells[name].hide
+local function getForcedHidden(n, d)
+    if d.type == "Item" then
+        return CooldownButtons.savedDB.profile.Items[d.id].hide
+    else
+        return CooldownButtons.savedDB.profile.Spells[n].hide
+    end
 end
 
 function CooldownEngine:sortCooldowns()
     local sortMe = newList()
     for cooldownName, cooldownData in self:IterateCooldowns() do
         local start, duration = self:GetCooldown(cooldownName)
-        if self:checkDurationLimit(start, duration) and not getForcedHiddenbyName(cooldownName) then
+        if self:checkDurationLimit(start, duration) and not getForcedHidden(cooldownName,cooldownData) then
             table_insert(sortMe, newList(tonumber(string_format("%.3f", start + duration - GetTime())), cooldownName))
             cooldownData.hide = false
         else

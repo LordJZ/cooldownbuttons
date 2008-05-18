@@ -88,7 +88,12 @@ function BarEngine:OnUpdate()
     for k, v in self:IterateCooldowns() do
         local cooldownName = k
         local cooldownData = v
-        local db = CooldownButtons.savedDB.profile[self:GetName()][cooldownName]
+        local db
+        if self:GetName() == "Items" then
+            db = CooldownButtons.savedDB.profile[self:GetName()][v.id]
+        else
+            db = CooldownButtons.savedDB.profile[self:GetName()][cooldownName]
+        end
         if db.save == true then -- drop Cooldown from normal loop becouse it is saved
             self:unregisterCooldown(cooldownName, true)
         else
@@ -151,7 +156,12 @@ function BarEngine:OnUpdateSaved()
         local cooldownName = k
         local cooldownData = v
         local kind = (((v.type == "Item") and "Items") or (((v.type == "Spell") or (v.type == "PetAction")) and "Spells"))
-        local db = CooldownButtons.savedDB.profile[kind][cooldownName]
+        local db
+        if kind == "Items" then
+            db = CooldownButtons.savedDB.profile[kind][v.id]
+        else
+            db = CooldownButtons.savedDB.profile[kind][cooldownName]
+        end
         if db.save == false then -- drop Cooldown from saved loop becouse it is NOT saved
             self:unregisterCooldown(cooldownName, true)
         else

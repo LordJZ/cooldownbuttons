@@ -118,7 +118,7 @@ function CooldownButtonsConfig:OnInitialize()
 
     LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable("Cooldown Buttons", options)
 
-    LibStub("AceConfigDialog-3.0"):SetDefaultSize("Cooldown Buttons", 620, 560)
+    LibStub("AceConfigDialog-3.0"):SetDefaultSize("Cooldown Buttons", 700, 560)
     self:RegisterChatCommand("cdb", openConfigUI)
     self:RegisterChatCommand("CooldownButtons", openConfigUI)
 end
