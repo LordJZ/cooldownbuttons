@@ -54,6 +54,9 @@ function CooldownButtonsItems:OnEnable()
     self:InitButtonEngine()
     self:InitCooldownEngine()
     self:BAG_UPDATE_COOLDOWN()
+    
+    -- Fix nil Index error... (maybe-.-)
+    self.itemGroups  = CooldownButtons:GetModule("Items").itemGroups
 end
 
 function CooldownButtonsItems:BAG_UPDATE_COOLDOWN()
