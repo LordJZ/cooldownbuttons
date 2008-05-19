@@ -8,11 +8,13 @@ L["Bar Settings"] = "바 설정"
  L["General Settings"] = "일반 설정"
   L["Item to Spells"] = "주문 아이템"
   L["Move Items to Spells Cooldown Bar"] = "주문 아이템 재사용 대기시간 바 이동"
+  L["Expiring Cooldowns"] = true
+  L["Expiring Time"] = true
+  L["Time when the Cooldown should be moved to Expiring Buttonbar (in seconds; 0 = never)."] = true
  L["Spells"] = "주문"
  L["Items"] = "아이템"
  L["Expiring"] = "완료"
  L["Saved"] = "저장"
- L["HoTs/DoTs"] = true
   L["Position"] = "위치"
    L["Show Anchor"] = "앵커 보기"
    L["Hide Anchor"] = "앵커 숨김"
@@ -106,14 +108,19 @@ L["Announcements Settings"] = "알림 설정"
 L["Cooldown Settings"] = "재사용 대기시간 설정"
  L["Save or Hide"] = "재사용 대기시간 저장"
   L["Spells"] = "주문"
-  L["Items"] = "아이템"
   L["Spelltree: "] = "주문특성: "
    L["Hide Button"] = "버튼 숨김"
    L["Save Button Position"] = "버튼 위치 저장"
    L["Here you can Setup at what position the Cooldown Button for the selected Spell should be drawn to."] = "여기서 따로 빼낸 선택한 주문의 재사용 대기시간 버튼의 위치를 설정할 수 있습니다."
    L["Show Movable Button"] = "이동 버튼 보기"
    L["Hide Movable Button"] = "이동 버튼 숨김"
-
+  L["Items"] = "아이템"
+   L["~ Add Item ~"] = true
+   L["Item Name or ItemID"] = true
+   L["You can get the ItemID from www.wowhead.com!"] = true
+   L["No Item given."] = true
+   L["is not an valid ItemName/ID or the Item is not in local Itemcache."] = true
+   L["Remove"] = true
 
 -- Directions
 L["Up"]    = "위"

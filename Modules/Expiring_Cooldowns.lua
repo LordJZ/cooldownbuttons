@@ -30,8 +30,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 local _G = _G
 local CooldownButtons = _G.CooldownButtons
-local CooldownButtonsSaved = CooldownButtons:NewModule("Saved","AceEvent-3.0")
-CooldownButtonsSaved.rev = tonumber(("$Revision$"):match("%d+")) or 0
+local CooldownButtonsExpiring = CooldownButtons:NewModule("Expiring","AceEvent-3.0")
+CooldownButtonsExpiring.rev = tonumber(("$Revision$"):match("%d+")) or 0
 local L = CooldownButtons.L
 
 ------
@@ -39,13 +39,13 @@ local newList, newDict, del, deepDel, deepCopy = CooldownButtons.GetRecyclingFun
 local string_find = string.find
 ------
 
-function CooldownButtonsSaved:OnInitialize()
+function CooldownButtonsExpiring:OnInitialize()
     self.db = CooldownButtons.db.profile.barSettings[self:GetName()]
-    CooldownButtons:GetModule("Config"):AddBarSettings(L["Saved"], "Saved", self.db, 40, true)
+    CooldownButtons:GetModule("Config"):AddBarSettings(L["Expiring"], "Expiring", self.db, 30, nil)
 end
 
-function CooldownButtonsSaved:OnEnable()
-    self:InitBarEngine("save")
+function CooldownButtonsExpiring:OnEnable()
+    self:InitBarEngine()
     self:InitButtonEngine()
     self:InitCooldownEngine()
     -- Fix nil Index error... (maybe-.-)

@@ -77,6 +77,13 @@ function CooldownEngine:registerCooldown(kind, name, id, texture, saveCall)
             return CooldownButtons:GetModule("Spells"):registerCooldown(kind, name, id, texture)
         end
     end
+    if CooldownButtons.db.profile.moveToExpTime > 0 and not saveCall then
+        local start, duration = _G["Get"..kind.."Cooldown"](id, BOOKTYPE_SPELL)
+        local time = start + duration - GetTime()
+        if time <= CooldownButtons.db.profile.moveToExpTime then
+            return CooldownButtons:GetModule("Expiring"):registerCooldown(kind, name, id, texture, true)
+        end
+    end
     if not cooldownList[handle][name] then
         local button, buttonIndex = self:GetFreeButton()
         if buttonIndex then

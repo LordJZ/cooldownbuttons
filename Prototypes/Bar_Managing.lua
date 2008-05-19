@@ -88,13 +88,17 @@ function BarEngine:OnUpdate()
     for k, v in self:IterateCooldowns() do
         local cooldownName = k
         local cooldownData = v
-        local db
-        if self:GetName() == "Items" then
-            db = CooldownButtons.savedDB.profile[self:GetName()][v.id]
+        local saved
+        if self:GetName() == "Items" or self:GetName() == "Spells" then
+            if self:GetName() == "Items" then
+                saved = CooldownButtons.savedDB.profile[self:GetName()][v.id].save
+            else
+                saved = CooldownButtons.savedDB.profile[self:GetName()][cooldownName].save
+            end
         else
-            db = CooldownButtons.savedDB.profile[self:GetName()][cooldownName]
+            saved = false
         end
-        if db.save == true then -- drop Cooldown from normal loop becouse it is saved
+        if saved == true then -- drop Cooldown from normal loop becouse it is saved
             self:unregisterCooldown(cooldownName, true)
         else
             local hadToUnregister = false
@@ -112,32 +116,38 @@ function BarEngine:OnUpdate()
             if not hadToUnregister then
                 local start, duration = self:GetCooldown(cooldownName)
                 local time = start + duration - GetTime()
-                if false or ((not start) or (start == 0)) then--hideFrame
-                    if self.db.showPulse then
-                        local button = self:GetButton(cooldownData["buttonID"])
-                        if not button.pulseActive then
+                if (0 == CooldownButtons.db.profile.moveToExpTime or time > CooldownButtons.db.profile.moveToExpTime) and self:GetName() == "Expiring" then
+                    self:unregisterCooldown(cooldownName, true)
+                elseif time <= CooldownButtons.db.profile.moveToExpTime and self:GetName() ~= "Expiring" then
+                    self:unregisterCooldown(cooldownName, true)
+                else
+                    if false or ((not start) or (start == 0)) then--hideFrame
+                        if self.db.showPulse then
+                            local button = self:GetButton(cooldownData["buttonID"])
+                            if not button.pulseActive then
+                                if LS2 then
+                                    local message = CooldownButtons:gsub(CooldownButtons.db.profile.LibSinkAnnouncmentMessage, "$cooldown", cooldownName)
+                                    LS2.Pour(CooldownButtons, message, 1, 1, 1, nil, nil, nil, nil, nil, cooldownData["texture"])
+                                end
+                                button.pulse.cooldownName = cooldownName
+                                button.pulse:SetScript("OnUpdate", function(self, elapsed) pulseHandler(self.cooldownName, self.module, elapsed) end)
+                            end
+                        else
                             if LS2 then
                                 local message = CooldownButtons:gsub(CooldownButtons.db.profile.LibSinkAnnouncmentMessage, "$cooldown", cooldownName)
                                 LS2.Pour(CooldownButtons, message, 1, 1, 1, nil, nil, nil, nil, nil, cooldownData["texture"])
                             end
-                            button.pulse.cooldownName = cooldownName
-                            button.pulse:SetScript("OnUpdate", function(self, elapsed) pulseHandler(self.cooldownName, self.module, elapsed) end)
+                            self:unregisterCooldown(cooldownName)
                         end
                     else
-                        if LS2 then
-                            local message = CooldownButtons:gsub(CooldownButtons.db.profile.LibSinkAnnouncmentMessage, "$cooldown", cooldownName)
-                            LS2.Pour(CooldownButtons, message, 1, 1, 1, nil, nil, nil, nil, nil, cooldownData["texture"])
+                        if not self.db.disableBar and (cooldownData["order"] <= self.db.buttonCount) and not cooldownData["hide"] then
+                            self:DrawButton(cooldownData["buttonID"], cooldownData["order"])
+                            self:ButtonUpdateTimer(cooldownData["buttonID"], time)
+                        else
+                            local frame = self:GetButton(cooldownData["buttonID"])
+                            frame:Hide()
+                            frame.text:Hide()
                         end
-                        self:unregisterCooldown(cooldownName)
-                    end
-                else
-                    if not self.db.disableBar and (cooldownData["order"] <= self.db.buttonCount) and not cooldownData["hide"] then
-                        self:DrawButton(cooldownData["buttonID"], cooldownData["order"])
-                        self:ButtonUpdateTimer(cooldownData["buttonID"], time)
-                    else
-                        local frame = self:GetButton(cooldownData["buttonID"])
-                        frame:Hide()
-                        frame.text:Hide()
                     end
                 end
             end

@@ -100,19 +100,35 @@ function CooldownButtonsConfig:OnInitialize()
     end
     
     local createHeader = select(2, self:GetWidgetAPI())
+    local createInput  = select(4, self:GetWidgetAPI())
     local createToggle = select(7, self:GetWidgetAPI())
     options.args.barSettings.args["general__Bar_Settings_Stuff"] = {
         type = "group",
         name = L["General Settings"],
         order = 0,
-        set = function(k,v) 
-                db[k.arg] = v 
-                db.barSettings.Items.disableBar = v
+        set = function(k,v)
+                if k.arg == "moveToExpTime" then
+                    if not (tonumber(v) == nil) then
+                        db[k.arg] = tonumber(v);
+                    end
+                else
+                    db[k.arg] = v 
+                    db.barSettings.Items.disableBar = v
+                end
               end,
-        get = function(k) return db[k.arg] end,
+        get = function(k)
+                if k.arg == "moveToExpTime" then
+                    return tostring(db[k.arg])
+                else
+                    return db[k.arg]
+                end
+              end,
         args = {
             header_00 = createHeader(L["Item to Spells"]),
             toggleMoving = createToggle(L["Move Items to Spells Cooldown Bar"], "", "moveItemsToSpells", true, nil, nil),
+
+            header_10 = createHeader(L["Expiring Cooldowns"]),
+            expiringTime = createInput(L["Expiring Time"], L["Time when the Cooldown should be moved to Expiring Buttonbar (in seconds; 0 = never)."], "moveToExpTime"),
         },
     }
 

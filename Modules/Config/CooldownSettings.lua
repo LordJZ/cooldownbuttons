@@ -67,16 +67,15 @@ function CooldownButtonsConfig:SavedCooldownsConfig()
                 args = {
                     ["0000"] = {
                         type = "group",
-                        name = "~ Add Item ~",
+                        name = L["~ Add Item ~"],
                         order = 0,
                         args = {
-                            itemName = createInput("Item Name or ItemID", "You can get the ItemID from www.wowhead.com!", ""),
+                            itemName = createInput(L["Item Name or ItemID"], L["You can get the ItemID from www.wowhead.com!"], ""),
                             itemAdd = createExecute("Add", "", "", function(k)
                                     local terror = k.options.args.cooldownSettings.args.saved.args.items.args["0000"].args.errorMessage
                                     terror.name = ""
                                     if addNewItemData == "" then
-                                        ChatFrame1:AddMessage("No Item given.")
-                                        terror.name = "No Item given."
+                                        terror.name = L["No Item given."]
                                         return 1
                                     end
                                     local itemName, itemLink = GetItemInfo(addNewItemData)
@@ -84,8 +83,6 @@ function CooldownButtonsConfig:SavedCooldownsConfig()
                                         local itemID = select(3, string_find(itemLink, "Hitem:(%d+)"))
                                         local itemArgs = k.options.args.cooldownSettings.args.saved.args.items.args
                                         CooldownButtons.savedDB.profile.Items[itemID].save = true
---                                        ChatFrame1:AddMessage(tostring(itemName).." "..itemID)
---                                        terror.name = tostring(itemName).." "..itemID
                                         if not itemArgs[itemID] then
                                             itemArgs[itemID] = createItemConfigStuff(itemID)
                                         end
@@ -93,8 +90,7 @@ function CooldownButtonsConfig:SavedCooldownsConfig()
 LibStub("AceConfigDialog-3.0").Status["Cooldown Buttons"].children.cooldownSettings.children.saved.children.items.status.groups.selectedgroup = itemID
 LibStub("AceConfigRegistry-3.0"):NotifyChange("Cooldown Buttons")
                                     else
-                                        ChatFrame1:AddMessage("|c00abcd00"..addNewItemData.."|r is not an valid ItemName/ID or the Item is not in local Itemcache.")
-                                        terror.name = "|c00abcd00"..addNewItemData.."|r is not an valid ItemName/ID or the Item is not in local Itemcache."
+                                        terror.name = "|c00abcd00"..addNewItemData.."|r "..L["is not an valid ItemName/ID or the Item is not in local Itemcache."]
                                     end
                             end),
                             errorMessage = createDescription(""),
@@ -233,7 +229,7 @@ function createItemConfigStuff(itemID)
                 LibStub("AceConfigRegistry-3.0"):NotifyChange("Cooldown Buttons")
             end, nil, function() return db.hide end),
 
-            removeItem = createExecute("Remove", "", itemID, function(k)
+            removeItem = createExecute(L["Remove"], "", itemID, function(k)
                 k.options.args[k[1]].args[k[2]].args[k[3]].args[k[4]] = nil
                 _db[k.arg] = nil
                 LibStub("AceConfigRegistry-3.0"):NotifyChange("Cooldown Buttons")

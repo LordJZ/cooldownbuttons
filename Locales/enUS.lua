@@ -7,11 +7,13 @@ L["Bar Settings"] = true
  L["General Settings"] = true
   L["Item to Spells"] = true
   L["Move Items to Spells Cooldown Bar"] = true
+  L["Expiring Cooldowns"] = true
+  L["Expiring Time"] = true
+  L["Time when the Cooldown should be moved to Expiring Buttonbar (in seconds; 0 = never)."] = true
  L["Spells"] = true
  L["Items"] = true
  L["Expiring"] = true
  L["Saved"] = true
- L["HoTs/DoTs"] = true
    L["Position"] = true
     L["Show Anchor"] = true
     L["Hide Anchor"] = true
@@ -105,13 +107,19 @@ L["Announcements Settings"] = true
 L["Cooldown Settings"] = true
  L["Save or Hide"] = true
   L["Spells"] = true
-  L["Items"] = true
   L["Spelltree: "] = true
    L["Hide Button"] = true
    L["Save Button Position"] = true
    L["Here you can Setup at what position the Cooldown Button for the selected Spell should be drawn to."] = true
    L["Show Movable Button"] = true
    L["Hide Movable Button"] = true
+  L["Items"] = true
+   L["~ Add Item ~"] = true
+   L["Item Name or ItemID"] = true
+   L["You can get the ItemID from www.wowhead.com!"] = true
+   L["No Item given."] = true
+   L["is not an valid ItemName/ID or the Item is not in local Itemcache."] = true
+   L["Remove"] = true
 
 
 -- Directions
