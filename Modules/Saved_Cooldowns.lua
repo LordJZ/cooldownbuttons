@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 local _G = _G
 local CooldownButtons = _G.CooldownButtons
-local CooldownButtonsSaved = CooldownButtons:NewModule("Saved","AceEvent-3.0")
+local CooldownButtonsSaved = CooldownButtons:NewModule("Saved")
 CooldownButtonsSaved.rev = tonumber(("$Revision$"):match("%d+")) or 0
 local L = CooldownButtons.L
 

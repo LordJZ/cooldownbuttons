@@ -91,9 +91,9 @@ function BarEngine:OnUpdate()
         local saved
         if self:GetName() == "Items" or self:GetName() == "Spells" then
             if self:GetName() == "Items" then
-                saved = CooldownButtons.savedDB.profile[self:GetName()][v.id].save
+                saved = (true and CooldownButtons.savedDB.profile[self:GetName()][v.id].save)
             else
-                saved = CooldownButtons.savedDB.profile[self:GetName()][cooldownName].save
+                saved = (true and CooldownButtons.savedDB.profile[self:GetName()][cooldownName].save)
             end
         else
             saved = false

@@ -64,6 +64,9 @@ function CooldownButtonsSpells:OnEnable()
     self:ResetSpells() -- Init Spell Table
     self:SPELL_UPDATE_COOLDOWN()
     self:PET_BAR_UPDATE_COOLDOWN()
+    
+    -- Fix nil Index error... (maybe-.-)
+    self.itemGroups  = CooldownButtons:GetModule("Items").itemGroups
 end
 
 function CooldownButtonsSpells:IterateSpellTable()

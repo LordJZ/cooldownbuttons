@@ -104,7 +104,7 @@ LibStub("AceConfigRegistry-3.0"):NotifyChange("Cooldown Buttons")
     local SpellsModule = CooldownButtons:GetModule("Spells")
     local spellArgs = options.args.cooldownSettings.args.saved.args.spells.args
     local spellTree = SpellsModule.treeTable
-    for i = 2, 4 do
+    for i = 2, GetNumSpellTabs() do
         spellArgs["00SpellTree_NR_"..i] = createSpellConfigStuff(spellTree[i].treeName, true)
     end
     for k, v in SpellsModule:IterateSpellTable() do
@@ -116,7 +116,7 @@ LibStub("AceConfigRegistry-3.0"):NotifyChange("Cooldown Buttons")
     local itemArgs = options.args.cooldownSettings.args.saved.args.items.args
     local ItemsModule = CooldownButtons:GetModule("Items")
     for k, v in pairs(CooldownButtons.savedDB.profile.Items) do
-        itemArgs[k] = createItemConfigStuff(k)
+        itemArgs[tostring(k)] = createItemConfigStuff(k)
     end
 end
 
@@ -230,6 +230,10 @@ function createItemConfigStuff(itemID)
             end, nil, function() return db.hide end),
 
             removeItem = createExecute(L["Remove"], "", itemID, function(k)
+            local module = CooldownButtons:GetModule("Saved")
+                if module.anchorVisible then
+                    module:HideSavedAnchor(db)
+                end
                 k.options.args[k[1]].args[k[2]].args[k[3]].args[k[4]] = nil
                 _db[k.arg] = nil
                 LibStub("AceConfigRegistry-3.0"):NotifyChange("Cooldown Buttons")

@@ -79,6 +79,7 @@ function ButtonEngine:NewButton()
             local kind = (((self.cd.type == "Item") and "Items") or (((self.cd.type == "Spell") or (self.cd.type == "PetAction")) and "Spells"))
             local db = CooldownButtons.savedDB.profile[kind][self.cd.name]
             local module = CooldownButtons:GetModule(self.module)
+            ChatFrame1:AddMessage(self.cd.name)
             db.pos.x = self:GetLeft() * module.db.buttonScale
             db.pos.y = self:GetBottom() * module.db.buttonScale
             self.anchorPos.x = db.pos.x
