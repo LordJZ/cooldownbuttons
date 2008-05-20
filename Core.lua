@@ -251,7 +251,8 @@ defaults = {
 
         LibSinkAnnouncmentMessage = L["Cooldown on $cooldown ready!"],
         LibSinkAnnouncmentShowTexture = true,
-        LibSinkAnnouncmentConfig  = { sink20OutputSink = "None" },
+        LibSinkAnnouncmentColor = { Red = 1, Green = 1, Blue = 1, },
+        LibSinkAnnouncmentConfig = { sink20OutputSink = "None" },
 
         barSettings = {
             ["**"] ={

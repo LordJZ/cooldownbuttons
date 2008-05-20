@@ -71,6 +71,20 @@ function CooldownButtonsConfig:LibSinkConfig()
         set = function( k, v ) db[k.arg] = v end,
         width= "full",
     }
+    options.args.announcements.args.LibSink.args.AnnouncementColor = {
+        type = "color",
+        name = L["Announcement Color"],
+        order = 22,
+        hasAlpha = false,
+        arg = "LibSinkAnnouncmentColor",
+        get = function( k ) local t = db[k.arg]; return t.Red, t.Green, t.Blue end,
+        set = function( k, v, v2 ,v3 ) local t = db[k.arg]
+                t.Red = v
+                t.Green = v2
+                t.Blue = v3
+              end,
+        width = "full",
+    }
     options.args.announcements.args.LibSink.args.header_10 = {
         type = "header",
         name = L["Announcement Area"],
