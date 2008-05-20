@@ -102,6 +102,8 @@ L["Announcements Settings"] = true
    L["Cooldown on $cooldown ready!"] = true
    L["Use \'$cooldown\' to add Cooldown name."] = true
    L["Default Message: "] = true
+   L["Show Cooldown Icon in Annoucnement"] = true
+   L["Announcement Color"] = true
    L["Announcement Area"] = true
 
 L["Cooldown Settings"] = true
