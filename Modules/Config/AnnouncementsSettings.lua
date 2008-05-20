@@ -43,24 +43,33 @@ function CooldownButtonsConfig:LibSinkConfig()
     options.args.announcements.args.LibSink = LS2.GetSinkAce3OptionsDataTable(CooldownButtons)
     options.args.announcements.args.LibSink.name = L["Announcement"]
     options.args.announcements.args.LibSink.args.header_00 = {
-            type = "header",
-            name = L["Announcement Message"],
-            order = 0,
+        type = "header",
+        name = L["Announcement Message"],
+        order = 0,
     }
     options.args.announcements.args.LibSink.args.LibSinkAnnouncmentMessage = {
-            type = "input",
-            name = "",
-            order = 10,
-            arg  = "LibSinkAnnouncmentMessage",
-            get = function( k ) return db[k.arg] end,
-            set = function( k, v ) db[k.arg] = v end,
-            width= "double",
+        type = "input",
+        name = "",
+        order = 10,
+        arg  = "LibSinkAnnouncmentMessage",
+        get = function( k ) return db[k.arg] end,
+        set = function( k, v ) db[k.arg] = v end,
+        width= "double",
     }
     options.args.announcements.args.LibSink.args.desc = {
         type = "description",
         name = L["Use \'$cooldown\' to add Cooldown name."].."\n"..
                L["Default Message: "]..L["Cooldown on $cooldown ready!"],
         order = 20,
+    }
+    options.args.announcements.args.LibSink.args.showTexture = {
+        type = "toggle",
+        name = L["Show Cooldown Icon in Annoucnement"],
+        order = 21,
+        arg  = "LibSinkAnnouncmentShowTexture",
+        get = function( k ) return db[k.arg] end,
+        set = function( k, v ) db[k.arg] = v end,
+        width= "full",
     }
     options.args.announcements.args.LibSink.args.header_10 = {
         type = "header",

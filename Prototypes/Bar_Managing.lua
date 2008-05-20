@@ -118,7 +118,7 @@ function BarEngine:OnUpdate()
                 local time = start + duration - GetTime()
                 if (0 == CooldownButtons.db.profile.moveToExpTime or time > CooldownButtons.db.profile.moveToExpTime) and self:GetName() == "Expiring" then
                     self:unregisterCooldown(cooldownName, true)
-                elseif time <= CooldownButtons.db.profile.moveToExpTime and self:GetName() ~= "Expiring" then
+                elseif (0 ~= CooldownButtons.db.profile.moveToExpTime and time <= CooldownButtons.db.profile.moveToExpTime) and self:GetName() ~= "Expiring" then
                     self:unregisterCooldown(cooldownName, true)
                 else
                     if false or ((not start) or (start == 0)) then--hideFrame
@@ -127,7 +127,8 @@ function BarEngine:OnUpdate()
                             if not button.pulseActive then
                                 if LS2 then
                                     local message = CooldownButtons:gsub(CooldownButtons.db.profile.LibSinkAnnouncmentMessage, "$cooldown", cooldownName)
-                                    LS2.Pour(CooldownButtons, message, 1, 1, 1, nil, nil, nil, nil, nil, cooldownData["texture"])
+                                    local tex = ((CooldownButtons.db.profile.LibSinkAnnouncmentShowTexture and cooldownData["texture"]) or nil)
+                                    LS2.Pour(CooldownButtons, message, 1, 1, 1, nil, nil, nil, nil, nil, tex)
                                 end
                                 button.pulse.cooldownName = cooldownName
                                 button.pulse:SetScript("OnUpdate", function(self, elapsed) pulseHandler(self.cooldownName, self.module, elapsed) end)
@@ -135,7 +136,8 @@ function BarEngine:OnUpdate()
                         else
                             if LS2 then
                                 local message = CooldownButtons:gsub(CooldownButtons.db.profile.LibSinkAnnouncmentMessage, "$cooldown", cooldownName)
-                                LS2.Pour(CooldownButtons, message, 1, 1, 1, nil, nil, nil, nil, nil, cooldownData["texture"])
+                                local tex = ((CooldownButtons.db.profile.LibSinkAnnouncmentShowTexture and cooldownData["texture"]) or nil)
+                                LS2.Pour(CooldownButtons, message, 1, 1, 1, nil, nil, nil, nil, nil, tex)
                             end
                             self:unregisterCooldown(cooldownName)
                         end
@@ -178,17 +180,23 @@ function BarEngine:OnUpdateSaved()
             local start, duration = self:GetCooldown(cooldownName)
             local time = start + duration - GetTime()
             if false or ((not start) or (start == 0)) then --hideFrame
-                if LS2 then
-                    local message = CooldownButtons:gsub(CooldownButtons.db.profile.LibSinkAnnouncmentMessage, "$cooldown", cooldownName)
-                    LS2.Pour(CooldownButtons, message, 1, 1, 1, nil, nil, nil, nil, nil, cooldownData["texture"])
-                end
                 if self.db.showPulse then
                     local button = self:GetButton(cooldownData["buttonID"])
                     if not button.pulseActive then
+                        if LS2 then
+                            local message = CooldownButtons:gsub(CooldownButtons.db.profile.LibSinkAnnouncmentMessage, "$cooldown", cooldownName)
+                            local tex = ((CooldownButtons.db.profile.LibSinkAnnouncmentShowTexture and cooldownData["texture"]) or nil)
+                            LS2.Pour(CooldownButtons, message, 1, 1, 1, nil, nil, nil, nil, nil, tex)
+                        end
                         button.pulse.cooldownName = cooldownName
                         button.pulse:SetScript("OnUpdate", function(self, elapsed) pulseHandler(self.cooldownName, self.module, elapsed) end)
                     end
                 else
+                    if LS2 then
+                        local message = CooldownButtons:gsub(CooldownButtons.db.profile.LibSinkAnnouncmentMessage, "$cooldown", cooldownName)
+                        local tex = ((CooldownButtons.db.profile.LibSinkAnnouncmentShowTexture and cooldownData["texture"]) or nil)
+                        LS2.Pour(CooldownButtons, message, 1, 1, 1, nil, nil, nil, nil, nil, tex)
+                    end
                     self:unregisterCooldown(cooldownName)
                 end
             else

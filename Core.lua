@@ -250,6 +250,7 @@ defaults = {
         moveItemsToSpells = false,
 
         LibSinkAnnouncmentMessage = L["Cooldown on $cooldown ready!"],
+        LibSinkAnnouncmentShowTexture = true,
         LibSinkAnnouncmentConfig  = { sink20OutputSink = "None" },
 
         barSettings = {
