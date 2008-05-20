@@ -96,10 +96,16 @@ function CooldownEngine:registerCooldown(kind, name, id, texture, saveCall)
 
             if name == L["Spellgroup: Shocks"] or name == L["Spellgroup: Traps"]
             or name == L["Spellgroup: Divine Shields"] then
+                if not self.spellGroups then -- Fix nil Index error... (maybe-.-)
+                    self.spellGroups = CooldownButtons:GetModule("Spells").spellGroups
+                end
                 button.texture:SetTexture(self.spellGroups[name].texture)
 
             elseif name == L["Healing/Mana Potions"]
             or name == L["Other Potions"] or name == L["Healthstone"] then
+                if not self.itemGroups then -- Fix nil Index error... (maybe-.-)
+                    self.itemGroups = CooldownButtons:GetModule("Items").itemGroups
+                end
                 button.texture:SetTexture(self.itemGroups[name].texture)
             else
                 button.texture:SetTexture(texture)

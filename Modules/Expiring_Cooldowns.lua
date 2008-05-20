@@ -48,7 +48,4 @@ function CooldownButtonsExpiring:OnEnable()
     self:InitBarEngine()
     self:InitButtonEngine()
     self:InitCooldownEngine()
-    -- Fix nil Index error... (maybe-.-)
-    self.itemGroups  = CooldownButtons:GetModule("Items").itemGroups
-    self.spellGroups = CooldownButtons:GetModule("Spells").spellGroups
 end
