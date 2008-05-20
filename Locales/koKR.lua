@@ -8,8 +8,8 @@ L["Bar Settings"] = "바 설정"
  L["General Settings"] = "일반 설정"
   L["Item to Spells"] = "주문 아이템"
   L["Move Items to Spells Cooldown Bar"] = "주문 아이템 재사용 대기시간 바 이동"
-  L["Expiring Cooldowns"] = true
-  L["Expiring Time"] = true
+  L["Expiring Cooldowns"] = "완료 재사용 대기시간"
+  L["Expiring Time"] = "완료 시간"
   L["Time when the Cooldown should be moved to Expiring Buttonbar (in seconds; 0 = never)."] = true
  L["Spells"] = "주문"
  L["Items"] = "아이템"
@@ -103,8 +103,8 @@ L["Announcements Settings"] = "알림 설정"
    L["Cooldown on $cooldown ready!"] = "$cooldown 재사용 준비!"
    L["Use \'$cooldown\' to add Cooldown name."] = "재사용 대기시간 이름 추가는 \'$cooldown\' 사용."
    L["Default Message: "] = "메세지 초기값: "
-   L["Show Cooldown Icon in Annoucnement"] = true
-   L["Announcement Color"] = true
+   L["Show Cooldown Icon in Annoucnement"] = "재사용 대기시간 아이콘에 알림 보기"
+   L["Announcement Color"] = "알림 색상"
    L["Announcement Area"] = "알림 영역"
 
 L["Cooldown Settings"] = "재사용 대기시간 설정"
@@ -117,12 +117,12 @@ L["Cooldown Settings"] = "재사용 대기시간 설정"
    L["Show Movable Button"] = "이동 버튼 보기"
    L["Hide Movable Button"] = "이동 버튼 숨김"
   L["Items"] = "아이템"
-   L["~ Add Item ~"] = true
-   L["Item Name or ItemID"] = true
-   L["You can get the ItemID from www.wowhead.com!"] = true
-   L["No Item given."] = true
-   L["is not an valid ItemName/ID or the Item is not in local Itemcache."] = true
-   L["Remove"] = true
+   L["~ Add Item ~"] = "~ 아이템 추가 ~"
+   L["Item Name or ItemID"] = "아이템 이름 & 아이템ID"
+   L["You can get the ItemID from www.wowhead.com!"] = "www.wowhead.com로부터 아이템ID를 구할수 있습니다!"
+   L["No Item given."] = "아아템이 없습니다."
+   L["is not an valid ItemName/ID or the Item is not in local Itemcache."] = "유효한 아이템 이름이 아님/ID 또는 아이템이 로컬 아이템캐쉬에 없습니다."
+   L["Remove"] = "삭제"
 
 -- Directions
 L["Up"]    = "위"
