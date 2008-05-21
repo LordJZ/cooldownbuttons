@@ -1,4 +1,4 @@
-﻿local L = LibStub("AceLocale-3.0"):NewLocale("Cooldown Buttons","koKR")
+local L = LibStub("AceLocale-3.0"):NewLocale("Cooldown Buttons","koKR")
 if not L then return end
 
 -- Hi Translators, please keep the "Layout" of this file, thanks.
@@ -137,7 +137,6 @@ L["Right - Down"] = "우측 - 아래"
 L["Right - Up"]   = "우측 - 위"
 L["Left - Down"]  = "좌측 - 아래"
 L["Left - Up"]    = "좌측 - 위"
-
 
 -- Grouping 
 L["Healing/Mana Potions"] = "치유/마나 물약"

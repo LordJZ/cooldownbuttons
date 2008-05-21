@@ -1,5 +1,6 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("Cooldown Buttons","enUS",true)
 
+
 -- Hi Translators, please keep the "Layout" of this file, thanks.
 
 -- configuration
@@ -125,7 +126,6 @@ L["Cooldown Settings"] = true
    L["is not an valid ItemName/ID or the Item is not in local Itemcache."] = true
    L["Remove"] = true
 
-
 -- Directions
 L["Up"]    = true
 L["Down"]  = true
@@ -137,7 +137,6 @@ L["Right - Down"] = true
 L["Right - Up"]   = true
 L["Left - Down"]  = true
 L["Left - Up"]    = true
-
 
 -- Grouping 
 L["Healing/Mana Potions"] = true
