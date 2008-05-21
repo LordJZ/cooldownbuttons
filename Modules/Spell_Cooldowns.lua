@@ -116,7 +116,7 @@ function CooldownButtonsSpells:SPELL_UPDATE_COOLDOWN()
 end
 
 function CooldownButtonsSpells:PET_BAR_UPDATE_COOLDOWN()
-    if not UnitExists("pet") then return end
+    if not UnitExists("pet") or CooldownButtons.db.profile.hidePetSpells then return end
     for spellIndex = 0, 9 do
         local spellName = GetPetActionInfo(spellIndex)
         if spellName ~= nil then

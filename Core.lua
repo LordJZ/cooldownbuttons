@@ -254,6 +254,8 @@ defaults = {
         LibSinkAnnouncmentColor = { Red = 1, Green = 1, Blue = 1, },
         LibSinkAnnouncmentConfig = { sink20OutputSink = "None" },
 
+        hidePetSpells = false,
+
         barSettings = {
             ["**"] ={
                 disableBar = false,

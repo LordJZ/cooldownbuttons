@@ -11,6 +11,7 @@ L["Bar Settings"] = true
   L["Expiring Cooldowns"] = true
   L["Expiring Time"] = true
   L["Time when the Cooldown should be moved to Expiring Buttonbar (in seconds; 0 = never)."] = true
+  L["Hide Pet Spells"] = true
  L["Spells"] = true
  L["Items"] = true
  L["Expiring"] = true

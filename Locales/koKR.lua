@@ -1,4 +1,4 @@
-local L = LibStub("AceLocale-3.0"):NewLocale("Cooldown Buttons","koKR")
+﻿local L = LibStub("AceLocale-3.0"):NewLocale("Cooldown Buttons","koKR")
 if not L then return end
 
 -- Hi Translators, please keep the "Layout" of this file, thanks.
@@ -11,6 +11,7 @@ L["Bar Settings"] = "바 설정"
   L["Expiring Cooldowns"] = "완료 재사용 대기시간"
   L["Expiring Time"] = "완료 시간"
   L["Time when the Cooldown should be moved to Expiring Buttonbar (in seconds; 0 = never)."] = true
+  L["Hide Pet Spells"] = true
  L["Spells"] = "주문"
  L["Items"] = "아이템"
  L["Expiring"] = "완료"

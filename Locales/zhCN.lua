@@ -1,4 +1,4 @@
-local L = LibStub("AceLocale-3.0"):NewLocale("Cooldown Buttons","zhCN")
+﻿local L = LibStub("AceLocale-3.0"):NewLocale("Cooldown Buttons","zhCN")
 if not L then return end
 
 -- Hi Translators, please keep the "Layout" of this file, thanks.
@@ -11,6 +11,7 @@ L["Bar Settings"] = "图标栏设定"
   L["Expiring Cooldowns"] = "即将完成的冷却"
   L["Expiring Time"] = "即将完成的冷却时间"
   L["Time when the Cooldown should be moved to Expiring Buttonbar (in seconds; 0 = never)."] = "图标移动到即将完成冷却图标栏的时间(秒,0为从不)" 
+  L["Hide Pet Spells"] = true
  L["Spells"] = "法术"
  L["Items"] = "物品"
  L["Expiring"] = "即将完成的冷却"
