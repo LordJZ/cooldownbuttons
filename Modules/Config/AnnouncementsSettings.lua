@@ -59,6 +59,7 @@ function CooldownButtonsConfig:LibSinkConfig()
     options.args.announcements.args.LibSink.args.desc = {
         type = "description",
         name = L["Use \'$cooldown\' to add Cooldown name."].."\n"..
+               L["Use \'$icon\' to add Cooldown Icon."].."\n"..
                L["Default Message: "]..L["Cooldown on $cooldown ready!"],
         order = 20,
     }
@@ -70,6 +71,11 @@ function CooldownButtonsConfig:LibSinkConfig()
         get = function( k ) return db[k.arg] end,
         set = function( k, v ) db[k.arg] = v end,
         width= "full",
+    }
+    options.args.announcements.args.LibSink.args.desc2 = {
+        type = "description",
+        name = L["This option will not affect the \'$icon\' Tag."],
+        order = 22,
     }
     options.args.announcements.args.LibSink.args.AnnouncementColor = {
         type = "color",

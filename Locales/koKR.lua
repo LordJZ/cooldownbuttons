@@ -102,8 +102,10 @@ L["Announcements Settings"] = "알림 설정"
   L["Announcement Message"] = "알림 메세지"
    L["Cooldown on $cooldown ready!"] = "$cooldown 재사용 준비!"
    L["Use \'$cooldown\' to add Cooldown name."] = "재사용 대기시간 이름 추가는 \'$cooldown\' 사용."
+   L["Use \'$icon\' to add Cooldown Icon."] = true
    L["Default Message: "] = "메세지 초기값: "
    L["Show Cooldown Icon in Annoucnement"] = "재사용 대기시간 아이콘에 알림 보기"
+   L["This option will not affect the \'$icon\' Tag."] = true
    L["Announcement Color"] = "알림 색상"
    L["Announcement Area"] = "알림 영역"
 
