@@ -118,11 +118,12 @@ end
 function CooldownButtonsSpells:PET_BAR_UPDATE_COOLDOWN()
     if not UnitExists("pet") then return end
     for spellIndex = 0, 9 do
-        local spellName  = GetPetActionInfo(spellIndex)
+        local spellName = GetPetActionInfo(spellIndex)
         if spellName ~= nil then
             local start, duration, enable = GetPetActionCooldown(spellIndex)
             if enable == 1 and start > 0 and duration > 3 then
-                self:registerCooldown("PetAction", spellName, spellIndex, select(3, GetSpellInfo(spellName)))
+                local texture = select(3, GetSpellInfo(spellName)) or select(3, GetPetActionInfo(spellIndex))
+                self:registerCooldown("PetAction", spellName, spellIndex, texture)
             end
         end
     end
