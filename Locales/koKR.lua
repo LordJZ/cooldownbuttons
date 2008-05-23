@@ -10,8 +10,8 @@ L["Bar Settings"] = "바 설정"
   L["Move Items to Spells Cooldown Bar"] = "주문 아이템 재사용 대기시간 바 이동"
   L["Expiring Cooldowns"] = "완료 재사용 대기시간"
   L["Expiring Time"] = "완료 시간"
-  L["Time when the Cooldown should be moved to Expiring Buttonbar (in seconds; 0 = never)."] = true
-  L["Hide Pet Spells"] = true
+  L["Time when the Cooldown should be moved to Expiring Buttonbar (in seconds; 0 = never)."] = "완료 버튼바로 이동되기 위한 재사용 대기시간의 시간 (초단위; 0 = 없음)."
+  L["Hide Pet Spells"] = "펫 주문 숨김"
  L["Spells"] = "주문"
  L["Items"] = "아이템"
  L["Expiring"] = "완료"
@@ -103,10 +103,10 @@ L["Announcements Settings"] = "알림 설정"
   L["Announcement Message"] = "알림 메세지"
    L["Cooldown on $cooldown ready!"] = "$cooldown 재사용 준비!"
    L["Use \'$cooldown\' to add Cooldown name."] = "재사용 대기시간 이름 추가는 \'$cooldown\' 사용."
-   L["Use \'$icon\' to add Cooldown Icon."] = true
+   L["Use \'$icon\' to add Cooldown Icon."] = "재사용 대기시간 아이콘 추가는 \'$icon\' 사용."
    L["Default Message: "] = "메세지 초기값: "
    L["Show Cooldown Icon in Annoucnement"] = "재사용 대기시간 아이콘에 알림 보기"
-   L["This option will not affect the \'$icon\' Tag."] = true
+   L["This option will not affect the \'$icon\' Tag."] = "이 옵션은 \'$icon\' 태그에 영향을 주지 않습니다."
    L["Announcement Color"] = "알림 색상"
    L["Announcement Area"] = "알림 영역"
 
