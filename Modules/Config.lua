@@ -131,7 +131,7 @@ function CooldownButtonsConfig:OnInitialize()
             expiringTime = createInput(L["Expiring Time"], L["Time when the Cooldown should be moved to Expiring Buttonbar (in seconds; 0 = never)."], "moveToExpTime"),
 
             header_20 = createHeader(L["Hide Pet Spells"]),
-            toggleMoving = createToggle(L["Hide Pet Spells"], "", "hidePetSpells", true, nil, nil),
+            toggleHidePet = createToggle(L["Hide Pet Spells"], "", "hidePetSpells", true, nil, nil),
         },
     }
 
