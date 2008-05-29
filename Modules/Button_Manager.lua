@@ -289,10 +289,10 @@ function ButtonManager:ButtonUpdateTimer(data, db)
             button.text:SetPoint("LEFT", button, "CENTER",   db.textDistance, 0)
             button.text:SetJustifyH("LEFT") 
         elseif db.textDirection == "up" then
-            button.text:SetPoint("CENTER", button, "CENTER", 2, db.textDistance   )
+            button.text:SetPoint("CENTER", button, "CENTER", 1, db.textDistance)
             button.text:SetJustifyH("CENTER") 
         elseif db.textDirection == "down" then 
-            button.text:SetPoint("CENTER", button, "CENTER", 2, -(db.textDistance))
+            button.text:SetPoint("CENTER", button, "CENTER", 1, -(db.textDistance))
             button.text:SetJustifyH("CENTER") 
         end
         button.text:SetFont(LSM:Fetch("font", db.fontFace), db.fontSize, "OUTLINE")

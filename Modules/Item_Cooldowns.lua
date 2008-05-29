@@ -103,7 +103,7 @@ CooldownButtonsItems.itemGroups = newList()
 CooldownButtonsItems.itemGroups[L["Healing/Mana Potions"]] = newDict(
     "name",    L["Healing/Mana Potions"],
     "texture", "Interface\\AddOns\\CooldownButtons\\healmana.tga",
-    "ids", newList("CDB_Itemgroup.Health", "CDB_Itemgroup.Mana" )
+    "ids", newList("CDB_Itemgroup.Health", "CDB_Itemgroup.Mana", "CDB_Itemgroup.Rejuvenation" )
 )
     
 CooldownButtonsItems.itemGroups[L["Other Potions"]] = newDict(
@@ -138,6 +138,7 @@ LPT:AddData("CDB_Itemgroup", "$Rev$", {
     -- other potions
     ["CDB_Itemgroup.Resistance"] = "13461:2600,22845:3400,32063:20,22795:1000,6049:1300,13457:2600,22841:3400,6050:1800,13456:2600,22842:3400,6051:400,22847:3400,6052:1800,13458:2600,22844:3400,6048:900,13459:2600,22846:3400",
     ["CDB_Itemgroup.Rage"]       = "5631:30,5633:45,13442:45",
+    ["CDB_Itemgroup.Rejuvenation"] = "2456:30,18253:45,22850:45",
     
     -- Healtstones
     ["CDB_Itemgroup.Healthstone"]="5509:500,5510:800,5511:250,5512:100,9421:1200,19004:110,19005:120,19006:275,19007:300,19008:550,19009:600,19010:880,19011:960,19012:1320,19013:1440,22103:2080,22104:2288,22105:2496",
