@@ -62,7 +62,9 @@ function CooldownButtonsItems:BAG_UPDATE_COOLDOWN()
             local itemName = select(3, string_find(link, "Hitem[^|]+|h%[([^[]+)%]"))
             local itemID   = select(3, string_find(link, "Hitem:(%d+)"))
             local itemTexture = GetInventoryItemTexture("player", i)
-            CooldownManager:Add("Item", itemName, itemID, itemTexture)
+            if not CooldownManager:CheckRegistred(itemName) then
+                CooldownManager:Add("Item", itemName, itemID, itemTexture)
+            end
         end
     end
     for i = 0, 4 do
@@ -75,7 +77,7 @@ function CooldownButtonsItems:BAG_UPDATE_COOLDOWN()
                 local itemName = self:getItemName(itemID)
                 local itemTexture = GetContainerItemInfo(i,j)
                 local itemEquipLoc  = select(9, GetItemInfo(itemID))
-                if not (itemEquipLoc == "INVTYPE_TRINKET") then
+                if not (itemEquipLoc == "INVTYPE_TRINKET") and not CooldownManager:CheckRegistred(itemName) then
                     CooldownManager:Add("Item", itemName, itemID, itemTexture)
                 end
             end

@@ -99,7 +99,9 @@ function CooldownButtonsSpells:SPELL_UPDATE_COOLDOWN()
                 end
                 local treeName    = treeTable[treeIndex].treeName
                 local treeTexture = treeTable[treeIndex].treeTexture
-                CooldownManager:Add("Spell", treeName, spellIndex, treeTexture)
+                if not CooldownManager:CheckRegistred(treeName) then
+                    CooldownManager:Add("Spell", treeName, spellIndex, treeTexture)
+                end
             end
         end
     end
@@ -121,7 +123,9 @@ function CooldownButtonsSpells:PET_BAR_UPDATE_COOLDOWN()
             local start, duration, enable = GetPetActionCooldown(spellIndex)
             if enable == 1 and start > 0 and duration > 3 then
                 local texture = select(3, GetSpellInfo(spellName)) or select(3, GetPetActionInfo(spellIndex))
-                CooldownManager:Add("PetAction", spellName, spellIndex, texture)
+                if not CooldownManager:CheckRegistred(spellName) then
+                    CooldownManager:Add("PetAction", spellName, spellIndex, texture)
+                end
             end
         end
     end
