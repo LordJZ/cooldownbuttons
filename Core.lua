@@ -154,10 +154,13 @@ function CooldownButtons:OnInitialize()
     self:CheckVersion("$Revision$")
     
     -- Check for v2.1 Database
-    if not CooldownButtonsDB or (CooldownButtonsDB and not (CooldownButtonsDB.useingCDBv2 == "2.1")) then
-        CooldownButtonsDB.useingCDBv2 = "2.1"
+    if not CooldownButtonsDB then
+        -- Create New
         self:Print("Welcome to CooldownButtons v2.1")
         --updateNotifyPopup()
+    elseif(CooldownButtonsDB and not (CooldownButtonsDB.useingCDBv2 == "2.1")) then
+        CooldownButtonsDB.useingCDBv2 = "2.1"
+        -- Upgrade
     end
     
     -- Loading Databases

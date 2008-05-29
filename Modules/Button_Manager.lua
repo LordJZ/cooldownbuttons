@@ -37,6 +37,7 @@ local LayoutManager = CooldownButtons:GetModule("Layout Manager")
 
 ------
 local newList, newDict, del, deepDel, deepCopy = CooldownButtons.GetRecyclingFunctions()
+local math_floor = math.floor
 local math_ceil = math.ceil
 ------
 
