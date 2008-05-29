@@ -30,8 +30,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 local _G = _G
 local CooldownButtons = _G.CooldownButtons
+CooldownButtons:CheckVersion("$Revision$")
 local CooldownButtonsItems = CooldownButtons:NewModule("Items", "AceEvent-3.0")
-CooldownButtonsItems.rev = tonumber(("$Revision$"):match("%d+")) or 0
 local L = CooldownButtons.L
 local LPT = LibStub("LibPeriodicTable-3.1")
 local CooldownManager = CooldownButtons:GetModule("Cooldown Manager")

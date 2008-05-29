@@ -32,8 +32,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 local _G = _G
 local CooldownButtons = _G.CooldownButtons
+CooldownButtons:CheckVersion("$Revision$")
 local LayoutManager = CooldownButtons:NewModule("Layout Manager")
-LayoutManager.rev = tonumber(("$Revision$"):match("%d+")) or 0
 local L = CooldownButtons.L
 
 local LBF = LibStub("LibButtonFacade", true)
@@ -45,6 +45,7 @@ local table_insert = table.insert
 
 local addonName  = "CooldownButtons"
 local cyTemplate = {}
+
 function LayoutManager:Setup()
     self.LayoutMod = false
     if LBF then

@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 local _G = _G
 local CooldownButtons = _G.CooldownButtons
+CooldownButtons:CheckVersion("$Revision$")
 local BarManager = CooldownButtons:NewModule("Bar Manager", "AceTimer-3.0")
 local L = CooldownButtons.L
 local CooldownManager = CooldownButtons:GetModule("Cooldown Manager")
@@ -41,7 +42,6 @@ local newList, newDict, del, deepDel, deepCopy = CooldownButtons.GetRecyclingFun
 ------
 
 function BarManager:OnInitialize()
-    self.rev = tonumber(("$Revision$"):match("%d+")) or 0
     self.bars = {"Spells", "Items", "Expiring", "Saved"}
 end
 

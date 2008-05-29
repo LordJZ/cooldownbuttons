@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 local _G = _G
 local CooldownButtons = _G.CooldownButtons
+CooldownButtons:CheckVersion("$Revision$")
 local ButtonManager = CooldownButtons:NewModule("Button Manager", "AceConsole-3.0")
 local L = CooldownButtons.L
 local LSM = LibStub("LibSharedMedia-3.0")
@@ -43,7 +44,6 @@ local math_ceil = math.ceil
 
 local CooldownManager, BarManager
 function ButtonManager:OnInitialize()
-    self.rev = tonumber(("$Revision$"):match("%d+")) or 0
     self.db = newList()
 end
 

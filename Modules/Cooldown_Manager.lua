@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 local _G = _G
 local CooldownButtons = _G.CooldownButtons
+CooldownButtons:CheckVersion("$Revision$")
 local CooldownManager = CooldownButtons:NewModule("Cooldown Manager")
 local L = CooldownButtons.L
 local ButtonManager = CooldownButtons:GetModule("Button Manager")
@@ -43,7 +44,6 @@ local table_sort = table.sort
 local NORMAL, SAVED, EXPIRING = 0, 1, 2
 
 function CooldownManager:OnInitialize()
-    self.rev = tonumber(("$Revision$"):match("%d+")) or 0
     self.db = newList()
     self.dbNum = 0
     self.dbNumPerBar = {

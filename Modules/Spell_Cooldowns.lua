@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 local _G = _G
 local CooldownButtons = _G.CooldownButtons
+CooldownButtons:CheckVersion("$Revision$")
 local CooldownButtonsSpells = CooldownButtons:NewModule("Spells", "AceEvent-3.0")
 
 local L = CooldownButtons.L
@@ -43,7 +44,6 @@ local string_find = string.find
 ------
 
 function CooldownButtonsSpells:OnInitialize()
-    self.rev = tonumber(("$Revision$"):match("%d+")) or 0
     self.db = CooldownButtons.db.profile.barSettings[self:GetName()]
 
     self.tooltip = CreateFrame("GameTooltip", "CDBTooltip", UIParent, "GameTooltipTemplate")
