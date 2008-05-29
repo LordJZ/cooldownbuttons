@@ -195,40 +195,42 @@ local GetTexture
 function CooldownManager:registerCooldown(kind, name, id, texture, switch)
     local start, duration = _G["Get"..kind.."Cooldown"](id, BOOKTYPE_SPELL)
     local index = (((kind == "Item") and start*duration) or (((kind == "Spell") or (kind == "PetAction")) and name))
-    local button, bID = ButtonManager:GetButton()
-    self.dbNum = self.dbNum + 1
-    self.db[index] = newDict(
-        "idx"  , index, -- own index
-        "kind" , kind,
-        "name" , name,
-        "id"   , id,
-        "tex"  , GetTexture(kind, id, name), 
-        "mode" , switch,
-        "button", bID
-    )
+    if not self.db[index] then
+        local button, bID = ButtonManager:GetButton()
+        self.dbNum = self.dbNum + 1
+        self.db[index] = newDict(
+            "idx"  , index, -- own index
+            "kind" , kind,
+            "name" , name,
+            "id"   , id,
+            "tex"  , GetTexture(kind, id, name), 
+            "mode" , switch,
+            "button", bID
+        )
 
-    button.used = true
-    button.texture:SetTexture(texture)
-    button.cooldown:SetCooldown(start, duration)
-
-    -- Todo: tweak this crap :)
-    if name == L["Spellgroup: Shocks"] or name == L["Spellgroup: Traps"]
-    or name == L["Spellgroup: Divine Shields"] then
-        if not self.spellGroups then
-            self.spellGroups = CooldownButtons:GetModule("Spells").spellGroups
-        end
-        button.texture:SetTexture(self.spellGroups[name].texture)
-    elseif name == L["Healing/Mana Potions"]
-    or name == L["Other Potions"] or name == L["Healthstone"] then
-        if not self.itemGroups then
-            self.itemGroups = CooldownButtons:GetModule("Items").itemGroups
-        end
-        button.texture:SetTexture(self.itemGroups[name].texture)
-    else
+        button.used = true
         button.texture:SetTexture(texture)
-    end
+        button.cooldown:SetCooldown(start, duration)
 
-    self:sortCooldowns()
+        -- Todo: tweak this crap :)
+        if name == L["Spellgroup: Shocks"] or name == L["Spellgroup: Traps"]
+        or name == L["Spellgroup: Divine Shields"] then
+            if not self.spellGroups then
+                self.spellGroups = CooldownButtons:GetModule("Spells").spellGroups
+            end
+            button.texture:SetTexture(self.spellGroups[name].texture)
+        elseif name == L["Healing/Mana Potions"]
+        or name == L["Other Potions"] or name == L["Healthstone"] then
+            if not self.itemGroups then
+                self.itemGroups = CooldownButtons:GetModule("Items").itemGroups
+            end
+            button.texture:SetTexture(self.itemGroups[name].texture)
+        else
+            button.texture:SetTexture(texture)
+        end
+
+        self:sortCooldowns()
+    end
 end
 
 function GetTexture(kind, id, name)
