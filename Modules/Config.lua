@@ -42,7 +42,10 @@ local createBarSettings
 
 options.type = "group"
 options.childGroups = "tab"
-options.name = "Cooldown Buttons r"..CooldownButtons.rev
+--options.name = "Cooldown Buttons r"..CooldownButtons.rev
+function CooldownButtonsConfig:OnEnable()
+    self.options.name = "Cooldown Buttons r"..CooldownButtons.rev
+end
 options.get = function( k ) return db[k.arg] end
 options.set = function( k, v ) db[k.arg] = v end
 options.args = {}
