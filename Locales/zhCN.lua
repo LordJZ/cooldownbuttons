@@ -140,8 +140,7 @@ L["Left - Down"]  = "左下"
 L["Left - Up"]    = "左上"
 
 -- Grouping 
-L["Healing/Mana Potions"] = "生命/法力药水"
-L["Other Potions"] = "其他药水"
+L["Potions"] = true
 L["Drums (Leatherworking)"] = "鼓(制皮)"
 L["Healthstone"] = "医疗石"
 L["Spellgroup: Divine Shields"] = "圣盾"

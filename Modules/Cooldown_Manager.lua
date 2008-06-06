@@ -219,8 +219,8 @@ function CooldownManager:registerCooldown(kind, name, id, texture, switch)
                 self.spellGroups = CooldownButtons:GetModule("Spells").spellGroups
             end
             button.texture:SetTexture(self.spellGroups[name].texture)
-        elseif name == L["Healing/Mana Potions"]
-        or name == L["Other Potions"] or name == L["Healthstone"] then
+        elseif name == L["Potions"]
+        or name == L["Healthstone"] or name == L["Drums (Leatherworking)"] then
             if not self.itemGroups then
                 self.itemGroups = CooldownButtons:GetModule("Items").itemGroups
             end

@@ -270,6 +270,7 @@ defaults = {
                     SkinID   = "Blizzard",
                     Gloss    = 0,
                     Backdrop = false,
+                    Colors   = {},
                 },
 
                 -- Button Layout

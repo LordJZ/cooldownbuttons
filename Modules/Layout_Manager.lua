@@ -71,6 +71,7 @@ function LayoutManager:AddBar(barName)
         self.barGroup.SkinID   = db.LBF_Data.SkinID
         self.barGroup.Backdrop = db.LBF_Data.Backdrop
         self.barGroup.Gloss    = db.LBF_Data.Gloss
+        self.barGroup.Colors   = db.LBF_Data.Colors
 --    elseif self.LayoutMod == "cyCircled" then
 --        _G.cyCircled_CooldownButtons:AddBar()
     end
@@ -86,12 +87,13 @@ function LayoutManager:AddElement(barName, buttonName)
     end
 end
 
-function LayoutManager:SkinChanged(SkinID, Gloss, Backdrop, Group)
+function LayoutManager:SkinChanged(SkinID, Gloss, Backdrop, Group, Button, Colors)
 --    if Group then
         local db = CooldownButtons.db.profile.barSettings.Spells
         db.LBF_Data.SkinID   = SkinID
         db.LBF_Data.Gloss    = Gloss
         db.LBF_Data.Backdrop = Backdrop
+        db.LBF_Data.Colors   = Colors
 --    else
 --        for _, db in pairs(CooldownButtons.db.profile.barSettings) do
 --            db.LBF_Data.SkinID   = SkinID

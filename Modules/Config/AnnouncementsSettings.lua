@@ -40,8 +40,12 @@ function CooldownButtonsConfig:LibSinkConfig()
     local options = self.options
     local db = CooldownButtons.db.profile
     LS2.SetSinkStorage(CooldownButtons, CooldownButtons.db.profile.LibSinkAnnouncmentConfig)
-    options.args.announcements.args.LibSink = LS2.GetSinkAce3OptionsDataTable(CooldownButtons)
-    options.args.announcements.args.LibSink.name = L["Announcement"]
+    options.args.announcements.args.LibSink = {
+        type = "group",
+        name = L["Announcement"],
+        order = 0,
+        args = {},
+    }
     options.args.announcements.args.LibSink.args.header_00 = {
         type = "header",
         name = L["Announcement Message"],
@@ -91,9 +95,5 @@ function CooldownButtonsConfig:LibSinkConfig()
               end,
         width = "full",
     }
-    options.args.announcements.args.LibSink.args.header_10 = {
-        type = "header",
-        name = L["Announcement Area"],
-        order = 30,
-    }
+    options.args.announcements.args.LibSink.args.lsk = LS2.GetSinkAce3OptionsDataTable(CooldownButtons)
 end

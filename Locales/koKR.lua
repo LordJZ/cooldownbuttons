@@ -140,8 +140,7 @@ L["Left - Down"]  = "좌측 - 아래"
 L["Left - Up"]    = "좌측 - 위"
 
 -- Grouping 
-L["Healing/Mana Potions"] = "치유/마나 물약"
-L["Other Potions"] = "다른 물약"
+L["Potions"] = true
 L["Drums (Leatherworking)"] = "북소리 (가죽세공)"
 L["Healthstone"] = "생명석"
 L["Spellgroup: Divine Shields"] = "주문그룹: 천상의 보호막"

@@ -140,8 +140,7 @@ L["Left - Down"]  = true
 L["Left - Up"]    = true
 
 -- Grouping 
-L["Healing/Mana Potions"] = true
-L["Other Potions"] = true
+L["Potions"] = true
 L["Drums (Leatherworking)"] = true
 L["Healthstone"] = true
 L["Spellgroup: Divine Shields"] = true
