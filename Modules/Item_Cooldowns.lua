@@ -102,7 +102,7 @@ end
 
 -- Item Groups and LPT Item Database
 CooldownButtonsItems.itemGroups = newList()
-CooldownButtonsItems.itemGroups[L["Healing/Mana Potions"]] = newDict(
+CooldownButtonsItems.itemGroups[L["Potions"]] = newDict(
     "name",    L["Potions"],
     "texture", "Interface\\AddOns\\CooldownButtons\\healmana.tga",
     "ids", newList("CDB_Itemgroup.Potions")
