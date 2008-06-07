@@ -43,6 +43,10 @@ local table_sort = table.sort
 ------
 local NORMAL, SAVED, EXPIRING = 0, 1, 2
 
+function dumpcd()
+    Rock("LibRockConsole-1.0"):PrintLiteral(CooldownManager.db)
+end
+
 function CooldownManager:OnInitialize()
     self.db = newList()
     self.dbNum = 0
@@ -219,12 +223,14 @@ function CooldownManager:registerCooldown(kind, name, id, texture, switch)
                 self.spellGroups = CooldownButtons:GetModule("Spells").spellGroups
             end
             button.texture:SetTexture(self.spellGroups[name].texture)
+            self.db[index].tex = self.spellGroups[name].texture
         elseif name == L["Potions"]
         or name == L["Healthstone"] or name == L["Drums (Leatherworking)"] then
             if not self.itemGroups then
                 self.itemGroups = CooldownButtons:GetModule("Items").itemGroups
             end
             button.texture:SetTexture(self.itemGroups[name].texture)
+            self.db[index].tex = self.itemGroups[name].texture
         else
             button.texture:SetTexture(texture)
         end

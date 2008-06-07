@@ -75,7 +75,7 @@ function BarManager:OnUpdate()
             local start, duration = _G["Get"..v.kind.."Cooldown"](v.id, BOOKTYPE_SPELL)
             local time = start + duration - GetTime()
             if false or ((not start) or (start == 0)) then--hideFrame
-                if self.db[v.bar] then
+                if not v.hide then
                     if self.db[v.bar].showPulse then
                         local button = ButtonManager:GetButton(v.button)
                         if not button.pulseActive then
@@ -87,19 +87,7 @@ function BarManager:OnUpdate()
                         self:FireSinkMessage(v.name, v.tex)
                         CooldownManager:Remove(v.idx)
                     end
-                else
-                    -- TODO: Error Handling not just dumping
-                    if not LibStub("AceConsole-3.0").embeds[self] then
-                        LibStub("AceConsole-3.0"):Embed(self)
-                    end
-                    self:Print("-- Error--")
-                    self:Print("Bad Cooldown detected: ", k)
-                    for key, val in pairs(v) do
-                        self:Print(key, ": ", val)
-                    end
-                    self:Print("Please Post this Message in Wowace Forums.")
-                    
-                    -- Removing (i hope that works...)
+                else -- Silently Remove if hidden, _MAYBE_ later with announcement :)
                     CooldownManager:Remove(v.idx)
                 end
             else
