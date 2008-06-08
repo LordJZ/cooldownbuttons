@@ -218,7 +218,7 @@ function createBarSettings(title, moduleName, db, myOrder, savedMenu)
                 type = "group",
                 name = L["Time Limit"],
                 order = getOrder(),
-                disabled =  function() return db.showOmniCC or db.disableBar end,
+                disabled =  function() return db.disableBar end,
                 args = {
                     header_00 = createHeader(L["Time Limit"]),
                     enableLimit = createToggle(L["Enable Time Limit"], L["Toggle hiding long Cooldowns."], "enableDurationLimit"),
