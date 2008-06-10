@@ -269,17 +269,29 @@ function CooldownManager:sortCooldowns()
             elseif self:CheckSaved(v) then
                 v.bar = "Saved"
             else
-                if checkDurationLimit(start, duration) and getForcedHidden(k, v) == false then
+                if getForcedHidden(k, v) == false then
+                    v.hide = false
                     if CooldownButtons.db.profile.moveItemsToSpells then
-                        table_insert(sortMe["Spells"], newList(tonumber(string_format("%.3f", start + duration - GetTime())), k))
+                        if checkDurationLimit(start, duration, "Spells") then
+                            table_insert(sortMe["Spells"], newList(tonumber(string_format("%.3f", start + duration - GetTime())), k))
+                        else
+                            v.hide = true
+                        end
                     else
                         if v.kind == "Spell" or v.kind == "PetAction" then
-                            table_insert(sortMe["Spells"], newList(tonumber(string_format("%.3f", start + duration - GetTime())), k))
+                            if checkDurationLimit(start, duration, "Spells") then
+                                table_insert(sortMe["Spells"], newList(tonumber(string_format("%.3f", start + duration - GetTime())), k))
+                            else
+                                v.hide = true
+                            end
                         elseif v.kind == "Item" then
-                            table_insert(sortMe["Items"], newList(tonumber(string_format("%.3f", start + duration - GetTime())), k))
+                            if checkDurationLimit(start, duration, "Items") then
+                                table_insert(sortMe["Items"], newList(tonumber(string_format("%.3f", start + duration - GetTime())), k))
+                            else
+                                v.hide = true
+                            end
                         end
                     end
-                    v.hide = false
                 else
                     v.hide = true
                 end
@@ -312,12 +324,12 @@ switchCase = {
   [2] = function(bar) return "Expiring" end,
 }
 
-function checkDurationLimit(start, duration)
-    if CooldownButtons.db.profile.enableDurationLimit then
+function checkDurationLimit(start, duration, bar)
+    if CooldownButtons.db.profile.barSettings[bar].enableDurationLimit then
         if CooldownButtons.db.profile.showAfterLimit then
-            return (start + duration - GetTime()) < CooldownButtons.db.profile.durationTime
+            return (start + duration - GetTime()) < CooldownButtons.db.profile.barSettings[bar].durationTime
         else
-            return duration < self.db.durationTime
+            return duration < CooldownButtons.db.profile.barSettings[bar].durationTime
         end
     else
         return true
