@@ -76,6 +76,16 @@ end
 
 function CooldownManager:OnEnable()
     -- TODO: Do we need OnEnable()?
+    local _, playerclass = UnitClass("player")
+    if playerclass == "WARLOCK" or playerclass == "HUNTER" then
+        self:RegisterEvent("PLAYER_DEAD", function()
+            for k,v in pairs(CooldownManager.db) do
+                if v.kind == "PetAction" do
+                    CooldownManager:RemoveCooldown(v.idx)
+                end
+            end
+        end)
+    end
 end
 
 local registerCooldown
