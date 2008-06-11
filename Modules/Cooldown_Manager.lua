@@ -80,7 +80,7 @@ function CooldownManager:OnEnable()
     if playerclass == "WARLOCK" or playerclass == "HUNTER" then
         self:RegisterEvent("PLAYER_DEAD", function()
             for k,v in pairs(CooldownManager.db) do
-                if v.kind == "PetAction" do
+                if v.kind == "PetAction" then
                     CooldownManager:RemoveCooldown(v.idx)
                 end
             end
