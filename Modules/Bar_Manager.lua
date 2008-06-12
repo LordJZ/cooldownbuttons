@@ -52,7 +52,7 @@ function BarManager:OnEnable()
     end
     self.anchorDB = {}
     
-    self:ScheduleRepeatingTimer("OnUpdate",0.5)
+    self:ScheduleRepeatingTimer("OnUpdate",0.25)
 end
 
 function BarManager:FireSinkMessage(cooldownName, texture)
