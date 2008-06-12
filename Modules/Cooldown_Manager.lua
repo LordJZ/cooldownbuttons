@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 local _G = _G
 local CooldownButtons = _G.CooldownButtons
 CooldownButtons:CheckVersion("$Revision$")
-local CooldownManager = CooldownButtons:NewModule("Cooldown Manager")
+local CooldownManager = CooldownButtons:NewModule("Cooldown Manager", "AceEvent-3.0")
 local L = CooldownButtons.L
 local ButtonManager = CooldownButtons:GetModule("Button Manager")
 
