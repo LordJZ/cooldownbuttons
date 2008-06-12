@@ -273,13 +273,13 @@ function CooldownManager:sortCooldowns()
             "Expiring", newList()
         )
         for k, v in pairs(self.db) do
-            local start, duration = _G["Get"..v.kind.."Cooldown"](v.id, BOOKTYPE_SPELL)
-            if self:CheckExpiring(start, duration) then
-                table_insert(sortMe["Expiring"], newList(tonumber(string_format("%.3f", start + duration - GetTime())), k))
-            elseif self:CheckSaved(v) then
-                v.bar = "Saved"
-            else
-                if getForcedHidden(k, v) == false then
+            if getForcedHidden(k, v) == false then
+                local start, duration = _G["Get"..v.kind.."Cooldown"](v.id, BOOKTYPE_SPELL)
+                if self:CheckExpiring(start, duration) then
+                    table_insert(sortMe["Expiring"], newList(tonumber(string_format("%.3f", start + duration - GetTime())), k))
+                elseif self:CheckSaved(v) then
+                    v.bar = "Saved"
+                else
                     v.hide = false
                     if CooldownButtons.db.profile.moveItemsToSpells then
                         if checkDurationLimit(start, duration, "Spells") then
@@ -302,12 +302,12 @@ function CooldownManager:sortCooldowns()
                             end
                         end
                     end
-                else
-                    v.hide = true
                 end
+                start, duration = nil, nil
+            else
+                v.hide = true
             end
             v.order = 0
-            start, duration = nil, nil
         end
 
         local counts = newList()

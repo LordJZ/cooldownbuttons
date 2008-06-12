@@ -71,37 +71,38 @@ function BarManager:OnUpdate()
         or not CooldownButtons.db.profile.moveItemsToSpells and ((v.bar ~= "Items") and v.kind == "Item") then
             CooldownManager:sortCooldowns()
         end
-        if true then -- false if drop due to  moveItemsToSpells decision
-            local start, duration = _G["Get"..v.kind.."Cooldown"](v.id, BOOKTYPE_SPELL)
-            local time = start + duration - GetTime()
-            if false or ((not start) or (start == 0)) then--hideFrame
-                if not v.hide then
-                    if self.db[v.bar].showPulse then
-                        local button = ButtonManager:GetButton(v.button)
-                        if not button.pulseActive then
-                            self:FireSinkMessage(v.name, v.tex)
-                            button.pulse.cIdx = v.idx
-                            button.pulse:SetScript("OnUpdate", button.pulse.pulseHandler)
-                        end
-                    else
+        local start, duration = _G["Get"..v.kind.."Cooldown"](v.id, BOOKTYPE_SPELL)
+        local time = start + duration - GetTime()
+        if false or ((not start) or (start == 0)) then--hideFrame
+            if not v.hide then
+                if self.db[v.bar].showPulse then
+                    local button = ButtonManager:GetButton(v.button)
+                    if not button.pulseActive then
                         self:FireSinkMessage(v.name, v.tex)
-                        CooldownManager:Remove(v.idx)
+                        button.pulse.cIdx = v.idx
+                        button.pulse:SetScript("OnUpdate", button.pulse.pulseHandler)
                     end
-                else -- Silently Remove if hidden, _MAYBE_ later with announcement :)
+                else
+                    self:FireSinkMessage(v.name, v.tex)
                     CooldownManager:Remove(v.idx)
                 end
-            else
-                if not v.hide then
-                    local expiring = CooldownManager:CheckExpiring(v)
-                    local saved = CooldownManager:CheckSaved(v)
-                    if ((saved) and v.bar ~= "Saved") or ((not saved) and (v.bar == "Saved")) then
-                        CooldownManager:TriggerSaved(k)
-                    end
-                    if ((expiring) and v.bar ~= "Expiring") or ((not expiring) and (v.bar == "Expiring")) then
-                        CooldownManager:TriggerExpired(k)
-                    end
-                    ButtonManager:DrawButton(v, self.db[v.bar])
+            else -- Silently Remove if hidden, _MAYBE_ later with announcement :)
+                CooldownManager:Remove(v.idx)
+            end
+        else
+            if not v.hide then
+                local expiring = CooldownManager:CheckExpiring(v)
+                local saved = CooldownManager:CheckSaved(v)
+                if ((saved) and v.bar ~= "Saved") or ((not saved) and (v.bar == "Saved")) then
+                    CooldownManager:TriggerSaved(k)
                 end
+                if ((expiring) and v.bar ~= "Expiring") or ((not expiring) and (v.bar == "Expiring")) then
+                    CooldownManager:TriggerExpired(k)
+                end
+                ButtonManager:DrawButton(v, self.db[v.bar])
+            elseif v.hide and ButtonManager:GetButton(v.button):IsShown() then
+                ButtonManager:GetButton(v.button):Hide()
+                ButtonManager:GetButton(v.button).text:Hide()
             end
         end
     end

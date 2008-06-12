@@ -136,6 +136,10 @@ function createSpellConfigStuff(cooldownName, isSpellTree)
                     if not (tonumber(v) == nil) then
                         db.pos.y = tonumber(v);
                     end
+                elseif k.arg == "hide" or
+                       k.arg == "save" then
+                    db[k.arg] = v
+                    CooldownButtons:GetModule("Cooldown Manager"):sortCooldowns()
                 else
                     db[k.arg] = v
                 end
@@ -195,6 +199,10 @@ function createItemConfigStuff(itemID)
                     if not (tonumber(v) == nil) then
                         db.pos.y = tonumber(v);
                     end
+                elseif k.arg == "hide" or
+                       k.arg == "save" then
+                    db[k.arg] = v
+                    CooldownButtons:GetModule("Cooldown Manager"):sortCooldowns()
                 else
                     db[k.arg] = v
                 end
