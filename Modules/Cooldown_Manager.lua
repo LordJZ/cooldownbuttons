@@ -205,7 +205,6 @@ function CooldownManager:TriggerExpired(key)
     self:sortCooldowns()
 end
 
-local GetTexture
 function CooldownManager:registerCooldown(kind, name, id, texture, switch)
     local start, duration = _G["Get"..kind.."Cooldown"](id, BOOKTYPE_SPELL)
     local index = (((kind == "Item") and start*duration) or (((kind == "Spell") or (kind == "PetAction")) and name))
@@ -217,9 +216,10 @@ function CooldownManager:registerCooldown(kind, name, id, texture, switch)
             "kind" , kind,
             "name" , name,
             "id"   , id,
-            "tex"  , GetTexture(kind, id, name), 
+            "tex"  , texture,
             "mode" , switch,
-            "button", bID
+            "button", bID,
+            "endtime", (start+duration)
         )
 
         button.used = true
@@ -246,21 +246,6 @@ function CooldownManager:registerCooldown(kind, name, id, texture, switch)
         end
 
         self:sortCooldowns()
-    end
-end
-
-function GetTexture(kind, id, name)
-    if kind == "Item" then
-        return select(10, GetItemInfo(id))
-    elseif kind == "Spell" then
-        return select(3, GetSpellInfo(id, BOOKTYPE_SPELL))
-    elseif kind == "PetAction" then
-        return select(3, GetSpellInfo(name)) or select(3, GetPetActionInfo(id))
-    else
-        error("Invalid Cooldowntype.\n"
-            .."Type: "..tostring(kind).."\n"
-            .."Name: "..tostring(name).."\n"
-            .."ID: "  ..tostring(id)  .."\n")
     end
 end
 

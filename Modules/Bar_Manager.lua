@@ -73,7 +73,7 @@ function BarManager:OnUpdate()
         end
         local start, duration = _G["Get"..v.kind.."Cooldown"](v.id, BOOKTYPE_SPELL)
         local time = start + duration - GetTime()
-        if false or ((not start) or (start == 0)) then--hideFrame
+        if ((not start) or (start == 0)) or (v.endtime < GetTime()) then--hideFrame
             if not v.hide then
                 if self.db[v.bar].showPulse then
                     local button = ButtonManager:GetButton(v.button)
