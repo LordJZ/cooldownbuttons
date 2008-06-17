@@ -67,12 +67,25 @@ end
 
 function BarManager:OnUpdate()
     for k, v in CooldownManager:IterateCooldowns() do
-        if CooldownButtons.db.profile.moveItemsToSpells and (v.bar == "Items") 
-        or not CooldownButtons.db.profile.moveItemsToSpells and ((v.bar ~= "Items") and v.kind == "Item") then
+        if (CooldownButtons.db.profile.moveItemsToSpells and (v.bar == "Items") 
+        or not CooldownButtons.db.profile.moveItemsToSpells and ((v.bar ~= "Items") and v.kind == "Item")) then
             CooldownManager:sortCooldowns()
         end
         local start, duration = _G["Get"..v.kind.."Cooldown"](v.id, BOOKTYPE_SPELL)
         local time = start + duration - GetTime()
+        local _bar_ = (((v.kind == "Item") and "Items") or (((v.kind == "Spell") or (v.kind == "PetAction")) and "Spells"))
+        if self.db[v.bar or _bar_].enableDurationLimit then
+            if self.db[_bar_] and self.db[_bar_].showAfterLimit then
+                if (v.hide and (time < self.db[_bar_].durationTime))
+                or ((not v.hide) and (time > self.db[_bar_].durationTime)) then
+                    CooldownManager:sortCooldowns()
+                end
+            else
+                if ((not v.hide) and (time > self.db[_bar_].durationTime)) then
+                    CooldownManager:sortCooldowns()
+                end
+            end
+        end
         if ((not start) or (start == 0)) or (v.endtime < GetTime()) then--hideFrame
             if not v.hide then
                 if self.db[v.bar].showPulse then

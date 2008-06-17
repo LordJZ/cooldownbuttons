@@ -321,7 +321,7 @@ switchCase = {
 
 function checkDurationLimit(start, duration, bar)
     if CooldownButtons.db.profile.barSettings[bar].enableDurationLimit then
-        if CooldownButtons.db.profile.showAfterLimit then
+        if CooldownButtons.db.profile.barSettings[bar].showAfterLimit then
             return (start + duration - GetTime()) < CooldownButtons.db.profile.barSettings[bar].durationTime
         else
             return duration < CooldownButtons.db.profile.barSettings[bar].durationTime

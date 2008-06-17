@@ -179,11 +179,6 @@ function CooldownButtons:OnEnable()
     else
         self.noOmniCC = true
     end
-    if self.noOmniCC == true then
-        for k,v in pairs(self.db.profile.barSettings) do
-            self.db.profile.barSettings[k].showOmniCC = false
-        end
-    end
     
     CooldownButtons:GetModule("Config"):AddBarSettings(L["Expiring"], "Expiring", self.db.profile.barSettings["Expiring"], 30, nil)
     CooldownButtons:GetModule("Config"):AddBarSettings(L["Saved"], "Saved", self.db.profile.barSettings["Saved"], 40, nil)

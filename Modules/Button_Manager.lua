@@ -159,14 +159,16 @@ function ButtonManager:DrawButton(data, db)
     local button = self.db[data.button]
     button:Show()
     button:ClearAllPoints()
-
-    if ((button.cooldown.noCooldownCount == nil and db.showOmniCC == false) or (button.cooldown.noCooldownCount == 1 and db.showOmniCC == true)) then
-        if not db.showOmniCC then
-            button.cooldown.noCooldownCount = 1
-        else
-            button.cooldown.noCooldownCount = nil
+    
+    if not CooldownButtons.noOmniCC then
+        if ((button.cooldown.noCooldownCount == nil and db.showOmniCC == false) or (button.cooldown.noCooldownCount == 1 and db.showOmniCC == true)) then
+            if not db.showOmniCC then
+                button.cooldown.noCooldownCount = 1
+            else
+                button.cooldown.noCooldownCount = nil
+            end
+            button.cooldown:SetCooldown(_G["Get"..data.kind.."Cooldown"](data.id, BOOKTYPE_SPELL))
         end
-        button.cooldown:SetCooldown(_G["Get"..data.kind.."Cooldown"](data.id, BOOKTYPE_SPELL))
     end
     if not db.showSpiral then
         button.cooldown:SetAlpha(0)
