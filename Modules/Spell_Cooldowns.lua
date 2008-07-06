@@ -215,7 +215,7 @@ CooldownButtonsSpells.spellGroups[L["Spellgroup: Shocks"]] = newDict(
 )
 
 CooldownButtonsSpells.spellGroups[L["Spellgroup: Divine Shields"]] = newDict(
-    "name", L["Spellgroup: Shocks"],
+    "name", L["Spellgroup: Divine Shields"],
     "texture", "Interface\\Icons\\Spell_Holy_DivineIntervention",
     "ids", newList( "CDB_Spellgroup.Shields.Divine_Shield" )
 )
