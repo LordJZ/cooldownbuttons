@@ -81,7 +81,7 @@ function CooldownManager:OnEnable()
         self:RegisterEvent("PLAYER_DEAD", function()
             for k,v in pairs(CooldownManager.db) do
                 if v.kind == "PetAction" then
-                    CooldownManager:RemoveCooldown(v.idx)
+                    CooldownManager:Remove(v.idx)
                 end
             end
         end)
