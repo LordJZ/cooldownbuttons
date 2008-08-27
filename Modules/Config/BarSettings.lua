@@ -196,7 +196,7 @@ function createBarSettings(title, moduleName, db, myOrder, savedMenu)
                 disabled =  function() return db.showOmniCC or db.disableBar end,
                 args = {
                     header_00 = createHeader(L["Font Layout"]),
-                    fontFace = createSelect(L["Font Face"], L["Set the Font type."], "fontFace", function() local fonts, newFonts = LSM:List("font"), {}; for k, v in pairs(fonts) do newFonts[v] = v; end return newFonts; end),
+                    fontFace = createFontSelect(L["Font Face"], L["Set the Font type."], "fontFace", function() local fonts, newFonts = LSM:List("font"), {}; for k, v in pairs(fonts) do newFonts[v] = v; end return newFonts; end),
                     fontSize = createRange(L["Font size"], L["Set the Font size."], "fontSize", {5, 25, 1}),
 
                     header_01 = createHeader(L["Alpha"]),

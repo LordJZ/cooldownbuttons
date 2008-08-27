@@ -83,6 +83,21 @@ do
         }
     end
 
+    function createFontSelect(name, desc, arg, values, full, disabled, hidden)
+        return {
+            type = "select",
+            dialogControl = "LSM30_Font",
+            name = name,
+            desc = desc,
+            order = getOrder(),
+            values = values,
+            arg = arg,
+            width = full and "full",
+            disabled = disabled,
+            hidden = hidden,
+        }
+    end
+    
     function createSelect(name, desc, arg, values, full, disabled, hidden)
         return {
             type = "select",
