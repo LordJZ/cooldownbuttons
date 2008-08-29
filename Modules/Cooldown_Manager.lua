@@ -75,7 +75,6 @@ function CooldownManager:OnInitialize()
 end
 
 function CooldownManager:OnEnable()
-    -- TODO: Do we need OnEnable()?
     local _, playerclass = UnitClass("player")
     if playerclass == "WARLOCK" or playerclass == "HUNTER" then
         self:RegisterEvent("PLAYER_DEAD", function()
@@ -86,6 +85,9 @@ function CooldownManager:OnEnable()
             end
         end)
     end
+    
+    -- HAX
+    self:RegisterEvent("PLAYER_ENTERING_WORLD")
 end
 
 local registerCooldown
@@ -101,6 +103,15 @@ function CooldownManager:Add(kind, name, id, texture)
         end
         return self:registerCooldown(kind, name, id, texture, NORMAL)
     else
+    end
+end
+
+function CooldownManager:PLAYER_ENTERING_WORLD()
+    for k, v in pairs(self.db) do
+        local start, duration = _G["Get"..v.kind.."Cooldown"](v.id, BOOKTYPE_SPELL)
+        if (start + duration - GetTime()) <= 5 then
+            self:Remove(k)
+        end
     end
 end
 
