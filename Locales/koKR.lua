@@ -13,6 +13,7 @@ L["Bar Settings"] = "바 설정"
   L["Time when the Cooldown should be moved to Expiring Buttonbar (in seconds; 0 = never)."] = "완료 버튼바로 이동되기 위한 재사용 대기시간의 시간 (초단위; 0 = 없음)."
   L["Hide Pet Spells"] = "펫 주문 숨김"
  L["Spells"] = "주문"
+ L["Pet Spells"] = true
  L["Items"] = "아이템"
  L["Expiring"] = "완료"
  L["Saved"] = "저장"

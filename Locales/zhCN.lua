@@ -13,6 +13,7 @@ L["Bar Settings"] = "图标栏设定"
   L["Time when the Cooldown should be moved to Expiring Buttonbar (in seconds; 0 = never)."] = "图标移动到即将完成冷却图标栏的时间(秒,0为从不)" 
   L["Hide Pet Spells"] = true
  L["Spells"] = "法术"
+ L["Pet Spells"] = true
  L["Items"] = "物品"
  L["Expiring"] = "即将完成的冷却"
  L["Saved"] = "预留"

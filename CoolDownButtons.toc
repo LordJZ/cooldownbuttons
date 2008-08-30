@@ -44,6 +44,7 @@ Modules\Item_Cooldowns.lua
 Modules\Config\__API__.lua
 Modules\Config\BarSettings.lua
 Modules\Config\CooldownSettings.lua
+Modules\Config\CooldownSettings_Pet.lua
 Modules\Config\ItemCooldownGrouping.lua
 Modules\Config\AnnouncementsSettings.lua
 Modules\Config\TestMode.lua

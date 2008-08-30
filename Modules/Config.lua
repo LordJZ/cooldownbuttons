@@ -145,20 +145,29 @@ function CooldownButtonsConfig:OnInitialize()
     self:RegisterChatCommand("CooldownButtons", openConfigUI)
 end
 
-function openConfigUI()
-    -- Setup Saved Cooldown Settings
-    if not CooldownButtonsConfig.SavedCooldownsConfigIsSet then
-        CooldownButtonsConfig:SavedCooldownsConfig()
+do
+    local lastPet = ""
+    function openConfigUI()
+        -- Setup Saved Cooldown Settings
+        if not CooldownButtonsConfig.SavedCooldownsConfigIsSet then
+            CooldownButtonsConfig:SavedCooldownsConfig()
+        end
+        -- Setup Item Cooldown Grouping Settings
+        if not CooldownButtonsConfig.ItemCooldownGroupingConfigIsSet then
+            CooldownButtonsConfig:ItemCooldownGroupingConfig()
+        end
+
+        -- Setip Pet Cooldown Settings
+        if UnitExists("playerpet") and (lastPet ~= UnitName("playerpet")) then
+            lastPet = UnitName("playerpet")
+            CooldownButtonsConfig.options.args.cooldownSettings.args.saved.args.petspells = nil
+            CooldownButtonsConfig:SavedPetCooldownsConfig()
+        elseif not UnitExists("playerpet") then
+            CooldownButtonsConfig.options.args.cooldownSettings.args.saved.args.petspells = nil
+            LibStub("AceConfigRegistry-3.0"):NotifyChange("Cooldown Buttons")
+        end
+        
+        --LibStub("AceConfigRegistry-3.0"):NotifyChange("Cooldown Buttons")
+        LibStub("AceConfigDialog-3.0"):Open("Cooldown Buttons")
     end
-    -- Setup Hidden Cooldown Settings
---    if not CooldownButtonsConfig.HiddenCooldownsConfigIsSet then
---        CooldownButtonsConfig:HiddenCooldownsConfig()
---    end
-    -- Setup Item Cooldown Grouping Settings
-    if not CooldownButtonsConfig.ItemCooldownGroupingConfigIsSet then
-        CooldownButtonsConfig:ItemCooldownGroupingConfig()
-    end
-    
-    --LibStub("AceConfigRegistry-3.0"):NotifyChange("Cooldown Buttons")
-    LibStub("AceConfigDialog-3.0"):Open("Cooldown Buttons")
 end
