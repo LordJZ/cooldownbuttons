@@ -72,6 +72,7 @@ L["Bar Settings"] = "图标栏设定"
     L["Position from Button."] = "图标的位置"
   L["Font Settings"] = "字体设定"
    L["Font Layout"] = "字体布局"
+    L["Font outline."] = true
     L["Font Face"] = "字体效果"
     L["Set the Font type."] = "字体选择"
     L["Font size"] = "字体大小"
@@ -147,3 +148,9 @@ L["Healthstone"] = "医疗石"
 L["Spellgroup: Divine Shields"] = "圣盾"
 L["Spellgroup: Shocks"] = "震击"
 L["Spellgroup: Traps"] = "陷阱"
+
+-- Outline
+L["No Outline"] = true
+L["Thin Outline"] = true
+L["Thick Outline"] = true
+

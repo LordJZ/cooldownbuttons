@@ -289,7 +289,8 @@ defaults = {
                 textDistance = 28,
 
                 -- Font Settings
-                fontFace ="Skurri",
+                fontOutline = "none",
+                fontFace = "Skurri",
                 fontSize = 14,
                 triggerColorFlash = false,
                 colorFlashStartTime = 10,

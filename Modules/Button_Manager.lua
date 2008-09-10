@@ -297,7 +297,7 @@ function ButtonManager:ButtonUpdateTimer(data, db)
             button.text:SetPoint("CENTER", button, "CENTER", 1, -(db.textDistance))
             button.text:SetJustifyH("CENTER") 
         end
-        button.text:SetFont(LSM:Fetch("font", db.fontFace), db.fontSize, "OUTLINE")
+        button.text:SetFont(LSM:Fetch("font", db.fontFace), db.fontSize, db.fontOutline ~= "none" and db.fontOutline or nil)
         button.text:SetTextColor(c.Red, c.Green,  c.Blue)
         button.text:SetAlpha(db.textAlpha)
     else

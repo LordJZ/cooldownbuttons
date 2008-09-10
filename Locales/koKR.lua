@@ -72,6 +72,7 @@ L["Bar Settings"] = "바 설정"
    L["Position from Button."] = "버튼에서 위치"
  L["Font Settings"] = "글꼴 설정"
   L["Font Layout"] = "글꼴 레이아웃"
+   L["Font outline."] = true
    L["Font Face"] = "글꼴 모양"
    L["Set the Font type."] = "글꼴 모양을 설정합니다."
    L["Font size"] = "글꼴 크기"
@@ -147,3 +148,8 @@ L["Healthstone"] = "생명석"
 L["Spellgroup: Divine Shields"] = "주문그룹: 천상의 보호막"
 L["Spellgroup: Shocks"] = "주문그룹: 충격"
 L["Spellgroup: Traps"] = "주문그룹: 덫"
+
+-- Outline
+L["No Outline"] = true
+L["Thin Outline"] = true
+L["Thick Outline"] = true

@@ -72,6 +72,7 @@ L["Bar Settings"] = true
     L["Position from Button."] = true
   L["Font Settings"] = true
    L["Font Layout"] = true
+    L["Font outline."] = true
     L["Font Face"] = true
     L["Set the Font type."] = true
     L["Font size"] = true
@@ -147,3 +148,8 @@ L["Healthstone"] = true
 L["Spellgroup: Divine Shields"] = true
 L["Spellgroup: Shocks"] = true
 L["Spellgroup: Traps"] = true
+
+-- Outline
+L["No Outline"] = true
+L["Thin Outline"] = true
+L["Thick Outline"] = true

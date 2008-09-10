@@ -62,6 +62,11 @@ local opt_text_style = {
     ["0m"]     = "00[m||h]",
     ["0M"]     = "00[M||H]",
 }
+local opt_text_outline = {
+    ["none"]         = L["No Outline"],
+    ["OUTLINE"]      = L["Thin Outline"],
+    ["THICKOUTLINE"] = L["Thick Outline"],
+}
 
 function CooldownButtonsConfig:AddBarSettings(title, moduleName, db, myOrder, savedMenu)
     self.options.args.barSettings.args[title] = createBarSettings(title, moduleName, db, myOrder, savedMenu)
@@ -198,6 +203,7 @@ function createBarSettings(title, moduleName, db, myOrder, savedMenu)
                     header_00 = createHeader(L["Font Layout"]),
                     fontFace = createFontSelect(L["Font Face"], L["Set the Font type."], "fontFace", function() local fonts, newFonts = LSM:List("font"), {}; for k, v in pairs(fonts) do newFonts[v] = v; end return newFonts; end),
                     fontSize = createRange(L["Font size"], L["Set the Font size."], "fontSize", {5, 25, 1}),
+                    fontOutline = createSelect(L["Font outline."], L["Font outline."], "fontOutline", opt_text_outline),
 
                     header_01 = createHeader(L["Alpha"]),
                     textAlpha = createRange(L["Text Alpha"], L["Set the Text transparency."], "textAlpha", {0.1, 1, 0.05}, true),
