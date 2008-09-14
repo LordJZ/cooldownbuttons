@@ -280,8 +280,6 @@ function ButtonManager:ButtonUpdateTimer(data, db)
                 c = db.fontColorFlash2
             end
         end
-        button.text:SetTextColor(c.Red, c.Green,  c.Blue)
-        button.text:SetText(formatTime(time, db.textStyle))
 
         button.text:ClearAllPoints()
         if db.textDirection == "left" then
@@ -299,6 +297,7 @@ function ButtonManager:ButtonUpdateTimer(data, db)
         end
         button.text:SetFont(LSM:Fetch("font", db.fontFace), db.fontSize, db.fontOutline ~= "none" and db.fontOutline or nil)
         button.text:SetTextColor(c.Red, c.Green,  c.Blue)
+        button.text:SetText(formatTime(time, db.textStyle))
         button.text:SetAlpha(db.textAlpha)
     else
         button.text:Hide()

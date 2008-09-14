@@ -220,6 +220,11 @@ CooldownButtonsSpells.spellGroups[L["Spellgroup: Divine Shields"]] = newDict(
     "ids", newList( "CDB_Spellgroup.Shields.Divine_Shield" )
 )
 
+local WRATH_ERROR_FIX = ""
+if GetBuildInfo() == "2.4.3" then
+    WRATH_ERROR_FIX = ",5573:"..GetSpellInfo(5573)..",1020:"..GetSpellInfo(1020)
+end
+
 -- LPT Spell Database
 LPT:AddData("CDB_Spellgroup", "$Rev$", {
     -- Hunter Traps
@@ -233,5 +238,6 @@ LPT:AddData("CDB_Spellgroup", "$Rev$", {
     ["CDB_Spellgroup.Shocks.Flame_Shock"]    = "8050:" ..GetSpellInfo(8050) ..",8052:" ..GetSpellInfo(8052) ..",8053:" ..GetSpellInfo(8053) ..",10447:"..GetSpellInfo(10447)..",10448:"..GetSpellInfo(10448)..",29228:"..GetSpellInfo(29228)..",25457:"..GetSpellInfo(25457),
     ["CDB_Spellgroup.Shocks.Earth_Shock"]    = "8042:" ..GetSpellInfo(8042) ..",8044:" ..GetSpellInfo(8044) ..",8045:" ..GetSpellInfo(8045) ..",8046:" ..GetSpellInfo(8046) ..",10412:"..GetSpellInfo(10412)..",10413:"..GetSpellInfo(10413)..",10414:"..GetSpellInfo(10414)..",25454:"..GetSpellInfo(25454),
     -- Paladin Shields
-    ["CDB_Spellgroup.Shields.Divine_Shield"] = "642:"  ..GetSpellInfo(642)  ..",5573:" ..GetSpellInfo(5573) ..",498:"  ..GetSpellInfo(498)  ..",1020:" ..GetSpellInfo(1020),
+    ["CDB_Spellgroup.Shields.Divine_Shield"] = "642:"  ..GetSpellInfo(642)  ..",498:"  ..GetSpellInfo(498) .. WRATH_ERROR_FIX,
 })
+--/run ChatFrame1:AddMessage(tostring(select(1,GetSpellInfo(1020))));
