@@ -7,6 +7,7 @@
 ## X-Category: Interface Enhancements
 ## X-Website: http://www.wowace.com/wiki/CooldownButtons
 ## X-AceForum: 11951
+## X-Email: dodge@sourceway.eu
 
 ## SavedVariables: CooldownButtonsDB, CooldownButtonsSavedDB
 ## DefaultState: Enabled
