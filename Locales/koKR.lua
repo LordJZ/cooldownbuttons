@@ -13,7 +13,7 @@ L["Bar Settings"] = "바 설정"
   L["Time when the Cooldown should be moved to Expiring Buttonbar (in seconds; 0 = never)."] = "완료 버튼바로 이동되기 위한 재사용 대기시간의 시간 (초단위; 0 = 없음)."
   L["Hide Pet Spells"] = "펫 주문 숨김"
  L["Spells"] = "주문"
- L["Pet Spells"] = true
+ L["Pet Spells"] = "소환수 주문"
  L["Items"] = "아이템"
  L["Expiring"] = "완료"
  L["Saved"] = "저장"
@@ -72,7 +72,7 @@ L["Bar Settings"] = "바 설정"
    L["Position from Button."] = "버튼에서 위치"
  L["Font Settings"] = "글꼴 설정"
   L["Font Layout"] = "글꼴 레이아웃"
-   L["Font outline."] = true
+   L["Font outline."] = "글꼴 외각선"
    L["Font Face"] = "글꼴 모양"
    L["Set the Font type."] = "글꼴 모양을 설정합니다."
    L["Font size"] = "글꼴 크기"
@@ -142,16 +142,16 @@ L["Left - Down"]  = "좌측 - 아래"
 L["Left - Up"]    = "좌측 - 위"
 
 -- Grouping 
-L["Potions"] = true
+L["Potions"] = "위치"
 L["Drums (Leatherworking)"] = "북소리 (가죽세공)"
 L["Healthstone"] = "생명석"
 L["Spellgroup: Divine Shields"] = "주문그룹: 천상의 보호막"
 L["Spellgroup: Shocks"] = "주문그룹: 충격"
 L["Spellgroup: Traps"] = "주문그룹: 덫"
-L["Spellgroup: Shield Wall/Recklessness/Retaliation"] = true
-L["Spellgroup: Overpower/Revenge"] = true
+L["Spellgroup: Shield Wall/Recklessness/Retaliation"] = "주문드룹: 방패의 벽/무모한 희생/보복"
+L["Spellgroup: Overpower/Revenge"] = "주문그룹: 제압/복수"
 
 -- Outline
-L["No Outline"] = true
-L["Thin Outline"] = true
-L["Thick Outline"] = true
+L["No Outline"] = "외각선 없음"
+L["Thin Outline"] = "얇은 외각선"
+L["Thick Outline"] = "두꺼운 외각선"
