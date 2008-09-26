@@ -148,6 +148,8 @@ L["Healthstone"] = "医疗石"
 L["Spellgroup: Divine Shields"] = "圣盾"
 L["Spellgroup: Shocks"] = "震击"
 L["Spellgroup: Traps"] = "陷阱"
+L["Spellgroup: Shield Wall/Recklessness/Retaliation"] = true
+L["Spellgroup: Overpower/Revenge"] = true
 
 -- Outline
 L["No Outline"] = true

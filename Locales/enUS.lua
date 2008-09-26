@@ -148,6 +148,8 @@ L["Healthstone"] = true
 L["Spellgroup: Divine Shields"] = true
 L["Spellgroup: Shocks"] = true
 L["Spellgroup: Traps"] = true
+L["Spellgroup: Shield Wall/Recklessness/Retaliation"] = true
+L["Spellgroup: Overpower/Revenge"] = true
 
 -- Outline
 L["No Outline"] = true
