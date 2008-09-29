@@ -104,7 +104,7 @@ end
 CooldownButtonsItems.itemGroups = newList()
 CooldownButtonsItems.itemGroups[L["Potions"]] = newDict(
     "name",    L["Potions"],
-    "texture", "Interface\\AddOns\\CooldownButtons\\healmana.tga",
+    "texture", "Interface\\AddOns\\CooldownButtons\\Icons\\healmana.tga",
     "ids", newList("CDB_Itemgroup.Potions")
 )
 

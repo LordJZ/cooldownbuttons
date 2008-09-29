@@ -68,7 +68,7 @@ options.args.cooldownSettings = {
 if LS2 then
     options.args.announcements = {
         type = "group",
-        name = L["Announcements Settings"],
+        name = L["Announcement Settings"],
         order = 2,
         args = {
         },
@@ -155,6 +155,10 @@ do
         -- Setup Item Cooldown Grouping Settings
         if not CooldownButtonsConfig.ItemCooldownGroupingConfigIsSet then
             CooldownButtonsConfig:ItemCooldownGroupingConfig()
+        end
+        -- Setup Item Cooldown Grouping Settings
+        if not CooldownButtonsConfig.ChatPostAnnouncements then
+            CooldownButtonsConfig:ClickAnnouncementSettings()
         end
 
         -- Setip Pet Cooldown Settings

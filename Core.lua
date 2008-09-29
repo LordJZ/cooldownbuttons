@@ -254,6 +254,15 @@ defaults = {
         LibSinkAnnouncmentConfig = { sink20OutputSink = "None" },
 
         hidePetSpells = false,
+        
+        chatPost = {
+            enableChatPost = false,
+            postDefaultMsg = true,
+            chatPostMessage = L["Cooldown on $spell active for $time."],
+            toChat = {
+                ["**"] = false,
+            },
+        },
 
         barSettings = {
             ["**"] ={

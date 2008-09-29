@@ -48,5 +48,6 @@ Modules\Config\CooldownSettings.lua
 Modules\Config\CooldownSettings_Pet.lua
 Modules\Config\ItemCooldownGrouping.lua
 Modules\Config\AnnouncementsSettings.lua
+Modules\Config\ClickAnnouncements.lua
 Modules\Config\TestMode.lua
 Modules\Config\FAQ.lua

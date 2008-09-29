@@ -186,7 +186,8 @@ function CooldownManager:Remove(idx)
     -- Free Button
     ButtonManager:GetButton(self.db[idx].button):Hide()
     ButtonManager:GetButton(self.db[idx].button).text:Hide()
-    ButtonManager:GetButton(self.db[idx].button).used = false
+    ButtonManager:GetButton(self.db[idx].button).used  = false
+    ButtonManager:GetButton(self.db[idx].button).cdIdx = nil
     -- Remove Cooldown
     self.db[idx] = deepDel(self.db[idx])
     self.dbNum = self.dbNum - 1
@@ -233,7 +234,8 @@ function CooldownManager:registerCooldown(kind, name, id, texture, switch)
             "endtime", (start+duration)
         )
 
-        button.used = true
+        button.used  = true
+        button.cdIdx = index
         button.texture:SetTexture(texture)
         button.cooldown:SetCooldown(start, duration)
 

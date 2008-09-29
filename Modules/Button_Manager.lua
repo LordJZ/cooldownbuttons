@@ -68,7 +68,7 @@ function ButtonManager:GetButton(id)
     end
 end
 
-local pulseHandler
+local pulseHandler, OnClickHandler
 function ButtonManager:CreateButton()
     local i = 1 + #self.db
     self.db[i]   = CreateFrame("Button", "CooldownButton_"..i, UIParent, "ActionButtonTemplate")
@@ -77,6 +77,7 @@ function ButtonManager:CreateButton()
     button:SetClampedToScreen(true)
     button:EnableMouse(false)
     button:RegisterForDrag("LeftButton")
+    button:SetScript("OnClick", function(self) OnClickHandler(self) end)
     button:SetScript("OnDragStart", function(self) if self:IsMovable() then self.movin = true; self:StartMoving(); end end)
     button:SetScript("OnDragStop",  function(self) if self:IsMovable() then self:StopMovingOrSizing(); self:SaveAnchorPos() end end )
     button.SaveAnchorPos = function(self)
@@ -174,6 +175,17 @@ function ButtonManager:DrawButton(data, db)
         button.cooldown:SetAlpha(0)
     else
         button.cooldown:SetAlpha(1)
+    end
+    
+    local chatPostConf = CooldownButtons.db.profile.chatPost
+    if ((button.chatPostSwtich == true and chatPostConf.enableChatPost == false) or (button.chatPostSwtich == false and chatPostConf.enableChatPost == true)) or button.chatPostSwtich == nil then
+        if not chatPostConf.enableChatPost then
+            button.chatPostSwtich = false
+            button:EnableMouse(false)
+        else
+            button.chatPostSwtich = true
+            button:EnableMouse(true)
+        end
     end
 
     local pos
@@ -352,5 +364,74 @@ function formatTime(time, mode)
                 return _formatString_.."H"
             end
         end
+    end
+end
+
+
+function OnClickHandler(self)
+    local chatPostConf = CooldownButtons.db.profile.chatPost
+    if chatPostConf.enableChatPost then
+        local cooldown = CooldownManager.db[self.cdIdx]
+
+        local start, duration = _G["Get"..cooldown.kind.."Cooldown"](cooldown.id, BOOKTYPE_SPELL)
+        local formated_time = formatTime(start + duration - GetTime(), "00:00m")
+        local chatmsg
+        if chatPostConf.postDefaultMsg then
+            chatmsg = CooldownButtons:gsub(L["Cooldown on $spell active for $time."], "$spell", cooldown["name"])
+            chatmsg = CooldownButtons:gsub(chatmsg, "$time", formated_time)
+        else
+            chatmsg = CooldownButtons:gsub(chatPostConf.chatPostMessage, "$spell", cooldown["name"])
+            chatmsg = CooldownButtons:gsub(chatmsg, "$time", formated_time)
+        end
+        
+        local postto = chatPostConf.toChat
+        if postto["chatframe"] then
+            DEFAULT_CHAT_FRAME:AddMessage(chatmsg)
+        end
+        if postto["say"] then
+            SendChatMessage(chatmsg, "SAY", GetDefaultLanguage("player"))
+        end
+        if postto["party"] then
+            if (GetNumPartyMembers() > 0) then
+                SendChatMessage(chatmsg, "PARTY", GetDefaultLanguage("player"))
+            end
+        end
+        if postto["raid"] then
+            if (GetNumRaidMembers() > 0) then
+                SendChatMessage(chatmsg, "RAID", GetDefaultLanguage("player"))
+            end
+        end
+        if postto["guild"] then
+            if (IsInGuild()) then
+                SendChatMessage(chatmsg, "GUILD", GetDefaultLanguage("player"))
+            end
+        end
+        if postto["officer"] then
+            -- TODO: Check if you are allowed to write in /o
+            SendChatMessage(chatmsg, "OFFICER", GetDefaultLanguage("player"))
+        end
+        if postto["emote"] then
+            SendChatMessage(chatmsg, "EMOTE", GetDefaultLanguage("player"))
+        end
+        if postto["raidwarn"] then
+            if ((GetNumRaidMembers() > 0) and IsRaidOfficer()) then
+                SendChatMessage(chatmsg, "RAID_WARNING", GetDefaultLanguage("player"))
+            end
+        end
+        if postto["battleground"] then
+            if select(2, IsInInstance()) == "pvp" then
+                SendChatMessage(chatmsg, "BATTLEGROUND", GetDefaultLanguage("player"))
+            end
+        end
+        if postto["yell"] then
+            SendChatMessage(chatmsg, "YELL", GetDefaultLanguage("player"))
+        end
+        for i = 5, 10 do
+            local channame = tostring(select(2, GetChannelName(i)))
+            if postto["channel"..i] and channame ~= "nil" then
+                SendChatMessage(chatmsg, "CHANNEL", GetDefaultLanguage("player"), i)
+            end
+        end
+        
     end
 end

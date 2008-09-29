@@ -206,7 +206,7 @@ CooldownButtonsSpells.spellGroups[L["Spellgroup: Traps"]] = newDict(
 
 CooldownButtonsSpells.spellGroups[L["Spellgroup: Shocks"]] = newDict(
     "name", L["Spellgroup: Shocks"],
-    "texture", "Interface\\AddOns\\CooldownButtons\\shocks.tga",
+    "texture", "Interface\\AddOns\\CooldownButtons\\Icons\\shocks.tga",
     "ids",
         newList(
         "CDB_Spellgroup.Shocks.Frost_Shock",
@@ -222,13 +222,13 @@ CooldownButtonsSpells.spellGroups[L["Spellgroup: Divine Shields"]] = newDict(
 
 CooldownButtonsSpells.spellGroups[L["Spellgroup: Shield Wall/Recklessness/Retaliation"]] = newDict(
     "name", L["Spellgroup: Shield Wall/Recklessness/Retaliation"],
-    "texture", "Interface\\Icons\\Ability_Warrior_ShieldWall",
+    "texture", "Interface\\AddOns\\CooldownButtons\\Icons\\warrior_3spells.tga",
     "ids", newList( "CDB_Spellgroup.Warrior.Shieldwall_Recklessness_Retaliation" )
 )
 
 CooldownButtonsSpells.spellGroups[L["Spellgroup: Overpower/Revenge"]] = newDict(
     "name", L["Spellgroup: Overpower/Revenge"],
-    "texture", "Interface\\Icons\\Ability_Warrior_ShieldWall",
+    "texture", "Interface\\AddOns\\CooldownButtons\\Icons\\warrior_2spells.tga",
     "ids", newList( "CDB_Spellgroup.Warrior.Overpower", "CDB_Spellgroup.Warrior.Revenge" )
 )
 
