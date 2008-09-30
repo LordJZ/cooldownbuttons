@@ -93,6 +93,7 @@ L["Potions"] = "위치"
 -- L["Raid"] = true
 -- L["Raidwarning"] = true
 L["Remove"] = "삭제"
+-- L["Reverse Cooldowns"] = true
 L["Right"] = "우측"
 L["Right - Down"] = "우측 - 아래"
 L["Right - Up"] = "우측 - 위"
@@ -150,6 +151,7 @@ L["Toggle Anchor to be the Center of the bar."] = "바의 중앙에 앵커를 �
 L["Toggle Pulse effect."] = "맥박 효과를 전환합니다."
 L["Toggle flashing Color."] = "깜빡임 색상을 전환합니다."
 L["Toggle hiding long Cooldowns."] = "긴 재사용 대기시간 숨김을 전환합니다."
+-- L["Toggle how the Cooldowns are shown.\n\nChecked = Long -> Short\nUnchecked = Short -> Long"] = true
 -- L["Toggle posting the default Message."] = true
 -- L["Toggle posting to Chat."] = true
 L["Toggle showing Cooldown Spiral on the Buttons."] = "버튼의 나선형 재사용 표시를 전환합니다."

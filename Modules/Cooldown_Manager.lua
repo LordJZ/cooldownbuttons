@@ -313,7 +313,13 @@ function CooldownManager:sortCooldowns()
         counts["Items"]    = 1
         counts["Expiring"] = 1
         for bar in pairs(sortMe) do
-            table_sort(sortMe[bar], function(a, b) return a[1] < b[1] end)
+            table_sort(sortMe[bar], function(a, b)
+                if CooldownButtons.db.profile.barSettings[bar].reverseCooldowns then
+                    return a[1] > b[1]
+                else
+                    return a[1] < b[1]
+                end
+            end)
             for _, data in pairs(sortMe[bar]) do
                 self.db[data[2]].order = counts[bar]
                 self.db[data[2]].bar = switchCase[self.db[data[2]].mode](bar)

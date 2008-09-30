@@ -181,7 +181,7 @@ function CooldownButtons:OnEnable()
     end
     
     CooldownButtons:GetModule("Config"):AddBarSettings(L["Expiring"], "Expiring", self.db.profile.barSettings["Expiring"], 30, nil)
-    CooldownButtons:GetModule("Config"):AddBarSettings(L["Saved"], "Saved", self.db.profile.barSettings["Saved"], 40, nil)
+    CooldownButtons:GetModule("Config"):AddBarSettings(L["Saved"], "Saved", self.db.profile.barSettings["Saved"], 40, true)
 end
 
 function CooldownButtons:CheckVersion(revision)
@@ -283,6 +283,7 @@ defaults = {
                 buttonAlpha = 1,
                 buttonSpacing = 45,
                 buttonDirection = "right",
+                reverseCooldowns = false,
 
                 -- Multiple Row Layout
                 buttonMultiRow    = false,

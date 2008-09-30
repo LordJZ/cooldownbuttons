@@ -160,6 +160,7 @@ function createBarSettings(title, moduleName, db, myOrder, savedMenu)
             buttonCount = createInput(L["Max Buttons"], L["Maximal number of Buttons to display."], "buttonCount", nil, function() return db.disableBar end, savedMenu),
             buttonDirection = createSelect(L["Direction"], L["Direction from Anchor."], "buttonDirection", opt_directions, nil, function() return db.disableBar end, savedMenu),
             showCenter = createToggle(L["Center from Anchor"], L["Toggle Anchor to be the Center of the bar."], "showCenter", nil, function() return db.disableBar end, savedMenu),
+            reverseCooldowns = createToggle(L["Reverse Cooldowns"], L["Toggle how the Cooldowns are shown.\n\nChecked = Long -> Short\nUnchecked = Short -> Long"], "reverseCooldowns", nil, function() return db.disableBar end, savedMenu),
             desc = createDescription(L["If you enable the \"Center from Anchor\" you can set \"Direction\" to Up/Down for vertical and Left/Right for horizontal grow."], savedMenu),
 
             header_20 = createHeader(L["Multi Row Layout"], savedMenu),

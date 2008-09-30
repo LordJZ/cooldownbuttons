@@ -93,6 +93,7 @@ L["Position from Button."] = "图标的位置"
 -- L["Raid"] = true
 -- L["Raidwarning"] = true
 L["Remove"] = "移除"
+-- L["Reverse Cooldowns"] = true
 L["Right"] = "右"
 L["Right - Down"] = "右下"
 L["Right - Up"] = "右上"
@@ -150,6 +151,7 @@ L["Toggle Anchor to be the Center of the bar."] = "是否以锚点作为图标�
 L["Toggle Pulse effect."] = "是否启用脉搏效果"
 L["Toggle flashing Color."] = "是否使用闪烁文字"
 L["Toggle hiding long Cooldowns."] = "是否隐藏过长的冷却"
+-- L["Toggle how the Cooldowns are shown.\n\nChecked = Long -> Short\nUnchecked = Short -> Long"] = true
 -- L["Toggle posting the default Message."] = true
 -- L["Toggle posting to Chat."] = true
 L["Toggle showing Cooldown Spiral on the Buttons."] = "是否在图标上显示冷却秒针"

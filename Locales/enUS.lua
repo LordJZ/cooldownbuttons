@@ -93,6 +93,7 @@ L["Potions"] = true
 L["Raid"] = true
 L["Raidwarning"] = true
 L["Remove"] = true
+L["Reverse Cooldowns"] = true
 L["Right"] = true
 L["Right - Down"] = true
 L["Right - Up"] = true
@@ -150,6 +151,7 @@ L["Toggle Anchor to be the Center of the bar."] = true
 L["Toggle Pulse effect."] = true
 L["Toggle flashing Color."] = true
 L["Toggle hiding long Cooldowns."] = true
+L["Toggle how the Cooldowns are shown.\n\nChecked = Long -> Short\nUnchecked = Short -> Long"] = true
 L["Toggle posting the default Message."] = true
 L["Toggle posting to Chat."] = true
 L["Toggle showing Cooldown Spiral on the Buttons."] = true
