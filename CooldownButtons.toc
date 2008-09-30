@@ -3,7 +3,7 @@
 ## Author: Dodge (Netrox @ Sen'Jin-EU)
 ## Notes: Shows simple Buttons for your Cooldowns :)
 ## Version: v2.1
-## X-ReleaseDate: "$Date$"
+## X-ReleaseDate: "$Date: 2008-09-29 13:15:57 +0200 (Mo, 29. Sep 2008) $"
 ## X-Category: Interface Enhancements
 ## X-Website: http://www.wowace.com/wiki/CooldownButtons
 ## X-AceForum: 11951
