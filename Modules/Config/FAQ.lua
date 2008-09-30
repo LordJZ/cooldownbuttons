@@ -35,15 +35,16 @@ local L = CooldownButtons.L
 
 options.args.faq.args.text = {
             type = "description",
-            name = "|cFFA2D96FWelcome to|r |cFFCCCC00Cooldown Buttons v2.1|r\n\n"
-                 .."|cFFBFBFBFRelease Notes:|r\n"
-   .."|cFFA2D96F".."After some Performance issues in v2 i can proudly release v2.1\n"
-                 .."the Core for handling Cooldowns and Buttons is totaly rewritten again. ;)\n\n"
-           .."|r".."|cFFBFBFBFBugreports/Suggestions:|r\n"
+            name = "|cFFA2D96FWelcome to|r |cFFCCCC00Cooldown Buttons v2.1|r\n\n\n\n"
+                 .."|cFFBFBFBFFAQ:|r\n"
+                 .."Q: Can you make the addon showing Bars?\n"
+   .."|cFFA2D96F".."A: Nope Sorry, the addon is called Cooldown|cFFCCCC00BUTTONS|r|cFFA2D96F so it will only have buttons. :P|r"
+                 .."\n\n\n\n"
+                 .."|cFFBFBFBFBugreports/Suggestions:|r\n"
    .."|cFFA2D96F".."For Bugreports and/or Suggestions you can contact "
                  .."me in IRC (#wowace on irc.freenode.net)\n"
-                 .."or post in the official Forumthread (http://www.wowace.com/forums/index.php?topic="..GetAddOnMetadata("CooldownButtons", "X-AceForum")..")\n\n"
+                 .."or post a comment on the Project Page at http://www.wowace.com/projects/cooldownbuttons/\n\n"
 
-           .."|r".."\n\n\n\n|cFFBFBFBFLast FAQ/Info Update:|r 2008-05-28",
+           .."|r".."\n\n|cFFBFBFBFLast FAQ/Info Update:|r 30. Sep. 08",
             order = 0,
 }
