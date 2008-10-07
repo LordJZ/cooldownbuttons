@@ -3,18 +3,18 @@
 ## Author: Dodge (Netrox @ Sen'Jin-EU)
 ## Notes: Shows simple Buttons for your Cooldowns :)
 ## Version: v2.1
-## X-ReleaseDate: "$Date: 2008-09-29 13:15:57 +0200 (Mo, 29. Sep 2008) $"
-## X-Category: Interface Enhancements
+
+## X-ReleaseDate: @project-date-iso@
 ## X-Website: http://www.wowace.com/projects/cooldownbuttons/
-## X-Email: dodge@sourceway.eu
 
 ## SavedVariables: CooldownButtonsDB, CooldownButtonsSavedDB
 ## DefaultState: Enabled
 ## OptionalDeps: Ace3, LibSharedMedia-3.0, LibPeriodicTable-3.1, LibSink-2.0, AceGUI-3.0-SharedMediaWidgets
-## X-Embeds:     Ace3, LibSharedMedia-3.0, LibPeriodicTable-3.1, LibSink-2.0, AceGUI-3.0-SharedMediaWidgets
 
 # Loading Embedded Libs
+#@no-lib-strip@
 embeds.xml
+#@end-no-lib-strip@
 
 # Localizations
 Locales\enUS.lua
@@ -48,5 +48,4 @@ Modules\Config\CooldownSettings_Pet.lua
 Modules\Config\ItemCooldownGrouping.lua
 Modules\Config\AnnouncementsSettings.lua
 Modules\Config\ClickAnnouncements.lua
-Modules\Config\TestMode.lua
 Modules\Config\FAQ.lua

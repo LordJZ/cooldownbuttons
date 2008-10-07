@@ -2,7 +2,7 @@
 Name: Deformat-3.0
 Revision: $Rev$
 Author(s): Deformat-2.0 by ckknight (ckknight@gmail.com)
-LibStubbed by: Dodge
+LibStubbed by: Netrox (netrox@sourceway.eu)
 Website: http://ckknight.wowinterface.com/
 Documentation: http://wiki.wowace.com/index.php/Deformat-2.0
 SVN: http://svn.wowace.com/root/trunk/Deformat/Deformat-2.0
