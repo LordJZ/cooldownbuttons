@@ -162,6 +162,7 @@ function CooldownManager:CheckExpiring(arg1, arg2) -- kind, id
 end
 
 function CooldownManager:Remove(idx)
+    if not idx then return end
     -- Free Button
     ButtonManager:GetButton(self.db[idx].button):Hide()
     ButtonManager:GetButton(self.db[idx].button).text:Hide()
