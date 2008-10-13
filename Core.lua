@@ -128,7 +128,11 @@ local defaults, defaultSaved
 local updateNotifyPopup
 
 -- Revision/Version
-CooldownButtons.rev = tonumber("@project-revision@") or "SVN"
+if "@project-version@" ~= "@project".."-version@" then
+    CooldownButtons.rev = "@project-version@"
+else
+    CooldownButtons.rev = "SVN"    
+end
 function CooldownButtons:OnInitialize()    
     -- Check for v2.1 Database
     if not CooldownButtonsDB then
