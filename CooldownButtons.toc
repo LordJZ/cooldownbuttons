@@ -2,7 +2,7 @@
 ## Title: Cooldown Buttons
 ## Author: Dodge (Netrox @ Sen'Jin-EU)
 ## Notes: Shows simple Buttons for your Cooldowns :)
-## Version: v2.1
+## Version: @project-version@ 
 
 ## X-ReleaseDate: @project-date-iso@
 ## X-Website: http://www.wowace.com/projects/cooldownbuttons/
