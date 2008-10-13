@@ -97,6 +97,9 @@ function BarManager:OnUpdate()
                 ButtonManager:GetButton(v.button).text:Hide()
             end
         end
+        if self.db[v.bar or _bar_].disableBar then
+            CooldownManager:Remove(v.idx)
+        end
     end
     for k, v in pairs(self.anchorDB) do
         if not ButtonManager:GetButton(self.anchorDB[k].button).movin then

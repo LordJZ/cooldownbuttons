@@ -89,6 +89,9 @@ function createBarSettings(title, moduleName, db, myOrder, savedMenu)
                     t.Green = v2
                     t.Blue = v3
                 else
+                    if moduleName == "Items" and k.arg == "disableBar" then
+                        CooldownButtons:GetModule("Items"):BAG_UPDATE_COOLDOWN()
+                    end
                     db[k.arg] = v
                 end
               end,
