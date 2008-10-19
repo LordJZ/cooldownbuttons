@@ -65,7 +65,7 @@ function BarManager:OnUpdate()
                 end
             end
         end
-        if ((not start) or (start == 0)) or (v.endtime < GetTime()) then--hideFrame
+        if ((not start) or (start == 0)) or (start+duration < GetTime()) then--hideFrame
             if not v.hide then
                 if self.db[v.bar].showPulse then
                     local button = ButtonManager:GetButton(v.button)

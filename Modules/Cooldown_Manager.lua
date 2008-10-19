@@ -210,8 +210,7 @@ function CooldownManager:registerCooldown(kind, name, id, texture, switch)
             "id"   , id,
             "tex"  , texture,
             "mode" , switch,
-            "button", bID,
-            "endtime", (start+duration)
+            "button", bID
         )
 
         button.used  = true
@@ -222,8 +221,7 @@ function CooldownManager:registerCooldown(kind, name, id, texture, switch)
         -- Todo: tweak this crap :)
         if name == L["Spellgroup: Shocks"] or name == L["Spellgroup: Traps"]
         or name == L["Spellgroup: Divine Shields"]
-        or name == L["Spellgroup: Overpower/Revenge"]
-        or name == L["Spellgroup: Shield Wall/Recklessness/Retaliation"] then
+        or name == L["Spellgroup: Overpower/Revenge"] then
             if not self.spellGroups then
                 self.spellGroups = CooldownButtons:GetModule("Spells").spellGroups
             end

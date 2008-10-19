@@ -199,12 +199,6 @@ CooldownButtonsSpells.spellGroups[L["Spellgroup: Divine Shields"]] = newDict(
     "ids", newList( "CDB_Spellgroup.Shields.Divine_Shield" )
 )
 
-CooldownButtonsSpells.spellGroups[L["Spellgroup: Shield Wall/Recklessness/Retaliation"]] = newDict(
-    "name", L["Spellgroup: Shield Wall/Recklessness/Retaliation"],
-    "texture", "Interface\\AddOns\\CooldownButtons\\Icons\\warrior_3spells.tga",
-    "ids", newList( "CDB_Spellgroup.Warrior.Shieldwall_Recklessness_Retaliation" )
-)
-
 CooldownButtonsSpells.spellGroups[L["Spellgroup: Overpower/Revenge"]] = newDict(
     "name", L["Spellgroup: Overpower/Revenge"],
     "texture", "Interface\\AddOns\\CooldownButtons\\Icons\\warrior_2spells.tga",
@@ -231,7 +225,6 @@ LPT:AddData("CDB_Spellgroup", "$Rev$", {
     -- Paladin Shields
     ["CDB_Spellgroup.Shields.Divine_Shield"] = "642:"  ..GetSpellInfo(642)  ..",498:"  ..GetSpellInfo(498)  .. WRATH_ERROR_FIX,
     -- Warrior Stuff
-    ["CDB_Spellgroup.Warrior.Shieldwall_Recklessness_Retaliation"] = "871:"  ..GetSpellInfo(871)  ..",1719:" ..GetSpellInfo(1719)  ..",20230:" ..GetSpellInfo(20230),
     ["CDB_Spellgroup.Warrior.Overpower"] = "7384:"  ..GetSpellInfo(7384)  ..",7887:" ..GetSpellInfo(7887)  ..",11584:" ..GetSpellInfo(11584)  ..",11585:" ..GetSpellInfo(11585),
     ["CDB_Spellgroup.Warrior.Revenge"] = "6572:"  ..GetSpellInfo(6572) ..",6574:" ..GetSpellInfo(6574) ..",7379:" ..GetSpellInfo(7379) ..",11600:" ..GetSpellInfo(11600) ..",11601:" ..GetSpellInfo(11601) ..",25288:" ..GetSpellInfo(25288) ..",25269:" ..GetSpellInfo(25269) ..",30357:" ..GetSpellInfo(30357),
 }) 

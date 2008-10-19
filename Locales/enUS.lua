@@ -126,7 +126,6 @@ L["Show after Limit"] = true
 L["Spacing"] = true
 L["Spellgroup: Divine Shields"] = true
 L["Spellgroup: Overpower/Revenge"] = true
-L["Spellgroup: Shield Wall/Recklessness/Retaliation"] = true
 L["Spellgroup: Shocks"] = true
 L["Spellgroup: Traps"] = true
 L["Spells"] = true

@@ -2,7 +2,7 @@
 -- Please make sure to save the file as UTF-8, BUT WITHOUT THE UTF-8 BOM HEADER; ¶
 local L = LibStub("AceLocale-3.0"):NewLocale("Cooldown Buttons", "zhCN")
 if not L then return end
--- Update on 10/13/2008 by wowui.cn
+
 L["Above"] = "上"
 L["Alpha"] = "透明度"
 L["Alpha & Scale"] = "透明度和缩放"
@@ -62,7 +62,7 @@ L["Hide Button"] = "隐藏图标"
 L["Hide Movable Button"] = "隐藏可移动的图标"
 L["Hide Pet Spells"] = "隐藏宠物法术"
 L["HoTs/DoTs"] = "HoT/DoT"
-L["If \'%s\' is disabled use the following Text"] = true
+-- L["If \'%s\' is disabled use the following Text"] = true
 L["If you enable the \"Center from Anchor\" you can set \"Direction\" to Up/Down for vertical and Left/Right for horizontal grow."] = "如果你启用了“以锚点为中心”你可以设置图标的垂直和水平伸展方向"
 L["Item Name or ItemID"] = "物品名称或ID"
 L["Item to Spells"] = "物品到法术"
@@ -126,7 +126,6 @@ L["Show after Limit"] = "进入限期内显示"
 L["Spacing"] = "间距"
 L["Spellgroup: Divine Shields"] = "法术组: 神圣之盾"
 L["Spellgroup: Overpower/Revenge"] = "法术组: 压制/复仇"
-L["Spellgroup: Shield Wall/Recklessness/Retaliation"] = "法术组: 盾墙/鲁莽/剑刃风暴"
 L["Spellgroup: Shocks"] = "法术组: 震击"
 L["Spellgroup: Traps"] = "法术组: 陷阱"
 L["Spells"] = "法术"
@@ -159,7 +158,7 @@ L["Toggle showing Cooldown Time at the Buttons."] = "是否在图标上显示冷
 L["Toggle showing the Cooldowns after passing the Limit."] = "是否在长冷却进入时限内后重新显示"
 L["Toggle useing Multirow."] = "是否使用多行显示"
 L["Up"] = "上"
-L["Use $spell for spell name and $time for cooldowntime."] = true
+-- L["Use $spell for spell name and $time for cooldowntime."] = true
 L["Use Multirow"] = "多行显示"
 L["Use \'$cooldown\' to add Cooldown name."] = "使用 \'$cooldown\' 来添加冷却名称"
 L["Use \'$icon\' to add Cooldown Icon."] = "使用 \'$icon\' 来添加冷却图标."
