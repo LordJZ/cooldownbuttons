@@ -193,10 +193,12 @@ CooldownButtonsSpells.spellGroups[L["Spellgroup: Shocks"]] = newDict(
         "CDB_Spellgroup.Shocks.Earth_Shock" )
 )
 
-CooldownButtonsSpells.spellGroups[L["Spellgroup: Divine Shields"]] = newDict(
-    "name", L["Spellgroup: Divine Shields"],
-    "texture", "Interface\\Icons\\Spell_Holy_DivineIntervention",
-    "ids", newList( "CDB_Spellgroup.Shields.Divine_Shield" )
+CooldownButtonsSpells.spellGroups[L["Spellgroup: Judgements"]] = newDict(
+    "name", "Spellgroup: Judgements",
+    "texture", "Interface\\Icons\\Spell_Holy_RighteousFury",
+    "ids", newList( "CDB_Spellgroup.Judgements.Judgement_of_Wisdom",
+        "CDB_Spellgroup.Judgements.Judgement_of_Justice",
+        "CDB_Spellgroup.Judgements.Judgement_of_Light")
 )
 
 CooldownButtonsSpells.spellGroups[L["Spellgroup: Overpower/Revenge"]] = newDict(
@@ -223,7 +225,9 @@ LPT:AddData("CDB_Spellgroup", "$Rev$", {
     ["CDB_Spellgroup.Shocks.Flame_Shock"]    = "8050:" ..GetSpellInfo(8050) ..",8052:" ..GetSpellInfo(8052) ..",8053:" ..GetSpellInfo(8053) ..",10447:"..GetSpellInfo(10447)..",10448:"..GetSpellInfo(10448)..",29228:"..GetSpellInfo(29228)..",25457:"..GetSpellInfo(25457),
     ["CDB_Spellgroup.Shocks.Earth_Shock"]    = "8042:" ..GetSpellInfo(8042) ..",8044:" ..GetSpellInfo(8044) ..",8045:" ..GetSpellInfo(8045) ..",8046:" ..GetSpellInfo(8046) ..",10412:"..GetSpellInfo(10412)..",10413:"..GetSpellInfo(10413)..",10414:"..GetSpellInfo(10414)..",25454:"..GetSpellInfo(25454),
     -- Paladin Shields
-    ["CDB_Spellgroup.Shields.Divine_Shield"] = "642:"  ..GetSpellInfo(642)  ..",498:"  ..GetSpellInfo(498)  .. WRATH_ERROR_FIX,
+    ["CDB_Spellgroup.Judgements.Judgement_of_Justice"] = "53407:"..GetSpellInfo(53407),
+    ["CDB_Spellgroup.Judgements.Judgement_of_Light"]   = "20271:"..GetSpellInfo(20271),
+    ["CDB_Spellgroup.Judgements.Judgement_of_Wisdom"]  = "53408:"..GetSpellInfo(53408),
     -- Warrior Stuff
     ["CDB_Spellgroup.Warrior.Overpower"] = "7384:"  ..GetSpellInfo(7384)  ..",7887:" ..GetSpellInfo(7887)  ..",11584:" ..GetSpellInfo(11584)  ..",11585:" ..GetSpellInfo(11585),
     ["CDB_Spellgroup.Warrior.Revenge"] = "6572:"  ..GetSpellInfo(6572) ..",6574:" ..GetSpellInfo(6574) ..",7379:" ..GetSpellInfo(7379) ..",11600:" ..GetSpellInfo(11600) ..",11601:" ..GetSpellInfo(11601) ..",25288:" ..GetSpellInfo(25288) ..",25269:" ..GetSpellInfo(25269) ..",30357:" ..GetSpellInfo(30357),
