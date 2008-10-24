@@ -190,7 +190,8 @@ CooldownButtonsSpells.spellGroups[L["Spellgroup: Shocks"]] = newDict(
         newList(
         "CDB_Spellgroup.Shocks.Frost_Shock",
         "CDB_Spellgroup.Shocks.Flame_Shock",
-        "CDB_Spellgroup.Shocks.Earth_Shock" )
+        "CDB_Spellgroup.Shocks.Earth_Shock",
+        "CDB_Spellgroup.Shocks.Wind_Shock" )
 )
 
 CooldownButtonsSpells.spellGroups[L["Spellgroup: Judgements"]] = newDict(
@@ -224,6 +225,7 @@ LPT:AddData("CDB_Spellgroup", "$Rev$", {
     ["CDB_Spellgroup.Shocks.Frost_Shock"]    = "8056:" ..GetSpellInfo(8056) ..",8058:" ..GetSpellInfo(8058) ..",10472:"..GetSpellInfo(10472)..",10473:"..GetSpellInfo(10473)..",25464:"..GetSpellInfo(25464),
     ["CDB_Spellgroup.Shocks.Flame_Shock"]    = "8050:" ..GetSpellInfo(8050) ..",8052:" ..GetSpellInfo(8052) ..",8053:" ..GetSpellInfo(8053) ..",10447:"..GetSpellInfo(10447)..",10448:"..GetSpellInfo(10448)..",29228:"..GetSpellInfo(29228)..",25457:"..GetSpellInfo(25457),
     ["CDB_Spellgroup.Shocks.Earth_Shock"]    = "8042:" ..GetSpellInfo(8042) ..",8044:" ..GetSpellInfo(8044) ..",8045:" ..GetSpellInfo(8045) ..",8046:" ..GetSpellInfo(8046) ..",10412:"..GetSpellInfo(10412)..",10413:"..GetSpellInfo(10413)..",10414:"..GetSpellInfo(10414)..",25454:"..GetSpellInfo(25454),
+    ["CDB_Spellgroup.Shocks.Wind_Shock"]     = "57994:" ..GetSpellInfo(57994),
     -- Paladin Shields
     ["CDB_Spellgroup.Judgements.Judgement_of_Justice"] = "53407:"..GetSpellInfo(53407),
     ["CDB_Spellgroup.Judgements.Judgement_of_Light"]   = "20271:"..GetSpellInfo(20271),

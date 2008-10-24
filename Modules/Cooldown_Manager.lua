@@ -303,6 +303,9 @@ function CooldownManager:sortCooldowns()
             for _, data in pairs(sortMe[bar]) do
                 self.db[data[2]].order = counts[bar]
                 self.db[data[2]].bar = switchCase[self.db[data[2]].mode](bar)
+                if counts[bar] > CooldownButtons.db.profile.barSettings[bar].buttonCount then
+                    self.db[data[2]].hide = true
+                end
                 counts[bar] = counts[bar] + 1
             end
             self.dbNumPerBar[bar] = counts[bar]
