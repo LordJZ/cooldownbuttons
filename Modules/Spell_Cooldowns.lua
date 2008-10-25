@@ -142,8 +142,23 @@ end
 function _GetKnownCooldown(spellIndex)
     CDBTooltipTextRight2:SetText("")
     CDBTooltipTextRight3:SetText("")
+    CDBTooltipTextRight4:SetText("")
     CDBTooltip:SetSpell(spellIndex, BOOKTYPE_SPELL)
-    return (CDBTooltipTextRight2:GetText() and (DF:Deformat(CDBTooltipTextRight2:GetText(), SPELL_RECAST_TIME_MIN) or DF:Deformat(CDBTooltipTextRight2:GetText(), SPELL_RECAST_TIME_SEC))) or (CDBTooltipTextRight3:GetText() and (DF:Deformat(CDBTooltipTextRight3:GetText(), SPELL_RECAST_TIME_MIN) or DF:Deformat(CDBTooltipTextRight3:GetText(), SPELL_RECAST_TIME_SEC)))
+    return (
+            (
+                CDBTooltipTextRight2:GetText()
+                and (DF:Deformat(CDBTooltipTextRight2:GetText(), SPELL_RECAST_TIME_MIN)
+                or   DF:Deformat(CDBTooltipTextRight2:GetText(), SPELL_RECAST_TIME_SEC))
+            ) or (
+                CDBTooltipTextRight3:GetText()
+                and (DF:Deformat(CDBTooltipTextRight3:GetText(), SPELL_RECAST_TIME_MIN)
+                or   DF:Deformat(CDBTooltipTextRight3:GetText(), SPELL_RECAST_TIME_SEC))
+            ) or (
+                CDBTooltipTextRight4:GetText()
+                and (DF:Deformat(CDBTooltipTextRight4:GetText(), SPELL_RECAST_TIME_MIN)
+                or   DF:Deformat(CDBTooltipTextRight4:GetText(), SPELL_RECAST_TIME_SEC))
+            )
+           )
 end
 
 function _GetSpellName(index)
