@@ -65,10 +65,13 @@ function BarManager:OnUpdate()
                 end
             end
         end
-        if ((not start) or (start == 0)) or (start+duration < GetTime()) then--hideFrame
+        local button = ButtonManager:GetButton(v.button)
+        if start+duration ~= v.endtime then
+            button.cooldown:SetCooldown(start, duration)
+        end
+        if ((not start) or (start == 0)) or (start+duration < GetTime() ) then--hideFrame
             if not v.hide then
                 if self.db[v.bar].showPulse then
-                    local button = ButtonManager:GetButton(v.button)
                     if not button.pulseActive then
                         self:FireSinkMessage(v.name, v.tex)
                         button.pulse.cIdx = v.idx
@@ -78,7 +81,7 @@ function BarManager:OnUpdate()
                     self:FireSinkMessage(v.name, v.tex)
                     CooldownManager:Remove(v.idx)
                 end
-            else -- Silently Remove if hidden, _MAYBE_ later with announcement :)
+            else -- Silently Remove if hidden.
                 CooldownManager:Remove(v.idx)
             end
         else

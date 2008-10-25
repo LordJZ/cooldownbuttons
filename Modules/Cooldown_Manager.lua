@@ -210,7 +210,8 @@ function CooldownManager:registerCooldown(kind, name, id, texture, switch)
             "id"   , id,
             "tex"  , texture,
             "mode" , switch,
-            "button", bID
+            "button", bID,
+            "endtime", (start+duration)
         )
 
         button.used  = true
