@@ -68,6 +68,7 @@ function BarManager:OnUpdate()
         local button = ButtonManager:GetButton(v.button)
         if start+duration ~= v.endtime then
             button.cooldown:SetCooldown(start, duration)
+            v.endtime = start+duration
         end
         if ((not start) or (start == 0)) or (start+duration < GetTime() ) then--hideFrame
             if not v.hide then
