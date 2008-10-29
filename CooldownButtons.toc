@@ -20,6 +20,7 @@ embeds.xml
 Locales\enUS.lua
 Locales\koKR.lua
 Locales\zhCN.lua
+Locales\zhTW.lua
 
 # Core Files
 Core.lua
