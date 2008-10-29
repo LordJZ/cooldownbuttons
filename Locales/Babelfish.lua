@@ -49,7 +49,7 @@ local locale = {
 	--"esES",
 	--"esMX",
 	"zhCN",
-	--"zhTW",
+	"zhTW",
 	"koKR",
 	--"ruRU"
 }
