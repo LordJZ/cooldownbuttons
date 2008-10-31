@@ -127,6 +127,7 @@ L["Spacing"] = true
 L["Spellgroup: Judgements"] = true
 L["Spellgroup: Overpower/Revenge"] = true
 L["Spellgroup: Shocks"] = true
+L["Spellgroup: Shoots"] = true
 L["Spellgroup: Traps"] = true
 L["Spells"] = true
 L["Spelltree: "] = true

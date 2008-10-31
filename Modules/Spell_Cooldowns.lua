@@ -198,6 +198,16 @@ CooldownButtonsSpells.spellGroups[L["Spellgroup: Traps"]] = newDict(
         "CDB_Spellgroup.Traps.Snake_Trap" )
 )
 
+CooldownButtonsSpells.spellGroups[L["Spellgroup: Shoots"]] = newDict(
+    "name",    L["Spellgroup: Shoots"],
+    "texture", "Interface\\Icons\\Ability_Hunter_Assassinate2",
+    "ids",
+        newList(
+        "CDB_Spellgroup.Shoots.Explosive_Shot",
+        "CDB_Spellgroup.Shoots.Arcane_Shot",
+        "CDB_Spellgroup.Shoots.Kill_Shot" )
+)
+
 CooldownButtonsSpells.spellGroups[L["Spellgroup: Shocks"]] = newDict(
     "name", L["Spellgroup: Shocks"],
     "texture", "Interface\\AddOns\\CooldownButtons\\Icons\\shocks.tga",
@@ -236,6 +246,9 @@ LPT:AddData("CDB_Spellgroup", "$Rev$", {
     ["CDB_Spellgroup.Traps.Freezing_Trap"]   = "1499:" ..GetSpellInfo(1499) ..",14310:"..GetSpellInfo(14310)..",14311:"..GetSpellInfo(14311),
     ["CDB_Spellgroup.Traps.Frost_Trap"]      = "13809:"..GetSpellInfo(13809),
     ["CDB_Spellgroup.Traps.Snake_Trap"]      = "34600:"..GetSpellInfo(34600),
+    ["CDB_Spellgroup.Shoots.Explosive_Shot"] = "53301:"..GetSpellInfo(53301)..",60051:"..GetSpellInfo(60051)..",60052:"..GetSpellInfo(60052)..",60053:"..GetSpellInfo(60053),
+    ["CDB_Spellgroup.Shoots.Arcane_Shot"]    = "3044:" ..GetSpellInfo(3044) ..",14281:"..GetSpellInfo(14281)..",14282:"..GetSpellInfo(14282)..",14283:"..GetSpellInfo(14283)..",14284:"..GetSpellInfo(14284)..",14285:"..GetSpellInfo(14285)..",14286:"..GetSpellInfo(14286)..",14287:"..GetSpellInfo(14287)..",27019:"..GetSpellInfo(27019)..",49044:"..GetSpellInfo(49044)..",49045:"..GetSpellInfo(49045),
+    ["CDB_Spellgroup.Shoots.Kill_Shot"]      = "53301:"..GetSpellInfo(53351)..",61005:"..GetSpellInfo(61005)..",61006:"..GetSpellInfo(61006),
     -- Shaman Shocks
     ["CDB_Spellgroup.Shocks.Frost_Shock"]    = "8056:" ..GetSpellInfo(8056) ..",8058:" ..GetSpellInfo(8058) ..",10472:"..GetSpellInfo(10472)..",10473:"..GetSpellInfo(10473)..",25464:"..GetSpellInfo(25464),
     ["CDB_Spellgroup.Shocks.Flame_Shock"]    = "8050:" ..GetSpellInfo(8050) ..",8052:" ..GetSpellInfo(8052) ..",8053:" ..GetSpellInfo(8053) ..",10447:"..GetSpellInfo(10447)..",10448:"..GetSpellInfo(10448)..",29228:"..GetSpellInfo(29228)..",25457:"..GetSpellInfo(25457),

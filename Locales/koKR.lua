@@ -127,6 +127,7 @@ L["Spacing"] = "간격"
 -- L["Spellgroup: Judgements"] = true
 L["Spellgroup: Overpower/Revenge"] = "주문그룹: 제압/복수"
 L["Spellgroup: Shocks"] = "주문그룹: 충격"
+-- L["Spellgroup: Shoots"] = true
 L["Spellgroup: Traps"] = "주문그룹: 덫"
 L["Spells"] = "주문"
 L["Spelltree: "] = "주문특성: "

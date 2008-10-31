@@ -127,6 +127,7 @@ L["Spacing"] = "間距"
 -- L["Spellgroup: Judgements"] = true
 L["Spellgroup: Overpower/Revenge"] = "法術組: 壓制/復仇"
 L["Spellgroup: Shocks"] = "法術組: 震擊"
+-- L["Spellgroup: Shoots"] = true
 L["Spellgroup: Traps"] = "法術組: 陷阱"
 L["Spells"] = "法術"
 L["Spelltree: "] = "技能樹"
