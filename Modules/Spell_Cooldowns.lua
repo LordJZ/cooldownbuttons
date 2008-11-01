@@ -57,7 +57,7 @@ function CooldownButtonsSpells:SPELL_UPDATE_COOLDOWN()
         local spellName  = spellData.spellName
         local spellIndex = spellData.spellIndex
         local start, duration, enable = GetSpellCooldown(spellIndex, BOOKTYPE_SPELL)
-        if enable == 1 and start > 0 and duration > 3 then
+        if enable == 1 and start > 0 and duration >= 3 then
             spellTreeTable[spellData.spellTree][start*duration] = 1 + (spellTreeTable[spellData.spellTree][start*duration] or 0)
             if not CooldownManager:CheckRegistred(spellName) then
                 spellsToAdd[spellName] = newList(self.spellTable[spellName].spellIndex, start, duration)
@@ -100,7 +100,7 @@ function CooldownButtonsSpells:PET_BAR_UPDATE_COOLDOWN()
         local spellName = GetPetActionInfo(spellIndex)
         if spellName ~= nil then
             local start, duration, enable = GetPetActionCooldown(spellIndex)
-            if enable == 1 and start > 0 and duration > 3 then
+            if enable == 1 and start > 0 and duration >= 3 then
                 local texture = select(3, GetSpellInfo(spellName)) or select(3, GetPetActionInfo(spellIndex))
                 if not CooldownManager:CheckRegistred(spellName) then
                     CooldownManager:Add("PetAction", spellName, spellIndex, texture)
