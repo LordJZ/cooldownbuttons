@@ -138,6 +138,7 @@ function BarManager:HideAnchor(module)
     anchor:SetMovable(false)
     anchor:EnableMouse(false)
     anchor.used = false
+    anchor.anchorIdx = nils
     anchor:SetFrameStrata("MEDIUM")
     anchor:Hide()
 end

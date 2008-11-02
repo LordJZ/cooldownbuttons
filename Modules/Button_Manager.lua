@@ -60,9 +60,11 @@ function ButtonManager:CreateButton()
     button:SetScript("OnDragStart", function(self) if self:IsMovable() then self.movin = true; self:StartMoving(); end end)
     button:SetScript("OnDragStop",  function(self) if self:IsMovable() then self:StopMovingOrSizing(); self:SaveAnchorPos() end end )
     button:SetScript("OnLeave",     function() GameTooltip:Hide()                         end)
-    button:SetScript("OnEnter",     function(self) 
-                                        GameTooltip:SetOwner(this, "ANCHOR_CURSOR");
-                                        GameTooltip:SetText(CooldownManager.db[self.cdIdx].name)
+    button:SetScript("OnEnter",     function(self)
+                                        if not self.anchorIdx then
+                                            GameTooltip:SetOwner(this, "ANCHOR_CURSOR");
+                                            GameTooltip:SetText(CooldownManager.db[self.cdIdx].name)
+                                        end
                                     end)
     button.SaveAnchorPos = function(self)
         local data = BarManager.anchorDB[self.anchorIdx]
