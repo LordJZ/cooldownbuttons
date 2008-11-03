@@ -9,7 +9,7 @@
 
 ## SavedVariables: CooldownButtonsDB, CooldownButtonsSavedDB
 ## DefaultState: Enabled
-## OptionalDeps: Ace3, LibSharedMedia-3.0, LibPeriodicTable-3.1, LibSink-2.0, AceGUI-3.0-SharedMediaWidgets
+## OptionalDeps: Ace3, LibSharedMedia-3.0, LibPeriodicTable-3.1, LibSink-2.0, AceGUI-3.0-SharedMediaWidgets, ButtonFacade
 
 # Loading Embedded Libs
 #@no-lib-strip@
