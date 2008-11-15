@@ -163,6 +163,12 @@ function CooldownButtons:OnEnable()
     
     CooldownButtons:GetModule("Config"):AddBarSettings(L["Expiring"], "Expiring", self.db.profile.barSettings["Expiring"], 30, nil)
     CooldownButtons:GetModule("Config"):AddBarSettings(L["Saved"], "Saved", self.db.profile.barSettings["Saved"], 40, true)
+    
+    local _, cls = UnitClass("player")
+    if cls == "DEATHKNIGHT" then
+        self:Print("Hey Death Knight Player, Cooldown Buttons has some issues with DK. It does not correctly Manage the Rune Cooldowns, currently i don't have much time to play so i also don't have much time to try to fix this issue. My priority is hiting Level 80 with my main char to not miss first Raids and then fixing CDB, but i took the time tomake a small hotfix. DKs now have ALL Spells in Cooldown Settings, so you can Hide every Spell you dont want to see.")
+        self:Print("If you have any Ideas or Suggestions to fix the Death Knight Problem just post it on wowace forums (|cffaaaaaahttp://forums.wowace.com/showthread.php?t=11289|r) or Create a Ticket on CDB Project Page: |cffaaaaaahttp://www.wowace.com/projects/cooldownbuttons/|r")
+    end
 end
 
 function CooldownButtons:gsub(text, variable, value)

@@ -233,11 +233,6 @@ CooldownButtonsSpells.spellGroups[L["Spellgroup: Overpower/Revenge"]] = newDict(
     "ids", newList( "CDB_Spellgroup.Warrior.Overpower", "CDB_Spellgroup.Warrior.Revenge" )
 )
 
-local WRATH_ERROR_FIX = ""
-if GetBuildInfo() == "2.4.3" then
-    WRATH_ERROR_FIX = ",5573:"..GetSpellInfo(5573)..",1020:"..GetSpellInfo(1020)
-end
-
 -- LPT Spell Database
 LPT:AddData("CDB_Spellgroup", "$Rev$", {
     -- Hunter Traps

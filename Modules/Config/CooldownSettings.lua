@@ -86,8 +86,10 @@ LibStub("AceConfigRegistry-3.0"):NotifyChange("Cooldown Buttons")
     for i = 2, GetNumSpellTabs() do
         spellArgs["00SpellTree_NR_"..i] = createSpellConfigStuff(spellTree[i].treeName, true)
     end
+    local _, cls = UnitClass("player")
     for k, v in SpellsModule:IterateSpellTable() do
-        if v.spellknownCD then
+        if v.spellknownCD or (cls == "DEATHKNIGHT") 
+        or (cls == "SHAMAN" and v.spellID == 20608)then
             spellArgs[v.spellID] = createSpellConfigStuff(k)
         end
     end
