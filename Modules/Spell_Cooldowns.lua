@@ -134,6 +134,10 @@ function CooldownButtonsSpells:ResetSpells()
                     "spellTexture" , GetSpellTexture(spellIndex, BOOKTYPE_SPELL),
                     "spellTree"    , spellTree
                 )
+                local _, class = UnitClass("player")
+                if class == "DEATHKNIGHT" and self.spellTable[spellName].spellknownCD == nil then
+                    self.spellTable[spellName] = del(self.spellTable[spellName])
+                end
             end
         end
     end
