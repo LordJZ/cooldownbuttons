@@ -2,9 +2,13 @@
 ## Title: Cooldown Buttons
 ## Author: Netrox (Sen'Jin-EU)
 ## Notes: Shows simple Buttons for your Cooldowns :)
-## Version: @project-version@ 
+## Version: 2.1.16 
+## X-Curse-Packaged-Version: 2.1.16
+## X-Curse-Project-Name: CooldownButtons
+## X-Curse-Project-ID: cooldownbuttons
+## X-Curse-Repository-ID: wow/cooldownbuttons/mainline
 
-## X-ReleaseDate: @project-date-iso@
+## X-ReleaseDate: 2008-12-20T08:44:52Z
 ## X-Website: http://www.wowace.com/projects/cooldownbuttons/
 
 ## SavedVariables: CooldownButtonsDB, CooldownButtonsSavedDB

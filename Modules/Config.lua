@@ -1,7 +1,7 @@
 --[[
 Name: CooldownButtons
-Project Revision: @project-revision@
-File Revision: @file-revision@ 
+Project Revision: 223
+File Revision: 190 
 Author(s): Netrox (netrox@sourceway.eu)
 Website: http://www.wowace.com/projects/cooldownbuttons/
 SVN: svn://svn.wowace.com/wow/cooldownbuttons/mainline/trunk

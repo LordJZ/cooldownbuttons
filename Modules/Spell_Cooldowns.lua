@@ -1,7 +1,7 @@
 --[[
 Name: CooldownButtons
-Project Revision: @project-revision@
-File Revision: @file-revision@ 
+Project Revision: 223
+File Revision: 223 
 Author(s): Netrox (netrox@sourceway.eu)
 Website: http://www.wowace.com/projects/cooldownbuttons/
 SVN: svn://svn.wowace.com/wow/cooldownbuttons/mainline/trunk
@@ -238,7 +238,7 @@ CooldownButtonsSpells.spellGroups[L["Spellgroup: Overpower/Revenge"]] = newDict(
 )
 
 -- LPT Spell Database
-LPT:AddData("CDB_Spellgroup", "$Rev$", {
+LPT:AddData("CDB_Spellgroup", "$Rev: 223 $", {
     -- Hunter Traps
     ["CDB_Spellgroup.Traps.Immolation_Trap"] = "13795:"..GetSpellInfo(13795)..",14302:"..GetSpellInfo(14302)..",14303:"..GetSpellInfo(14303)..",14304:"..GetSpellInfo(14304)..",14305:"..GetSpellInfo(14305)..",27023:"..GetSpellInfo(27023),
     ["CDB_Spellgroup.Traps.Explosive_Trap"]  = "13813:"..GetSpellInfo(13813)..",14316:"..GetSpellInfo(14316)..",14317:"..GetSpellInfo(14317)..",27025:"..GetSpellInfo(27025),

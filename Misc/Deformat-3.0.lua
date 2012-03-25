@@ -1,6 +1,6 @@
 --[[
 Name: Deformat-3.0
-Revision: $Rev$
+Revision: $Rev: 183 $
 Author(s): Deformat-2.0 by ckknight (ckknight@gmail.com)
 LibStubbed by: Netrox (netrox@sourceway.eu)
 Website: http://ckknight.wowinterface.com/
@@ -12,7 +12,7 @@ License: LGPL v2.1
 ]]
 
 local MAJOR_VERSION = "LibDeformat-3.0"
-local MINOR_VERSION = "$Revision$"
+local MINOR_VERSION = "$Revision: 183 $"
 
 local Deformat = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
 

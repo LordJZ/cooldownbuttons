@@ -1,7 +1,7 @@
 --[[
 Name: CooldownButtons
-Project Revision: @project-revision@
-File Revision: @file-revision@ 
+Project Revision: 223
+File Revision: 223 
 Author(s): Netrox (netrox@sourceway.eu)
 Website: http://www.wowace.com/projects/cooldownbuttons/
 SVN: svn://svn.wowace.com/wow/cooldownbuttons/mainline/trunk
@@ -128,8 +128,8 @@ local defaults, defaultSaved
 local updateNotifyPopup
 
 -- Revision/Version
-if "@project-version@" ~= "@project".."-version@" then
-    CooldownButtons.rev = "@project-version@"
+if "2.1.16" ~= "@project".."-version@" then
+    CooldownButtons.rev = "2.1.16"
 else
     CooldownButtons.rev = "SVN"    
 end
