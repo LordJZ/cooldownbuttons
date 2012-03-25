@@ -52,7 +52,7 @@ function CooldownButtonsSpells:SPELL_UPDATE_COOLDOWN()
     local treeTable   = self.treeTable
     local spellTable  = self.spellTable
     local spellsToAdd = newList()
-    local spellTreeTable = newList(newList(),newList(),newList(),newList())
+    local spellTreeTable = newList(newList(),newList(),newList(),newList(),newList())
     for _, spellData in pairs(self.spellTable) do
         local spellName  = spellData.spellName
         local spellIndex = spellData.spellIndex
@@ -147,7 +147,7 @@ function _GetKnownCooldown(spellIndex)
     CDBTooltipTextRight2:SetText("")
     CDBTooltipTextRight3:SetText("")
     CDBTooltipTextRight4:SetText("")
-    CDBTooltip:SetSpell(spellIndex, BOOKTYPE_SPELL)
+    CDBTooltip:SetSpellBookItem(spellIndex, BOOKTYPE_SPELL)
     return (
             (
                 CDBTooltipTextRight2:GetText()
@@ -166,7 +166,7 @@ function _GetKnownCooldown(spellIndex)
 end
 
 function _GetSpellName(index)
-    local spell, rank = GetSpellName(index, BOOKTYPE_SPELL)
+    local spell, rank = GetSpellBookItemName(index, BOOKTYPE_SPELL)
     local spellLink   = GetSpellLink(index, BOOKTYPE_SPELL)
     local spellID     = select(3, string_find(spellLink, "spell:(%d+)"))
     local group       = select(2, LPT:ItemInSet(spellID, "CDB_Spellgroup"))
@@ -223,14 +223,6 @@ CooldownButtonsSpells.spellGroups[L["Spellgroup: Shocks"]] = newDict(
         "CDB_Spellgroup.Shocks.Wind_Shock" )
 )
 
-CooldownButtonsSpells.spellGroups[L["Spellgroup: Judgements"]] = newDict(
-    "name", "Spellgroup: Judgements",
-    "texture", "Interface\\Icons\\Spell_Holy_RighteousFury",
-    "ids", newList( "CDB_Spellgroup.Judgements.Judgement_of_Wisdom",
-        "CDB_Spellgroup.Judgements.Judgement_of_Justice",
-        "CDB_Spellgroup.Judgements.Judgement_of_Light")
-)
-
 CooldownButtonsSpells.spellGroups[L["Spellgroup: Overpower/Revenge"]] = newDict(
     "name", L["Spellgroup: Overpower/Revenge"],
     "texture", "Interface\\AddOns\\CooldownButtons\\Icons\\warrior_2spells.tga",
@@ -240,25 +232,21 @@ CooldownButtonsSpells.spellGroups[L["Spellgroup: Overpower/Revenge"]] = newDict(
 -- LPT Spell Database
 LPT:AddData("CDB_Spellgroup", "$Rev: 223 $", {
     -- Hunter Traps
-    ["CDB_Spellgroup.Traps.Immolation_Trap"] = "13795:"..GetSpellInfo(13795)..",14302:"..GetSpellInfo(14302)..",14303:"..GetSpellInfo(14303)..",14304:"..GetSpellInfo(14304)..",14305:"..GetSpellInfo(14305)..",27023:"..GetSpellInfo(27023),
-    ["CDB_Spellgroup.Traps.Explosive_Trap"]  = "13813:"..GetSpellInfo(13813)..",14316:"..GetSpellInfo(14316)..",14317:"..GetSpellInfo(14317)..",27025:"..GetSpellInfo(27025),
-    ["CDB_Spellgroup.Traps.Freezing_Trap"]   = "1499:" ..GetSpellInfo(1499) ..",14310:"..GetSpellInfo(14310)..",14311:"..GetSpellInfo(14311),
+    ["CDB_Spellgroup.Traps.Immolation_Trap"] = "13795:"..GetSpellInfo(13795)..",82945:"..GetSpellInfo(82945),
+    ["CDB_Spellgroup.Traps.Explosive_Trap"]  = "13813:"..GetSpellInfo(13813)..",82939:"..GetSpellInfo(82939),
+    ["CDB_Spellgroup.Traps.Freezing_Trap"]   = "1499:" ..GetSpellInfo(1499) ..",60192:"..GetSpellInfo(60192),
     ["CDB_Spellgroup.Traps.Frost_Trap"]      = "13809:"..GetSpellInfo(13809),
     ["CDB_Spellgroup.Traps.Snake_Trap"]      = "34600:"..GetSpellInfo(34600),
-    ["CDB_Spellgroup.Shoots.Explosive_Shot"] = "53301:"..GetSpellInfo(53301)..",60051:"..GetSpellInfo(60051)..",60052:"..GetSpellInfo(60052)..",60053:"..GetSpellInfo(60053),
-    ["CDB_Spellgroup.Shoots.Arcane_Shot"]    = "3044:" ..GetSpellInfo(3044) ..",14281:"..GetSpellInfo(14281)..",14282:"..GetSpellInfo(14282)..",14283:"..GetSpellInfo(14283)..",14284:"..GetSpellInfo(14284)..",14285:"..GetSpellInfo(14285)..",14286:"..GetSpellInfo(14286)..",14287:"..GetSpellInfo(14287)..",27019:"..GetSpellInfo(27019)..",49044:"..GetSpellInfo(49044)..",49045:"..GetSpellInfo(49045),
-    ["CDB_Spellgroup.Shoots.Kill_Shot"]      = "53301:"..GetSpellInfo(53351)..",61005:"..GetSpellInfo(61005)..",61006:"..GetSpellInfo(61006),
+    ["CDB_Spellgroup.Shoots.Explosive_Shot"] = "53301:"..GetSpellInfo(53301),
+    ["CDB_Spellgroup.Shoots.Arcane_Shot"]    = "3044:" ..GetSpellInfo(3044),
+    ["CDB_Spellgroup.Shoots.Kill_Shot"]      = "53301:"..GetSpellInfo(53351),
     -- Shaman Shocks
-    ["CDB_Spellgroup.Shocks.Frost_Shock"]    = "8056:" ..GetSpellInfo(8056) ..",8058:" ..GetSpellInfo(8058) ..",10472:"..GetSpellInfo(10472)..",10473:"..GetSpellInfo(10473)..",25464:"..GetSpellInfo(25464)..",49235:"..GetSpellInfo(49235)..",49236:"..GetSpellInfo(49236),
-    ["CDB_Spellgroup.Shocks.Flame_Shock"]    = "8050:" ..GetSpellInfo(8050) ..",8052:" ..GetSpellInfo(8052) ..",8053:" ..GetSpellInfo(8053) ..",10447:"..GetSpellInfo(10447)..",10448:"..GetSpellInfo(10448)..",29228:"..GetSpellInfo(29228)..",25457:"..GetSpellInfo(25457)..",49232:"..GetSpellInfo(49232)..",49233:"..GetSpellInfo(49233), 
-    ["CDB_Spellgroup.Shocks.Earth_Shock"]    = "8042:" ..GetSpellInfo(8042) ..",8044:" ..GetSpellInfo(8044) ..",8045:" ..GetSpellInfo(8045) ..",8046:" ..GetSpellInfo(8046) ..",10412:"..GetSpellInfo(10412)..",10413:"..GetSpellInfo(10413)..",10414:"..GetSpellInfo(10414)..",25454:"..GetSpellInfo(25454)..",49230:"..GetSpellInfo(49230)..",49231:"..GetSpellInfo(49231), 
+    ["CDB_Spellgroup.Shocks.Frost_Shock"]    = "8056:" ..GetSpellInfo(8056),
+    ["CDB_Spellgroup.Shocks.Flame_Shock"]    = "8050:" ..GetSpellInfo(8050),
+    ["CDB_Spellgroup.Shocks.Earth_Shock"]    = "8042:" ..GetSpellInfo(8042),
     ["CDB_Spellgroup.Shocks.Wind_Shock"]     = "57994:" ..GetSpellInfo(57994),
-    -- Paladin Shields
-    ["CDB_Spellgroup.Judgements.Judgement_of_Justice"] = "53407:"..GetSpellInfo(53407),
-    ["CDB_Spellgroup.Judgements.Judgement_of_Light"]   = "20271:"..GetSpellInfo(20271),
-    ["CDB_Spellgroup.Judgements.Judgement_of_Wisdom"]  = "53408:"..GetSpellInfo(53408),
     -- Warrior Stuff
-    ["CDB_Spellgroup.Warrior.Overpower"] = "7384:"  ..GetSpellInfo(7384)  ..",7887:" ..GetSpellInfo(7887)  ..",11584:" ..GetSpellInfo(11584)  ..",11585:" ..GetSpellInfo(11585),
-    ["CDB_Spellgroup.Warrior.Revenge"] = "6572:"  ..GetSpellInfo(6572) ..",6574:" ..GetSpellInfo(6574) ..",7379:" ..GetSpellInfo(7379) ..",11600:" ..GetSpellInfo(11600) ..",11601:" ..GetSpellInfo(11601) ..",25288:" ..GetSpellInfo(25288) ..",25269:" ..GetSpellInfo(25269) ..",30357:" ..GetSpellInfo(30357),
+    ["CDB_Spellgroup.Warrior.Overpower"] = "7384:"..GetSpellInfo(7384),
+    ["CDB_Spellgroup.Warrior.Revenge"] = "6572:"..GetSpellInfo(6572),
 }) 
 --/run ChatFrame1:AddMessage(tostring(select(1,GetSpellInfo(1020))));
