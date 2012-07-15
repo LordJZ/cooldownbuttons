@@ -123,7 +123,11 @@ function CooldownButtonsSpells:ResetSpells()
         for j = 1, num do
             local spellIndex = offset + j
             local spellName, spellID  = _GetSpellName(spellIndex, BOOKTYPE_SPELL)
-            if not self.spellTable[spellName] or (self.spellTable[spellName] and (self.spellTable[spellName]["spellIndex"] ~= spellIndex) and (self.spellTable[spellName]["spellID"] == spellID)) then
+            if spellName and (not self.spellTable[spellName] or (
+                self.spellTable[spellName] and
+                (self.spellTable[spellName]["spellIndex"] ~= spellIndex) and
+                (self.spellTable[spellName]["spellID"] == spellID)))
+            then
                 if self.spellTable[spellName] then self.spellTable[spellName] = del(self.spellTable[spellName]) end
 
                 self.spellTable[spellName] = newDict(
@@ -168,6 +172,10 @@ end
 function _GetSpellName(index)
     local spell, rank = GetSpellBookItemName(index, BOOKTYPE_SPELL)
     local spellLink   = GetSpellLink(index, BOOKTYPE_SPELL)
+    if not spellLink then
+        return nil, nil
+    end
+
     local spellID     = select(3, string_find(spellLink, "spell:(%d+)"))
     local group       = select(2, LPT:ItemInSet(spellID, "CDB_Spellgroup"))
     local groupKey    = nil
