@@ -247,7 +247,7 @@ LPT:AddData("CDB_Spellgroup", "$Rev: 223 $", {
     ["CDB_Spellgroup.Traps.Snake_Trap"]      = "34600:"..GetSpellInfo(34600),
     ["CDB_Spellgroup.Shoots.Explosive_Shot"] = "53301:"..GetSpellInfo(53301),
     ["CDB_Spellgroup.Shoots.Arcane_Shot"]    = "3044:" ..GetSpellInfo(3044),
-    ["CDB_Spellgroup.Shoots.Kill_Shot"]      = "53301:"..GetSpellInfo(53351),
+    ["CDB_Spellgroup.Shoots.Kill_Shot"]      = "53351:"..GetSpellInfo(53351),
     -- Shaman Shocks
     ["CDB_Spellgroup.Shocks.Frost_Shock"]    = "8056:" ..GetSpellInfo(8056),
     ["CDB_Spellgroup.Shocks.Flame_Shock"]    = "8050:" ..GetSpellInfo(8050),
