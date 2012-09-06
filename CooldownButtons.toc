@@ -1,6 +1,6 @@
-## Interface: 30000
+﻿## Interface: 50001
 ## Title: Cooldown Buttons
-## Author: Netrox (Sen'Jin-EU)
+## Author: Netrox (Bacardî on Sen'Jin-EU[Alliance])
 ## Notes: Shows simple Buttons for your Cooldowns :)
 ## Version: @project-version@ 
 
@@ -11,42 +11,30 @@
 ## DefaultState: Enabled
 ## OptionalDeps: Ace3, LibSharedMedia-3.0, LibPeriodicTable-3.1, LibSink-2.0, AceGUI-3.0-SharedMediaWidgets, ButtonFacade
 
-# Loading Embedded Libs
 #@no-lib-strip@
-embeds.xml
+# Loading Embedded Libs
+libs\AceLocale-3.0\AceLocale-3.0.xml
+Libs\AceDB-3.0\AceDB-3.0.xml
 #@end-no-lib-strip@
 
-# Localizations
-Locales\enUS.lua
-Locales\koKR.lua
-Locales\zhCN.lua
-Locales\zhTW.lua
+# Locales
+locales.xml
 
 # Core Files
-Core.lua
+core.lua
+bars.lua
+spells.lua
+items.lua
+cooldownsets.lua
 
-# Miscellaneous
+#@do-not-package@
+Options\Libs\AceConfig-3.0\AceConfigDialog-3.0-API.lua
+Options\Libs\AceGUI-3.0\AceGUI-3.0-CDB-Dropdown.lua
+Options\Options.lua
+Options\Options_Bar.lua
+Options\Options_Cooldowns.lua
+Options\Options_Announcements.lua
+#@end-do-not-package@
+
+# deformat lib
 Misc\Deformat-3.0.lua
-
-# Core Modules
-Modules\Config.lua
-
-# Manager Modules
-Modules\Layout_Manager.lua
-Modules\Button_Manager.lua
-Modules\Cooldown_Manager.lua
-Modules\Bar_Manager.lua
-
-# Cooldown Modules
-Modules\Spell_Cooldowns.lua
-Modules\Item_Cooldowns.lua
-
-# Additional Config Modules
-Modules\Config\__API__.lua
-Modules\Config\BarSettings.lua
-Modules\Config\CooldownSettings.lua
-Modules\Config\CooldownSettings_Pet.lua
-Modules\Config\ItemCooldownGrouping.lua
-Modules\Config\AnnouncementsSettings.lua
-Modules\Config\ClickAnnouncements.lua
-Modules\Config\FAQ.lua

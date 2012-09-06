@@ -1,0 +1,28 @@
+﻿## Interface: 50001
+## Title: CooldownButtons Options
+## Author: Netrox (Bacardî on Sen'Jin-EU[Alliance])
+## Notes: Options for CooldownButtons
+## Version: @project-version@
+
+## X-ReleaseDate: @project-date-iso@
+## X-Website: http://www.wowace.com/projects/cooldownbuttons/
+
+## Dependencies: CooldownButtons
+## LoadOnDemand: 1
+
+## DefaultState: Enabled
+## OptionalDeps: Ace3
+
+#@no-lib-strip@
+# Loading Embedded Libs
+embeds.xml
+#@end-no-lib-strip@
+
+#######################
+Libs\AceConfig-3.0\AceConfigDialog-3.0-API.lua
+Libs\AceGUI-3.0\AceGUI-3.0-CDB-Dropdown.lua
+#######################
+Options.lua
+Options_Bar.lua
+Options_Cooldowns.lua
+Options_Announcements.lua
