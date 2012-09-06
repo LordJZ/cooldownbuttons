@@ -19,8 +19,10 @@ embeds.xml
 #@end-no-lib-strip@
 
 #######################
-Libs\AceConfig-3.0\AceConfigDialog-3.0-API.lua
-Libs\AceGUI-3.0\AceGUI-3.0-CDB-Dropdown.lua
+Libs\AceConfig-3.0\AceConfig-3.0.xml
+Libs\AceGUI-3.0\AceGUI-3.0.xml
+Misc\AceConfigDialog-3.0-API.lua
+Misc\AceGUI-3.0-CDB-Dropdown.lua
 #######################
 Options.lua
 Options_Bar.lua

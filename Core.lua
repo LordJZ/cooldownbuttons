@@ -54,13 +54,6 @@ function CDB:PLAYER_LOGIN(event, addon)
                     used = false,
                     posx = 500,
                     posy = 500,
-                    -- LBF Config
-                    LBF_Data = {
-                        SkinID   = "Blizzard",
-                        Gloss    = 0,
-                        Backdrop = false,
-                        Colors   = {},
-                    },
                     -- Button Layout
                     count = 10,
                     scale = 1,

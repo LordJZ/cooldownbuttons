@@ -3,7 +3,7 @@ CDB.engine = engine
 
 local LS2 = LibStub("LibSink-2.0")
 local LSM = LibStub("LibSharedMedia-3.0")
-local LBF = LibStub("LibButtonFacade", true)
+local MSQ = LibStub("Masque", true)
 local newList, newDict, del, deepDel, deepCopy = CDB.GetRecyclingFunctions()
 local math_ceil = math.ceil
 local gsub = CDB.gsub
@@ -156,11 +156,7 @@ function engine:Init()
     self.db = CDB.db
     self.cooldowns = CDB.cooldowns
     self.cooldownsSort = CDB.cooldownsSort
-    
-    if LBF then
-		LBF:RegisterSkinCallback("Cooldown Buttons", self.SkinChanged, self)
-    end
-    
+
     self.bars = {}
     for name, conf in pairs(self.db.profile.bars) do
         self.bars[name] = self:CreateBar(name, conf)
@@ -310,12 +306,8 @@ function engine:CreateBar(name, db)
     self:SetLabelFont(bar, db)
     self:SetSpiralStuff(bar, db)
     
-    if LBF then
-        self.barGroup = LBF:Group("Cooldown Buttons", name)
-        self.barGroup.SkinID   = db.LBF_Data.SkinID
-        self.barGroup.Backdrop = db.LBF_Data.Backdrop
-        self.barGroup.Gloss    = db.LBF_Data.Gloss
-        self.barGroup.Colors   = db.LBF_Data.Colors
+    if MSQ then
+        self.barGroup = MSQ:Group("Cooldown Buttons", name)
         for k, v in pairs(bar.buttons) do
             self.barGroup:AddButton(v)
         end
