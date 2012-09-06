@@ -44,7 +44,6 @@ function spells:Init()
 end
 
 function spells:SPELL_UPDATE_COOLDOWN()
-DEFAULT_CHAT_FRAME:AddMessage("SPELL_UPDATE_COOLDOWN")
     local treeTable   = self.treeTable
     local spellTable  = self.spellTable
     local spellsToAdd = newList()
@@ -106,7 +105,6 @@ function spells:PET_BAR_UPDATE_COOLDOWN()
 end
 
 function spells:SPELLS_CHANGED()
-DEFAULT_CHAT_FRAME:AddMessage("SPELLS_CHANGED")
     local treeTable   = self.treeTable
     local spellTable  = self.spellTable
     for spellTree = 1, 2 do -- General Tab and current Spec
@@ -161,7 +159,6 @@ function spells:GetKnownCooldown(spellIndex, spellID)
     CDBTooltipTextRight3:SetText("")
     CDBTooltipTextRight4:SetText("")
     if spellIndex == nil then
-    DEFAULT_CHAT_FRAME:AddMessage(spellID)
     	CDBTooltip:SetSpellByID(spellID)
     else
     	CDBTooltip:SetSpellBookItem(spellIndex, BOOKTYPE_SPELL)
