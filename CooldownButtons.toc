@@ -26,6 +26,8 @@ items.lua
 cooldownsets.lua
 
 #@do-not-package@
+Options\Misc\AceConfigDialog-3.0-API.lua
+Options\Misc\AceGUI-3.0-CDB-Dropdown.lua
 Options\Options.lua
 Options\Options_Bar.lua
 Options\Options_Cooldowns.lua
