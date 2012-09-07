@@ -63,9 +63,32 @@ local function OnClick(self)
 end
 
 local function OnDragStart(self)
+    if self:IsMovable() then
+        self.movin = true
+        self:StartMoving()
+    end
 end
 
 local function OnDragStop(self)
+    if self:IsMovable() then
+        self:StopMovingOrSizing()
+        self:SaveAnchorPos()
+    end 
+end
+
+local function SaveAnchorPos(self)
+	ChatFrame3:AddMessage(self:GetLeft() ..", ".. self:GetBottom() )
+	local bar = engine.bars[self.name]
+	local db = bar.db
+	ChatFrame3:AddMessage(bar.db.posx )
+	ChatFrame3:AddMessage(bar.db.posy )
+	
+	db.posx = self:GetLeft()
+	db.posy = self:GetBottom()
+	
+    self.movin = false
+    engine:SetBarPoints(bar, db)
+    LibStub("AceConfigRegistry-3.0"):NotifyChange("Cooldown Buttons")
 end
 
 local function create(name, i)
@@ -79,7 +102,7 @@ local function create(name, i)
         
         button = CreateFrame("Button", buttonname, UIParent, "ActionButtonTemplate")
 
-        button.idx = i
+        button.name = name
         button:SetClampedToScreen(true)
         button:EnableMouse(false)
         button:RegisterForDrag("LeftButton")
@@ -91,6 +114,7 @@ local function create(name, i)
         button:SetScript("OnDragStop",  OnDragStop)
         button:SetScript("OnShow", function(self) self.text:DoShow() self.lastUpdate = 0 end)
         button:SetScript("OnHide", function(self) self.text:Hide() end)
+        button.SaveAnchorPos = SaveAnchorPos
         
         button.texture  = _G[("%sIcon"):format(button:GetName())]
         button.cooldown = _G[("%sCooldown"):format(button:GetName())]
@@ -293,6 +317,11 @@ end
 
 function engine:CreateBar(name, db)
     local bar = { db = db, }
+    bar.anchor = create(name, "Anchor")
+    --bar.anchor:Show()
+    bar.anchor:SetMovable(true)
+    bar.anchor:SetFrameStrata("HIGH")
+    bar.anchor.texture:SetTexture("Interface\\Icons\\ability_seal")
     -- create buttons
     bar.buttons = { }
     bar.btncount = db.count
@@ -308,6 +337,7 @@ function engine:CreateBar(name, db)
     
     if MSQ then
         self.barGroup = MSQ:Group("Cooldown Buttons", name)
+        self.barGroup:AddButton(bar.anchor)
         for k, v in pairs(bar.buttons) do
             self.barGroup:AddButton(v)
         end
@@ -418,11 +448,12 @@ do
     }
     function engine:SetBarPoints(bar, db)
         local buttons = bar.buttons
-        for k, v in pairs(buttons) do
-            v:ClearAllPoints()
+        for k, button in pairs(buttons) do
+            button:ClearAllPoints()
             if not db.multirow then
                 if k == 1 then -- set anchor
-                    v:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", db.posx, db.posy)
+                    button:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", db.posx, db.posy)
+                    bar.anchor:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", db.posx, db.posy)
                 else -- i > 1
                     local x, y = 0, 0
                     if db.direction == "left" then
@@ -434,11 +465,11 @@ do
                     elseif db.direction == "down" then 
                         y = 0 - db.spacing
                     end
-                    v:SetPoint(A[0][db.direction], buttons[k-1], A[1][db.direction], x, y)
+                    button:SetPoint(A[0][db.direction], buttons[k-1], A[1][db.direction], x, y)
                 end
             else
                 if k == 1 then -- set anchor
-                    v:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", db.posx, db.posy)
+                    button:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", db.posx, db.posy)
 --ChatFrame3:AddMessage("first")
                 else  -- i > 1
                     local point, relativeTo, relativePoint, xOffset, yOffset
@@ -488,7 +519,7 @@ do
                             yOffset = 0
                         end
                     end
-                    v:SetPoint(point, relativeTo, relativePoint, xOffset, yOffset)
+                    button:SetPoint(point, relativeTo, relativePoint, xOffset, yOffset)
                 end        
             end
         end

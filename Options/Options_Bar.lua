@@ -98,7 +98,14 @@ end
 function CDB_Options:AddBarSettings(bars, name, db)
     bars[name] = API:createGroup(name)
     do
-        bars[name].args.anchor = API:createExecute(L["BAR_SHOW_ANCHOR"], L["BAR_SHOW_ANCHOR_DESC"], "", function() end)
+        bars[name].args.anchor = API:createExecute(L["BAR_SHOW_ANCHOR"], L["BAR_SHOW_ANCHOR_DESC"], "", function()
+                local bar = CDB.engine.bars[name].anchor
+                if bar:IsShown() then
+                    bar:Hide()
+                else
+                    bar:Show()
+                end
+        end)
         bars[name].args.remove = API:createExecute(L["BAR_REMOVE_BAR"], L["BAR_REMOVE_BAR_DESC"], "", function() self:RemoveBarSettings(bars, name) end, L["BAR_REMOVE_CONFIRM"])
     end
 
