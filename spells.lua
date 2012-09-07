@@ -116,20 +116,26 @@ function spells:SPELLS_CHANGED()
         for j = 1, num do
             local spellIndex = offset + j
             local spellName, spellID, texture = self:GetSpellInfo(spellIndex, BOOKTYPE_SPELL)
-            if spellName ~= nil then -- TODO: Handle Flyout
+            if spellName ~= nil then
             	self:insertSpell(spellName, spellID, texture, spellIndex)            
             end
         end
     end
     for i = 1, GetNumFlyouts() do
     	local flyoutId = GetFlyoutID(i)
-    	local _, _, flyoutSlots, flyoutIsKnown = GetFlyoutInfo(flyoutId);
+    	local flyoutName, _, flyoutSlots, flyoutIsKnown = GetFlyoutInfo(flyoutId);
     	if flyoutIsKnown then
     		for slot = 1, flyoutSlots do
 				local spellID, isKnown = GetFlyoutSlotInfo(flyoutId, slot)
 				if isKnown then
 					local spellName, _, texture = GetSpellInfo(spellID)
-	            	self:insertSpell(spellName, spellID, texture, nil)          
+					if spellName == nil then
+                        if spellID ~= 13219 then -- Allready known: Old Wound Poison thats no longer available... http://old.wowhead.com/spell=13219
+                            DEFAULT_CHAT_FRAME:AddMessage("Unknown SpellID "..spellID.." in Flyout #"..flyoutId.."("..flyoutName..") please report on http://www.wowace.com/addons/cooldownbuttons/")
+                        end
+					else
+						self:insertSpell(spellName, spellID, texture, nil)
+					end
     			end
 			end
     	end
