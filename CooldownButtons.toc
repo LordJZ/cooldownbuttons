@@ -9,7 +9,7 @@
 
 ## SavedVariables: CooldownButtonsDB, CooldownButtonsSavedDB
 ## DefaultState: Enabled
-## OptionalDeps: Ace3, LibSharedMedia-3.0, LibPeriodicTable-3.1, LibSink-2.0, AceGUI-3.0-SharedMediaWidgets, ButtonFacade
+## OptionalDeps: Ace3, LibSharedMedia-3.0, LibPeriodicTable-3.1, LibSink-2.0, AceGUI-3.0-SharedMediaWidgets, Masque
 
 #@no-lib-strip@
 embeds.xml
@@ -26,10 +26,6 @@ items.lua
 cooldownsets.lua
 
 #@do-not-package@
-Options\Libs\AceConfig-3.0\AceConfig-3.0.xml
-Options\Libs\AceGUI-3.0\AceGUI-3.0.xml
-Options\Misc\AceConfigDialog-3.0-API.lua
-Options\Misc\AceGUI-3.0-CDB-Dropdown.lua
 Options\Options.lua
 Options\Options_Bar.lua
 Options\Options_Cooldowns.lua
