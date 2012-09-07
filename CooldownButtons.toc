@@ -12,11 +12,7 @@
 ## OptionalDeps: Ace3, LibSharedMedia-3.0, LibPeriodicTable-3.1, LibSink-2.0, AceGUI-3.0-SharedMediaWidgets, ButtonFacade
 
 #@no-lib-strip@
-# Loading Embedded Libs
-libs\AceLocale-3.0\AceLocale-3.0.xml
-Libs\AceDB-3.0\AceDB-3.0.xml
-Libs\LibSink-2.0\lib.xml
-Libs\LibSharedMedia-3.0\LibSharedMedia-3.0.lua
+embeds.xml
 #@end-no-lib-strip@
 
 # Locales
@@ -31,7 +27,7 @@ cooldownsets.lua
 
 #@do-not-package@
 Options\Libs\AceConfig-3.0\AceConfig-3.0.xml
-Options\Libs\AceGUI-3.0\AceGUI-3.0.xmlua
+Options\Libs\AceGUI-3.0\AceGUI-3.0.xml
 Options\Misc\AceConfigDialog-3.0-API.lua
 Options\Misc\AceGUI-3.0-CDB-Dropdown.lua
 Options\Options.lua
