@@ -266,12 +266,26 @@ end
 
 function CDB:SortCooldowns()
     table_sort(self.cooldownsSort, function(a, b)
-        if (not a) or (not b) then return true end -- security ! ;)
+        if (not a) or (not b) then return true end -- security ! 
         local start1, duration1 = CDB.cooldowns[a]:Timer()
         local start2, duration2 = CDB.cooldowns[b]:Timer()
-        local cd1 = start1 + duration1
-        local cd2 = start2 + duration2
-        return cd1 < cd2
+--@debug@
+        if start1 == nil or duration1 == nill or start2 == nill or duration2 == nil then
+            self:Print("--------------------------")
+            self:Print(a.." "..(start1 or "*nil*").." "..(duration1 or "*nil*"))
+            self:Print(b.." "..(start2 or "*nil*").." "..(duration2 or "*nil*"))
+            self:Print("--------------------------")
+        end
+--@end-debug@
+        if start1 == nil or duration1 == nill then
+            return true
+        elseif start2 == nill or duration2 == nil then
+            return false
+        else
+            local cd1 = start1 + duration1
+            local cd2 = start2 + duration2
+            return cd1 < cd2
+        end
     end)
 end
 
