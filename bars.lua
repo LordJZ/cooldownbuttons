@@ -49,9 +49,12 @@ local function OnUpdate(self)
         local db = self.parent.db
         local timestamp = start + duration - GetTime()
         if db.showMs and timestamp < (db.showMsLimit + 1) then
-        local _, _, sec, ms = string.find(timestamp,"([0-9]*)\.([0-9])")
+            local _, _, sec, ms = string.find(timestamp,"([0-9]*)\.([0-9])")
+            if sec == nil then
+                sec = 0
+            end
             if ms == nil then
-                ms = 0
+                ms= 0
             end
             self.text:SetText(sec.."."..ms)
         else
