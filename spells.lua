@@ -53,7 +53,7 @@ function spells:SPELL_UPDATE_COOLDOWN()
         local spellIndex = spellData.spellIndex
         local start, duration, enable = GetSpellCooldown(spellName)
         if enable == 1 and start > 0 and duration >= 3 then
-         --   spellTreeTable[spellData.spellTree][start*duration] = 1 + (spellTreeTable[spellData.spellTree][start*duration] or 0)
+            spellTreeTable[spellData.spellTree][start*duration] = 1 + (spellTreeTable[spellData.spellTree][start*duration] or 0)
             if not CDB:IsCooldown(spellName) then
                 spellsToAdd[spellName] = newList(self.spellTable[spellName].spellIndex, start, duration)
             end
@@ -117,32 +117,30 @@ function spells:SPELLS_CHANGED()
             local spellIndex = offset + j
             local spellName, spellID, texture = self:GetSpellInfo(spellIndex, BOOKTYPE_SPELL)
             if spellName ~= nil then
-            	self:insertSpell(spellName, spellID, texture, spellIndex)            
+            	self:insertSpell(spellName, spellID, texture, spellTree, spellIndex)
+            else
+                local flyoutName, _, flyoutSlots, flyoutIsKnown = GetFlyoutInfo(spellID);
+                if flyoutIsKnown then
+                    for slot = 1, flyoutSlots do
+                        local spellID, isKnown = GetFlyoutSlotInfo(spellID, slot)
+                        if isKnown then
+                            local spellName, _, texture = GetSpellInfo(spellID)
+                            if spellName == nil then
+                                if spellID ~= 13219 then -- Allready known: Old Wound Poison thats no longer available... http://old.wowhead.com/spell=13219
+                                    DEFAULT_CHAT_FRAME:AddMessage("Unknown SpellID "..spellID.." in Flyout #"..spellID.."("..flyoutName..") please report on http://www.wowace.com/addons/cooldownbuttons/")
+                                end
+                            else
+                                self:insertSpell(spellName, spellID, texture, spellTree, nil)
+                            end
+                        end
+                    end
+                end
             end
         end
     end
-    for i = 1, GetNumFlyouts() do
-    	local flyoutId = GetFlyoutID(i)
-    	local flyoutName, _, flyoutSlots, flyoutIsKnown = GetFlyoutInfo(flyoutId);
-    	if flyoutIsKnown then
-    		for slot = 1, flyoutSlots do
-				local spellID, isKnown = GetFlyoutSlotInfo(flyoutId, slot)
-				if isKnown then
-					local spellName, _, texture = GetSpellInfo(spellID)
-					if spellName == nil then
-                        if spellID ~= 13219 then -- Allready known: Old Wound Poison thats no longer available... http://old.wowhead.com/spell=13219
-                            DEFAULT_CHAT_FRAME:AddMessage("Unknown SpellID "..spellID.." in Flyout #"..flyoutId.."("..flyoutName..") please report on http://www.wowace.com/addons/cooldownbuttons/")
-                        end
-					else
-						self:insertSpell(spellName, spellID, texture, nil)
-					end
-    			end
-			end
-    	end
-    end
 end
 
-function spells:insertSpell(spellName, spellID, texture, spellIndex)
+function spells:insertSpell(spellName, spellID, texture, spellTree, spellIndex)
 	if not self.spellTable[spellName] or (self.spellTable[spellName] and (self.spellTable[spellName]["spellIndex"] ~= spellIndex) and (self.spellTable[spellName]["spellID"] == spellID)) then
 		if self.spellTable[spellName] then self.spellTable[spellName] = del(self.spellTable[spellName]) end
 			self.spellTable[spellName] = newDict(
@@ -189,7 +187,7 @@ end
 function spells:GetSpellInfo(index)
     local spellType, spellBookId = GetSpellBookItemInfo(index, BOOKTYPE_SPELL)
     if spellType == "FLYOUT" then
-    	return nil, nil, nil
+    	return nil, spellBookId, spellType
     end
     
     local spellName = GetSpellBookItemName(index, BOOKTYPE_SPELL)

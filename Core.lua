@@ -68,6 +68,8 @@ function CDB:PLAYER_LOGIN(event, addon)
                     rowdirection = "right-down",
                     -- Text Layout
                     style = "00:00m",
+                    showMs = true,
+                    showMsLimit = 5,
                     textdirection = "down",
                     textalpha = 1,
                     textdistance = 1,
@@ -87,9 +89,11 @@ function CDB:PLAYER_LOGIN(event, addon)
                     showpulse  = false,
                     showomnicc = false,
                     -- Limitations
-                    limit = false,
-                    limitshow = true,
-                    limittime = 0,
+                    limitMin = false,
+                    limitMax = false,
+                    limitMinTime = 3,
+                    limitMaxTime = 14400,
+                    limitAfterMax = false;
                 },
                 ["Default"] = {
                     used = true,
@@ -224,10 +228,8 @@ function CDB:RemoveCooldown(name)
         self.cooldowns[name].active = false
         if self.cooldowns[name].preview then
             self.cooldowns[name] = nil
-            --ChatFrame3:AddMessage("prev")
             for k, v in pairs(self.cooldownsSort) do
                 if v == name then
-            --ChatFrame3:AddMessage("drop sort")
                     table_remove(self.cooldownsSort, k)
                 end
             end

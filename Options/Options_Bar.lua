@@ -102,8 +102,12 @@ function CDB_Options:AddBarSettings(bars, name, db)
                 local bar = CDB.engine.bars[name].anchor
                 if bar:IsShown() then
                     bar:Hide()
+                    bars[name].args.anchor.name = L["BAR_SHOW_ANCHOR"]
+                    bars[name].args.anchor.desc = L["BAR_SHOW_ANCHOR_DESC"]
                 else
                     bar:Show()
+                    bars[name].args.anchor.name = L["BAR_HIDE_ANCHOR"]
+                    bars[name].args.anchor.desc = L["BAR_HIDE_ANCHOR_DESC"]
                 end
         end)
         bars[name].args.remove = API:createExecute(L["BAR_REMOVE_BAR"], L["BAR_REMOVE_BAR_DESC"], "", function() self:RemoveBarSettings(bars, name) end, L["BAR_REMOVE_CONFIRM"])
@@ -128,8 +132,8 @@ function CDB_Options:AddBarSettings(bars, name, db)
     bars[name].args.rowspacing = API:createRange(L["BAR_ROW_SPACING"], L["BAR_ROW_SPACING_DESC"], "rowspacing", {0, 100, 1}, nil, nil, function() return not db.multirow end)
 
     bars[name].args.alphascaleheader = API:createHeader(L["BAR_HEADER_ALPHASCALE"])
-    bars[name].args.scale = API:createRange(L["BAR_ALPHA"], L["BAR_ALPHA_DESC"], "scale", {0.5, 2.5, 0.05})
-    bars[name].args.alpha = API:createRange(L["BAR_SCALE"], L["BAR_SCALE_DESC"], "alpha", {0.1, 1, 0.05})
+    bars[name].args.scale = API:createRange(L["BAR_SCALE"], L["BAR_SCALE_DESC"], "scale", {0.5, 3, 0.05})
+    bars[name].args.alpha = API:createRange(L["BAR_ALPHA"], L["BAR_ALPHA_DESC"], "alpha", {0.1, 1, 0.05})
 
     local function enableTimer() return db.showomnicc end
     bars[name].args.submenuTimer = API:createGroup(L["BAR_SUB_TIMER"])
@@ -140,8 +144,10 @@ function CDB_Options:AddBarSettings(bars, name, db)
     bars[name].args.submenuTimer.args.pulse = API:createToggle(L["BAR_TIMER_PULSE"], L["BAR_TIMER_PULSE_DESC"], "showpulse", nil, enableTimer)
 
     bars[name].args.submenuTimer.args.timerstyleheader = API:createHeader(L["BAR_TIMER_HEADER_STYLE"])
-    bars[name].args.submenuTimer.args.showitme = API:createToggle(L["BAR_TIMER_SHOW"], L["BAR_TIMER_SHOW_DESC"], "showtime", nil, enableTimer)
+    bars[name].args.submenuTimer.args.showtime = API:createToggle(L["BAR_TIMER_SHOW"], L["BAR_TIMER_SHOW_DESC"], "showtime", nil, enableTimer)
     bars[name].args.submenuTimer.args.style = API:createSelect(L["BAR_TIMER_STYLE"], L["BAR_TIMER_STYLE_DESC"], "style", opt_text_style, nil, enableTimer)
+    bars[name].args.submenuTimer.args.showMs = API:createToggle(L["BAR_TIMER_SHOW_MS"], L["BAR_TIMER_SHOW_MS_DESC"], "showMs", nil, enableTimer)
+    bars[name].args.submenuTimer.args.showMsLimit = API:createRange(L["BAR_TIMER_SHOW_MS_LIMIT"], L["BAR_TIMER_SHOW_MS_LIMIT_DESC"], "showMsLimit", {0, 100, 1}, nil, enableTimer)
 
     bars[name].args.submenuTimer.args.textpositionheader = API:createHeader(L["BAR_TIMER_HEADER_POSITION"])
     bars[name].args.submenuTimer.args.distance = API:createRange(L["BAR_TIMER_SPACING"], L["BAR_TIMER_SPACING_DESC"], "textdistance", {0, 100, 1}, nil, function() if enableTimer() then return true else return (db.textdirection == "center") end end)
@@ -164,11 +170,13 @@ function CDB_Options:AddBarSettings(bars, name, db)
     bars[name].args.submenuFont.args.flashcolor1 = API:createColor(L["BAR_FONT_FLASH1"], L["BAR_FONT_FLASH1_DESC"], "flashcolor1", false)
     bars[name].args.submenuFont.args.flashcolor2 = API:createColor(L["BAR_FONT_FLASH2"], L["BAR_FONT_FLASH2_DESC"], "flashcolor2", false)
 
-    bars[name].args.submenuLimit = API:createGroup(L["BAR_SUB_LIMIT"], "", nil, true)
+    bars[name].args.submenuLimit = API:createGroup(L["BAR_SUB_LIMIT"], "", nil)--, true)
     bars[name].args.submenuLimit.args.limitheader = API:createHeader(L["BAR_LIMIT_HEADER_LIMIT"])
-    bars[name].args.submenuLimit.args.enable = API:createToggle(L["BAR_LIMIT_ENABLE"], L["BAR_LIMIT_ENABLE_DESC"], "limit")
-    bars[name].args.submenuLimit.args.after = API:createToggle(L["BAR_LIMIT_SHOWAFTER"], L["BAR_LIMIT_SHOWAFTER_DESC"], "limitshow")
-    bars[name].args.submenuLimit.args.limit = API:createInput(L["BAR_LIMIT_LIMIT"], L["BAR_LIMIT_LIMIT_DESC"], "limittime")
+    bars[name].args.submenuLimit.args.limitMin = API:createToggle(L["BAR_LIMIT_MIN_ENABLE"], L["BAR_LIMIT_MIN_ENABLE_DESC"], "limitMin")
+    bars[name].args.submenuLimit.args.limitMinTime = API:createRange(L["BAR_LIMIT_MIN_LIMIT"], L["BAR_LIMIT_MIN_LIMIT_DESC"], "limitMinTime", {3, 14400, 1})
+    bars[name].args.submenuLimit.args.limitMax = API:createToggle(L["BAR_LIMIT_MAX_ENABLE"], L["BAR_LIMIT_MAX_ENABLE_DESC"], "limitMax", nil, true, true)
+    bars[name].args.submenuLimit.args.limitMaxTime = API:createRange(L["BAR_LIMIT_MAX_LIMIT"], L["BAR_LIMIT_MAX_LIMIT_DESC"], "limitMaxTime", {1, 14400, 1}, nil, true, true)
+    bars[name].args.submenuLimit.args.limitAfterMax = API:createToggle(L["BAR_LIMIT_AFTER_MAX_ENABLE"], L["BAR_LIMIT_AFTER_MAX_ENABLE_DESC"], "limitAfterMax", nil, true, true)
 
     local function notifyCfgChange(option) CDB.engine:UpdateConfig(name, db, option) end
     local function get(key) if key.type == "input" then return tostring(db[key.arg]) end return db[key.arg] end

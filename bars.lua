@@ -6,6 +6,7 @@ local LSM = LibStub("LibSharedMedia-3.0")
 local MSQ = LibStub("Masque", true)
 local newList, newDict, del, deepDel, deepCopy = CDB.GetRecyclingFunctions()
 local math_ceil = math.ceil
+local math_floor = math.floor
 local gsub = CDB.gsub
 local table_insert = table.insert
 local table_remove = table.remove
@@ -22,9 +23,9 @@ local function LibSinkMessage(name, texture)
 end
 
 
-local UpdateInterval = 0.5; -- How often the OnUpdate code will run (in seconds)
+local UpdateInterval = 0.1; -- How often the OnUpdate code will run (in seconds)
 local function OnUpdate(self)
-	local nowint = floor(GetTime() + 0.5)
+	local nowint = GetTime()
 	if nowint == self.lastUpdate then return end
     if not (nowint - self.lastUpdate > UpdateInterval) then return end
     self.lastUpdate = nowint
@@ -45,7 +46,27 @@ local function OnUpdate(self)
             CDB:RemoveCooldown(self.obj.name) 
         end
     else
-        self.text:SetText(date("%M:%S", 82800 + start + duration - GetTime()))
+        local db = self.parent.db
+        local timestamp = start + duration - GetTime()
+        if db.showMs and timestamp < (db.showMsLimit + 1) then
+        local _, _, sec, ms = string.find(timestamp,"([0-9]*)\.([0-9])")
+            self.text:SetText(sec.."."..ms)
+        else
+            self.text:SetText(engine:formatTime(timestamp, db.style))
+        end
+        
+        if db.flash and (timestamp <= db.flashstart) then
+            local c
+            if (math_floor(timestamp) % 2) == 0 then
+                c = db.flashcolor1
+            else
+                c = db.flashcolor2
+            end
+            self.text:SetTextColor(c.Red, c.Green,  c.Blue)
+        else
+            local c = db.color
+            self.text:SetTextColor(c.Red, c.Green,  c.Blue)           
+        end
     end
 end
 
@@ -77,14 +98,11 @@ local function OnDragStop(self)
 end
 
 local function SaveAnchorPos(self)
-	ChatFrame3:AddMessage(self:GetLeft() ..", ".. self:GetBottom() )
 	local bar = engine.bars[self.name]
 	local db = bar.db
-	ChatFrame3:AddMessage(bar.db.posx )
-	ChatFrame3:AddMessage(bar.db.posy )
 	
-	db.posx = self:GetLeft()
-	db.posy = self:GetBottom()
+	db.posx = self:GetLeft()   * db.scale
+	db.posy = self:GetBottom() * db.scale
 	
     self.movin = false
     engine:SetBarPoints(bar, db)
@@ -190,20 +208,21 @@ end
 function engine:Update()
     for barName, barData in pairs(self.bars) do
         local i = 1
+        local db = barData.db
         local buttons = barData.buttons
         for _, name in pairs(self.cooldownsSort) do
             local data = self.cooldowns[name]
-            if data.active and self:IsInBar(name, barName) and i <= #buttons then
+            local start, duration = data:Timer()
+            if (not db.limitMin or duration > db.limitMinTime) and data.active and self:IsInBar(name, barName) and i <= #buttons then
                 local button = buttons[i]
                 button.obj = data
                 button.texture:SetTexture(data.texture)
-                button.cooldown:SetCooldown(data:Timer())
+                button.cooldown:SetCooldown(start, duration)
                 button:Show()
                 i = i+1
             end
         end
         do
-            local db = barData.db
             if db.center then
                 local used = i
                 if not db.multirow then
@@ -246,6 +265,7 @@ function engine:UpdateConfig(name, db, option)
     or option == "direction" or option == "rowdirection"
     or option == "spacing"   or option == "rowspacing"
     or option == "multirow"  or option == "countperrow"
+    or option == "scale"     or option == "alpha"
     then
         self:SetBarPoints(bar, db)
     elseif option == "textdirection" or option == "textalpha"
@@ -279,6 +299,9 @@ function engine:UpdateConfig(name, db, option)
         self:Update()
     elseif option == "center" then
         self:SetBarPoints(bar, db)
+        self:Update()
+    elseif option == "limitMin" or option == "limitMinTime"
+    or option == "limitMax" or option == "limitMaxTime" or option == "limitAfterMax" then
         self:Update()
     -------------------
     --- todo: continue here !
@@ -450,31 +473,42 @@ do
         local buttons = bar.buttons
         for k, button in pairs(buttons) do
             button:ClearAllPoints()
+            
+            button:SetAlpha(db.alpha)
+            button:SetScale(db.scale)
+            bar.anchor:SetScale(db.scale)
+            
             if not db.multirow then
                 if k == 1 then -- set anchor
-                    button:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", db.posx, db.posy)
-                    bar.anchor:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", db.posx, db.posy)
+                    local xOffset = db.posx / db.scale
+                    local yOffset = db.posy / db.scale
+                    button:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", xOffset, yOffset)
+                    bar.anchor:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", xOffset, yOffset)
                 else -- i > 1
-                    local x, y = 0, 0
+                    local xOffset, yOffset = 0, 0
                     if db.direction == "left" then
-                        x = 0 - db.spacing
+                        xOffset = 0 - db.spacing
                     elseif db.direction == "right" then
-                        x = db.spacing
+                        xOffset = db.spacing
                     elseif db.direction == "up" then
-                        y = db.spacing
+                        yOffset = db.spacing
                     elseif db.direction == "down" then 
-                        y = 0 - db.spacing
+                        yOffset = 0 - db.spacing
                     end
-                    button:SetPoint(A[0][db.direction], buttons[k-1], A[1][db.direction], x, y)
+                    xOffset = xOffset / db.scale
+                    yOffset = yOffset / db.scale
+                    button:SetPoint(A[0][db.direction], buttons[k-1], A[1][db.direction], xOffset, yOffset)
                 end
             else
                 if k == 1 then -- set anchor
-                    button:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", db.posx, db.posy)
---ChatFrame3:AddMessage("first")
+                    local xOffset = db.posx / db.scale
+                    local yOffset = db.posy / db.scale
+                    button:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", xOffset, yOffset)
+
                 else  -- i > 1
                     local point, relativeTo, relativePoint, xOffset, yOffset
                     if ((k-1) % db.countperrow) ~= 0 then
---ChatFrame3:AddMessage("button")
+
                         id = k - 1
                         point = A[0][db.rowdirection]
                         relativeTo = buttons[k-1]
@@ -497,7 +531,7 @@ do
                             yOffset = db.spacing
                         end
                     else          
---ChatFrame3:AddMessage("break")
+
                         point = A[2][db.rowdirection]
                         relativeTo = buttons[k-db.countperrow]
                         relativePoint = A[3][db.rowdirection]
@@ -519,6 +553,8 @@ do
                             yOffset = 0
                         end
                     end
+                    xOffset = xOffset / db.scale
+                    yOffset = yOffset / db.scale
                     button:SetPoint(point, relativeTo, relativePoint, xOffset, yOffset)
                 end        
             end
@@ -536,6 +572,58 @@ do
                 barWidth = ((buttonWidth + db.spacing) * db.count) - db.spacing
             end
             bar.width = barWidth
+        end
+    end
+end
+
+
+function engine:formatTime(time, mode)
+    local _formatString_
+    if mode == "00:00m" or mode == "00:00M" then
+        if time < 3600 then
+            _formatString_ = date("%M:%S", 82800 + time)
+            if string.sub(_formatString_, 1, 1) == "0" then
+                _formatString_ = string.sub(_formatString_, 2)
+            end
+            return _formatString_
+        else
+            _formatString_ = date("%H:%M", 82800 + time)
+            if string.sub(_formatString_, 1, 1) == "0" then
+                _formatString_ = string.sub(_formatString_, 2)
+            end
+            if mode == "00:00m" then
+                return _formatString_.."h"
+            else
+                return _formatString_.."H"
+            end
+        end
+    elseif mode == "0m" or mode == "0M" then
+        if time < 60 then
+            _formatString_ = date("%S", 82800 + time)
+            if string.sub(_formatString_, 1, 1) == "0" then
+                _formatString_ = string.sub(_formatString_, 2)
+            end
+            return _formatString_
+        elseif  time < 3600  then
+            _formatString_ = date("%M", 82800 + time)
+            if string.sub(_formatString_, 1, 1) == "0" then
+                _formatString_ = string.sub(_formatString_, 2)
+            end
+            if mode == "0m" then
+                return _formatString_.."m"
+            else
+                return _formatString_.."M"
+            end
+        else
+            _formatString_ = date("%H", 82800 + time)
+            if string.sub(_formatString_, 1, 1) == "0" then
+                _formatString_ = string.sub(_formatString_, 2)
+            end
+            if mode == "0m" then
+                return _formatString_.."h"
+            else
+                return _formatString_.."H"
+            end
         end
     end
 end
