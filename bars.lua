@@ -50,6 +50,9 @@ local function OnUpdate(self)
         local timestamp = start + duration - GetTime()
         if db.showMs and timestamp < (db.showMsLimit + 1) then
         local _, _, sec, ms = string.find(timestamp,"([0-9]*)\.([0-9])")
+            if ms == nil then
+                ms = 0
+            end
             self.text:SetText(sec.."."..ms)
         else
             self.text:SetText(engine:formatTime(timestamp, db.style))
