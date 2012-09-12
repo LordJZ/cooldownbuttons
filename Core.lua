@@ -145,10 +145,6 @@ function CDB:PLAYER_LOGIN(event, addon)
     end
 end
 
-function CDB:IsCooldown(name)
-    return self.cooldowns[name] and self.cooldowns[name].active
-end
-
 function CDB:UpdateCooldowns()
     self.engine:Update()
 end
@@ -210,14 +206,15 @@ do
                 previewstart = preview and GetTime(),
             }
             table_insert(self.cooldownsSort, name)
+
+            return true
         else
+            local wasActive = self.cooldowns[name].active
             self.cooldowns[name].index = index -- Update Index for the case that we've learned a new Spell
             self.cooldowns[name].active = true
             if preview then self.cooldowns[name].previewstart = GetTime() end
-        end
-        if not preview then
-            self:SortCooldowns()
-            self:UpdateCooldowns()
+
+            return not wasActive
         end
     end
 end
@@ -236,7 +233,6 @@ function CDB:RemoveCooldown(name)
         end
     end
     self:SortCooldowns()
-    self:UpdateCooldowns()
 end
 
 function CDB:RemovePreviewCooldowns()
@@ -247,7 +243,6 @@ function CDB:RemovePreviewCooldowns()
         end
     end
     self:SortCooldowns()
-    self:UpdateCooldowns()
 end
 
 function CDB:AddPreviewCooldowns(duration)
@@ -256,14 +251,13 @@ function CDB:AddPreviewCooldowns(duration)
     for name, data in pairs(self.db.profile.bars) do
         if data.count > count then
             for variable = 1, data.count, 1 do
-                count = count +1
+                count = count + 1
                 --ChatFrame3:AddMessage("PreviewCooldown_"..tostring(count))
                 self:AddCooldown("Preview", "PreviewCooldown_"..tostring(count), 0, "Interface\\Icons\\INV_Jewelcrafting_DragonsEye05", duration)
             end
         end
     end
     self:SortCooldowns()
-    self:UpdateCooldowns()
 end
 
 function CDB:SortCooldowns()
@@ -289,6 +283,7 @@ function CDB:SortCooldowns()
             return cd1 < cd2
         end
     end)
+    self:UpdateCooldowns()
 end
 
 function CDB.gsub(text, variable, value)

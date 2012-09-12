@@ -44,6 +44,7 @@ function spells:Init()
 end
 
 function spells:SPELL_UPDATE_COOLDOWN()
+    local hasNewCooldown = false
     local treeTable   = self.treeTable
     local spellTable  = self.spellTable
     local spellsToAdd = newList()
@@ -54,9 +55,7 @@ function spells:SPELL_UPDATE_COOLDOWN()
         local start, duration, enable = GetSpellCooldown(spellName)
         if enable == 1 and start > 0 and duration >= 3 then
             spellTreeTable[spellData.spellTree][start*duration] = 1 + (spellTreeTable[spellData.spellTree][start*duration] or 0)
-            if not CDB:IsCooldown(spellName) then
-                spellsToAdd[spellName] = newList(self.spellTable[spellName].spellIndex, start, duration)
-            end
+            spellsToAdd[spellName] = newList(self.spellTable[spellName].spellIndex, start, duration)
         end
     end
     for treeIndex = 1, 2 do -- General Tab and current Spec
@@ -73,8 +72,9 @@ function spells:SPELL_UPDATE_COOLDOWN()
                 end
                 local treeName    = treeTable[treeIndex].treeName
                 local treeTexture = treeTable[treeIndex].treeTexture
-                if not CDB:IsCooldown(treeName) then
-                    CDB:AddCooldown("Spell", treeName, spellIndex, treeTexture)
+
+                if CDB:AddCooldown("Spell", treeName, spellIndex, treeTexture) then
+                    hasNewCooldown = true
                 end
             end
         end
@@ -82,13 +82,22 @@ function spells:SPELL_UPDATE_COOLDOWN()
     for spellName in pairs(spellsToAdd) do
         local spellIndex   = self.spellTable[spellName].spellIndex
         local spellTexture = self.spellTable[spellName].spellTexture
-        CDB:AddCooldown("Spell", spellName, spellIndex, spellTexture)
+        
+        if CDB:AddCooldown("Spell", spellName, spellIndex, spellTexture) then
+            hasNewCooldown = true
+        end
     end
+    if hasNewCooldown == true then
+        CDB:SortCooldowns()
+    end
+
+    --cleanup
     spellsToAdd = deepDel(spellsToAdd)
     spellTreeTable = deepDel(spellTreeTable)
 end
 
 function spells:PET_BAR_UPDATE_COOLDOWN()
+    local hasNewCooldown = false
     if not UnitExists("pet") --[[ oder config sagt keine pets !]] then return end
     for spellIndex = 0, 9 do
         local spellName = GetPetActionInfo(spellIndex)
@@ -96,11 +105,15 @@ function spells:PET_BAR_UPDATE_COOLDOWN()
             local start, duration, enable = GetPetActionCooldown(spellIndex)
             if enable == 1 and start > 0 and duration >= 3 then
                 local texture = select(3, GetSpellInfo(spellName)) or select(3, GetPetActionInfo(spellIndex))
-                if not CDB:IsCooldown(spellName) then
-                    CDB:AddCooldown("PetAction", spellName, spellIndex, texture)
+                
+                if CDB:AddCooldown("PetAction", spellName, spellIndex, texture) then
+                    hasNewCooldown = true
                 end
             end
         end
+    end
+    if hasNewCooldown == true then
+        CDB:SortCooldowns()
     end
 end
 

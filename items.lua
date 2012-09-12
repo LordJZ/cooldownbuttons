@@ -39,12 +39,13 @@ end
 function items:UNIT_INVENTORY_CHANGED() self:BAG_UPDATE_COOLDOWN() end
 
 function items:BAG_UPDATE_COOLDOWN()
+    local hasNewCooldown = false
     for i = 1, 18 do
         local start, duration, enable = GetInventoryItemCooldown("player", i)
         if enable == 1 and start > 0 and duration > 3 then
             local itemName, itemID, itemTexture = self:GetItemInfo(GetInventoryItemLink("player",i))
-            if not CDB:IsCooldown(itemName) then
-                CDB:AddCooldown("Item", itemName, itemID, itemTexture)
+            if CDB:AddCooldown("Item", itemName, itemID, itemTexture) then
+                hasNewCooldown = true
             end
         end
     end
@@ -55,11 +56,17 @@ function items:BAG_UPDATE_COOLDOWN()
             if enable == 1 and start > 0 and duration > 3 then
                 local itemName, itemID, itemTexture = self:GetItemInfo(GetContainerItemLink(i,j))
                 local itemEquipLoc  = select(9, GetItemInfo(itemID))
-                if not (itemEquipLoc == "INVTYPE_TRINKET") and not CDB:IsCooldown(itemName) then
-                    CDB:AddCooldown("Item", itemName, itemID, itemTexture)
+                if not (itemEquipLoc == "INVTYPE_TRINKET") then
+                    if CDB:AddCooldown("Item", itemName, itemID, itemTexture) then
+                        hasNewCooldown = true
+                    end
                 end
             end
         end
+    end
+
+    if hasNewCooldown == true then
+        CDB:SortCooldowns()
     end
 end
 
