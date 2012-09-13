@@ -18,8 +18,50 @@ function CDB_Options:LoadCooldownSettings()
     self.options.args.cooldowns = API:createGroup(L["GROUP_COOLDOWN"], L["GROUP_COOLDOWN_DESC"])
     local cooldowns = self.options.args.cooldowns.args
     
-    cooldowns.cd2bar = self:IniType2BarSettings()
-    cooldowns.groups = self:InitGroupSettings()
+    cooldowns.type2bar = self:IniType2BarSettings()
+    --cooldowns.groups = self:InitGroupSettings()
+    --@debug@
+    cooldowns.fixedCooldowns = self:InitFixedCooldownSettings()
+    --@end-debug@
+end
+
+function CDB_Options:InitFixedCooldownSettings()
+    local parent = API:createGroup(L["COOLDOWN_SUB_FIXED"], L["COOLDOWN_SUB_FIXED_DESC"])
+    local db = {
+        ["fixedCooldowns"] = CDB.db.profile.fixedCooldowns,
+    }
+    local subGroupId = 0
+    
+    parent.args.spells = API:createGroup(L["COOLDOWN_FIXED_SPELLS"], L["COOLDOWN_FIXED_SPELLS_DESC"])
+    for name, data in pairs(CDB.spells.spellTable) do
+        if data.spellknownCD then
+           
+            local group = API:createGroup(name, "")
+            group.args.enabled = API:createToggle(L["BAR_USEMULTIROW"], L["BAR_USEMULTIROW_DESC"], "multirow")
+            
+            group.args.positionheader = API:createHeader(L["BAR_HEADER_POSITION"])
+            group.args.fixPosition = API:createToggle(L["BAR_USEMULTIROW"], L["BAR_USEMULTIROW_DESC"], "multirow")
+            group.args.anchor = API:createExecute(L["BAR_SHOW_ANCHOR"], L["BAR_SHOW_ANCHOR_DESC"], "", function()
+--                local bar = CDB.engine.bars[name].anchor
+--                if bar:IsShown() then
+--                    bar:Hide()
+--                    bars[name].args.anchor.name = L["BAR_SHOW_ANCHOR"]
+--                    bars[name].args.anchor.desc = L["BAR_SHOW_ANCHOR_DESC"]
+--                else
+--                    bar:Show()
+--                    bars[name].args.anchor.name = L["BAR_HIDE_ANCHOR"]
+--                    bars[name].args.anchor.desc = L["BAR_HIDE_ANCHOR_DESC"]
+--                end
+            end)
+            group.args.positionX = API:createInput(L["BAR_POSITION_X"], L["BAR_POSITION_X_DESC"], "posx")
+            group.args.positionY = API:createInput(L["BAR_POSITION_Y"], L["BAR_POSITION_Y_DESC"], "posy")
+            
+            parent.args.spells.args["spell_"..subGroupId] = group            
+            subGroupId = subGroupId + 1
+        end
+    end
+    
+    return parent
 end
 
 function CDB_Options:InitGroupSettings()

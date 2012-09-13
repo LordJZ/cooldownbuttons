@@ -93,7 +93,15 @@ function CDB:PLAYER_LOGIN(event, addon)
                     limitMax = false,
                     limitMinTime = 3,
                     limitMaxTime = 14400,
-                    limitAfterMax = false;
+                    limitAfterMax = false,
+                    fixedCooldowns = {
+                        ["**"] = {
+                            enabled = true,
+                            customLocation = false,
+                            posx = 0,
+                            posy = 0,
+                        }
+                    }
                 },
                 ["Default"] = {
                     used = true,
