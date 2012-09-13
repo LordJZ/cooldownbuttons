@@ -309,6 +309,8 @@ function engine:UpdateConfig(name, db, option)
     elseif option == "limitMin" or option == "limitMinTime"
     or option == "limitMax" or option == "limitMaxTime" or option == "limitAfterMax" then
         self:Update()
+    elseif option == "type2bar" then
+        self:Update()
     -------------------
     --- todo: continue here !
     -------------------

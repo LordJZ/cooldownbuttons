@@ -18,7 +18,7 @@ function CDB_Options:LoadCooldownSettings()
     self.options.args.cooldowns = API:createGroup(L["GROUP_COOLDOWN"], L["GROUP_COOLDOWN_DESC"])
     local cooldowns = self.options.args.cooldowns.args
     
-    cooldowns.cd2bar = self:InitCD2BarSettings()
+    cooldowns.cd2bar = self:IniType2BarSettings()
     cooldowns.groups = self:InitGroupSettings()
 end
 
@@ -65,13 +65,13 @@ function CDB_Options:InitGroupSettings()
     return parent
 end
 
-function CDB_Options:InitCD2BarSettings()
-    local parent = API:createGroup(L["COOLDOWN_SUB_CD2BAR"], L["COOLDOWN_SUB_CD2BAR_DESC"])
+function CDB_Options:IniType2BarSettings()
+    local parent = API:createGroup(L["COOLDOWN_SUB_TYPE2BAR"], L["COOLDOWN_SUB_TYPE2BAR_DESC"])
     local db = {
         ["bars"] = CDB.db.profile.bars,
         ["type2bar"] = CDB.db.profile.type2bar,
     }
-    local cd2bar = parent.args
+    local type2bar = parent.args
     local function getBars(k)
         local t = {}
         for name, _ in pairs(db.bars) do
@@ -87,21 +87,32 @@ function CDB_Options:InitCD2BarSettings()
         end
         return t
     end
-    cd2bar.spellheader = API:createHeader(L["COOLDOWN_CD2BAR_HEADER_SPELLS"])
-    cd2bar.spellactive = API:createSelect(L["COOLDOWN_CD2BAR_REMOVE"], L["COOLDOWN_CD2BAR_REMOVE_DESC"], {obj = "Spell", mode = "remove"}, getBars)
-    cd2bar.spellinactive = API:createSelect(L["COOLDOWN_CD2BAR_ADD"], L["COOLDOWN_CD2BAR_ADD_DESC"], {obj = "Spell", mode = "add"}, getBars)
-    cd2bar.petactionheader = API:createHeader(L["COOLDOWN_CD2BAR_HEADER_PETACTIONS"])
-    cd2bar.petactionactive = API:createSelect(L["COOLDOWN_CD2BAR_REMOVE"], L["COOLDOWN_CD2BAR_REMOVE_DESC"], {obj = "PetAction", mode = "remove"}, getBars)
-    cd2bar.petactioninactive = API:createSelect(L["COOLDOWN_CD2BAR_ADD"], L["COOLDOWN_CD2BAR_ADD_DESC"], {obj = "PetAction", mode = "add"}, getBars)
-    cd2bar.itemheader = API:createHeader(L["COOLDOWN_CD2BAR_HEADER_ITEMS"])
-    cd2bar.itemactive = API:createSelect(L["COOLDOWN_CD2BAR_REMOVE"], L["COOLDOWN_CD2BAR_REMOVE_DESC"], {obj = "Item", mode = "remove"}, getBars)
-    cd2bar.iteminactive = API:createSelect(L["COOLDOWN_CD2BAR_ADD"], L["COOLDOWN_CD2BAR_ADD_DESC"], {obj = "Item", mode = "add"}, getBars)
+    local function tableLength(T)
+        local count = 0
+        for _ in pairs(T) do count = count + 1 end
+        return count
+    end
+    local function isEnabled(k)
+        return tableLength(getBars(k)) <= 0
+    end
+    type2bar.spellheader = API:createHeader(L["COOLDOWN_TYPE2BAR_HEADER_SPELLS"])
+    type2bar.spellinactive = API:createSelect(L["COOLDOWN_TYPE2BAR_ADD"], L["COOLDOWN_TYPE2BAR_ADD_DESC"], {obj = "Spell", mode = "add"}, getBars, nil, isEnabled)
+    type2bar.spellactive = API:createSelect(L["COOLDOWN_TYPE2BAR_REMOVE"], L["COOLDOWN_TYPE2BAR_REMOVE_DESC"], {obj = "Spell", mode = "remove"}, getBars, nil, isEnabled)
+    type2bar.petactionheader = API:createHeader(L["COOLDOWN_TYPE2BAR_HEADER_PETACTIONS"])
+    type2bar.petactioninactive = API:createSelect(L["COOLDOWN_TYPE2BAR_ADD"], L["COOLDOWN_TYPE2BAR_ADD_DESC"], {obj = "PetAction", mode = "add"}, getBars, nil, isEnabled)
+    type2bar.petactionactive = API:createSelect(L["COOLDOWN_TYPE2BAR_REMOVE"], L["COOLDOWN_TYPE2BAR_REMOVE_DESC"], {obj = "PetAction", mode = "remove"}, getBars, nil, isEnabled)
+    type2bar.itemheader = API:createHeader(L["COOLDOWN_TYPE2BAR_HEADER_ITEMS"])
+    type2bar.iteminactive = API:createSelect(L["COOLDOWN_TYPE2BAR_ADD"], L["COOLDOWN_TYPE2BAR_ADD_DESC"], {obj = "Item", mode = "add"}, getBars, nil, isEnabled)
+    type2bar.itemactive = API:createSelect(L["COOLDOWN_TYPE2BAR_REMOVE"], L["COOLDOWN_TYPE2BAR_REMOVE_DESC"], {obj = "Item", mode = "remove"}, getBars, nil, isEnabled)
+    
+    local function notifyCfgChange(option) CDB.engine:UpdateConfig(name, db, option) end
     local function set(k, v)
         if k.arg.mode == "add" then
             db.type2bar[k.arg.obj][v] = true
         else -- k.arg.b == "remove"
             db.type2bar[k.arg.obj][v] = false
         end
+        notifyCfgChange("type2bar") 
     end
     API:injectSetGet(parent, set, false)
     return parent
