@@ -13,10 +13,10 @@ local table_remove = table.remove
 
 local function LibSinkMessage(name, texture)
     if LS2 then
-        local db = CDB.db.profile.LibSink
+        local db = CDB.db.profile.notifications.sink
         local message = gsub(db.message, "$cooldown", name)
         message = gsub(message, "$icon", "|T"..texture.."::|t")
-        local tex = ((db.texture and texture) or nil)
+        local tex = ((db.showIcon and texture) or nil)
         local c = db.color
         LS2.Pour(CDB, message, c.Red, c.Green, c.Blue, nil, nil, nil, nil, nil, tex)
     end
@@ -35,12 +35,13 @@ local function OnUpdate(self)
     local start, duration = self.obj:Timer()
     if ((not start) or (start == 0)) or (start+duration < GetTime() ) then --hideFrame
         local db = self.parent.db
-        LibSinkMessage(self.obj.name, self.obj.texture)
         if (not db.showomnicc) and db.showpulse then
             if not self.pulse.active then
+                LibSinkMessage(self.obj.name, self.obj.texture)
                 self.pulse:SetScript("OnUpdate", self.pulse.handler)
             end
         else
+            LibSinkMessage(self.obj.name, self.obj.texture)
             self.text:SetText("")
             self:Hide()
             CDB:RemoveCooldown(self.obj.name) 
@@ -87,6 +88,68 @@ local function OnLeave(self)
 end
 
 local function OnClick(self)
+    local db = CDB.db.profile.notifications.chat
+    if db.enable then
+        local cooldown = self.obj
+
+        local start, duration = cooldown:Timer()
+        local time = engine:formatTime(start + duration - GetTime(), "00:00m")
+        local message = db.message
+        message = gsub(message, "$icon", "|T"..cooldown.texture.."::|t")
+        message = gsub(message, "$link", cooldown:Link())
+        message = gsub(message, "$spell", cooldown.name)
+        message = gsub(message, "$time", time)
+        
+        local targets = db.targets
+        if targets["chatframe"] then
+            DEFAULT_CHAT_FRAME:AddMessage(message)
+        end
+        if targets["say"] then
+            SendChatMessage(message, "SAY", GetDefaultLanguage("player"))
+        end
+        if targets["party"] then
+            if (GetNumGroupMembers() > 0 and not IsInRaid()) then
+                SendChatMessage(message, "PARTY", GetDefaultLanguage("player"))
+            end
+        end
+        if targets["raid"] then
+            if (GetNumGroupMembers() > 0 and IsInRaid()) then
+                SendChatMessage(message, "RAID", GetDefaultLanguage("player"))
+            end
+        end
+        if targets["guild"] then
+            if (IsInGuild()) then
+                SendChatMessage(message, "GUILD", GetDefaultLanguage("player"))
+            end
+        end
+        if targets["officer"] then
+            -- TODO: Check if you are allowed to write in /o
+            SendChatMessage(message, "OFFICER", GetDefaultLanguage("player"))
+        end
+        if targets["emote"] then
+            SendChatMessage(message, "EMOTE", GetDefaultLanguage("player"))
+        end
+        if targets["raidwarn"] then
+            if ((GetNumRaidMembers() > 0) and IsRaidOfficer()) then
+                SendChatMessage(message, "RAID_WARNING", GetDefaultLanguage("player"))
+            end
+        end
+        if targets["battleground"] then
+            if select(2, IsInInstance()) == "pvp" then
+                SendChatMessage(message, "BATTLEGROUND", GetDefaultLanguage("player"))
+            end
+        end
+        if targets["yell"] then
+            SendChatMessage(message, "YELL", GetDefaultLanguage("player"))
+        end
+        for i = 5, 10 do
+            local channame = tostring(select(2, GetChannelName(i)))
+            if targets["channel"..i] and channame ~= "nil" then
+                SendChatMessage(message, "CHANNEL", GetDefaultLanguage("player"), i)
+            end
+        end
+        
+    end
 end
 
 local function OnDragStart(self)

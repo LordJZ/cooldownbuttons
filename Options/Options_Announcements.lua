@@ -10,60 +10,76 @@ License: All rights reserved.
 
 local CDB_Options = CDB_Options
 local API = CDB_OptionsApi
+local L = CDB.L
 
 local string_format = string.format
 
 function CDB_Options:LoadAnnouncenentSettings()
-    self.options.args.announcements = API:createGroup("Announcement Settings")
-    local announcements = self.options.args.announcements.args
+    self.options.args.notifications = API:createGroup(L["GROUP_NOTIFICATION"], L["GROUP_NOTIFICATION_DESC"])
+    local notifications = self.options.args.notifications.args
     
     local LS2 = LibStub("LibSink-2.0")
     if LS2 then
-        LS2.SetSinkStorage(CDB, CDB.db.profile.LibSink.config)
-        announcements.announcements = API:createGroup("Announcement")
-        announcements.announcements.args.messageheader = API:createHeader("Announcement Message")
-        announcements.announcements.args.message = API:createInput("", "", "message")
-        announcements.announcements.args.messagedescription = API:createDescription("stupid description....")
-        announcements.announcements.args.texture = API:createToggle("Show Cooldown Icon in Annoucnement", "", "showIcon")
-        announcements.announcements.args.texturedescription = API:createDescription("another stupid description....")
-        announcements.announcements.args.texturedescription = API:createColor("Announcement Color", "", "")
-        announcements.announcements.args.LibSinkOptions = LS2.GetSinkAce3OptionsDataTable(CDB)
+        local db = CDB.db.profile.notifications.sink
+        LS2.SetSinkStorage(CDB, CDB.db.profile.notifications.sink.sinkStorage)
+        
+        notifications.notifications = API:createGroup(L["NOTIFICATION_SUB_NOTIFICATIONS"], L["NOTIFICATION_SUB_NOTIFICATIONS_SUB"])
+        notifications.notifications.args.message = API:createInput(L["NOTIFICATION_MESSAGE"], L["NOTIFICATION_MESSAGE_DESC"], "message", "full")
+        notifications.notifications.args.texture = API:createToggle(L["NOTIFICATION_SHOW_ICON"], L["NOTIFICATION_SHOW_ICON_DESC"], "showIcon")
+        notifications.notifications.args.color = API:createColor(L["NOTIFICATION_COLOR"], L["NOTIFICATION_COLOR_DESC"], "color")
+        notifications.notifications.args.output = LS2.GetSinkAce3OptionsDataTable(CDB)
+        notifications.notifications.args.output.inline = true
+        notifications.notifications.args.output.order = 10000 -- force last option
+        
+        local function get(key) if key.type == "input" then return tostring(db[key.arg]) end return db[key.arg] end
+        local function set(key, value) if key.type == "input" then if not (tonumber(value) == nil) then value = tonumber(value) end end db[key.arg] = value end
+        local function getColor(key) local c = db[key.arg] return c.Red, c.Green, c.Blue end
+        local function setColor(key, r, g, b) local c = db[key.arg] c.Red = r c.Green = g c.Blue = b end
+        API:injectSetGet(notifications.notifications, set, get) 
+        API:injectSetGet(notifications.notifications.args.color, setColor, getColor) 
     end
 
-    announcements.chat = API:createGroup("Chat Post")
-   
-    announcements.chat.args.enable = API:createToggle("Enable Chat Post", "", "enableChatPost")
-    announcements.chat.args.messageheader = API:createHeader("Message Settings")
-    announcements.chat.args.default = API:createToggle("Use default Message", "", "postDefaultMsg")
-    announcements.chat.args.desc1 = API:createDescription("The default message is: Cooldown on $spell active for $time.\n\n")
-    announcements.chat.args.desc2 = API:createDescription("If \'Use default Message\' is disabled use the following Text")
-    announcements.chat.args.custommessage = API:createInput("Custom Message", "", "chatPostMessage")
-    announcements.chat.args.desc3 = API:createDescription("Use $spell for spell name and $time for cooldowntime.")
-    announcements.chat.args.submenuOutput = API:createGroup("Output")
-    announcements.chat.args.submenuOutput.args.say           = API:createToggle("Say", "Toggle posting to Chat.", "say")
-    announcements.chat.args.submenuOutput.args.party         = API:createToggle("Party", "Toggle posting to Chat.", "party")
-    announcements.chat.args.submenuOutput.args.raid          = API:createToggle("Raid", "Toggle posting to Chat.", "raid")
-    announcements.chat.args.submenuOutput.args.guild         = API:createToggle("Guild", "Toggle posting to Chat.", "guild")
-    announcements.chat.args.submenuOutput.args.officer       = API:createToggle("Officer", "Toggle posting to Chat.", "officer")
-    announcements.chat.args.submenuOutput.args.emote         = API:createToggle("Emote", "Toggle posting to Chat.", "emote")
-    announcements.chat.args.submenuOutput.args.raidwarn      = API:createToggle("Raidwarning", "Toggle posting to Chat.", "raidwarn")
-    announcements.chat.args.submenuOutput.args.battleground  = API:createToggle("Battleground", "Toggle posting to Chat.", "battleground")
-    announcements.chat.args.submenuOutput.args.yell          = API:createToggle("Yell", "Toggle posting to Chat.", "yell")
-    announcements.chat.args.submenuOutput.args.chatframe     = API:createToggle("Default Chatframe", "Toggle posting to Chat.", "chatframe")
-    announcements.chat.args.submenuOutput.args.channelheader = API:createHeader("Custom Channels")
-    announcements.chat.args.submenuOutput.args.channel5      = API:createToggle("", "Toggle posting to Chat.", "channel5")
-    announcements.chat.args.submenuOutput.args.channel6      = API:createToggle("", "Toggle posting to Chat.", "channel6")
-    announcements.chat.args.submenuOutput.args.channel7      = API:createToggle("", "Toggle posting to Chat.", "channel7")
-    announcements.chat.args.submenuOutput.args.channel8      = API:createToggle("", "Toggle posting to Chat.", "channel8")
-    announcements.chat.args.submenuOutput.args.channel9      = API:createToggle("", "Toggle posting to Chat.", "channel9")
-    announcements.chat.args.submenuOutput.args.channel10     = API:createToggle("", "Toggle posting to Chat.", "channel10")
+    do -- Chat Post
+        notifications.chat = API:createGroup(L["NOTIFICATION_SUB_CHATPOST"], L["NOTIFICATION_SUB_CHATPOST_DESC"])
+       
+        notifications.chat.args.enable = API:createToggle(L["CHATPOST_ENABLE"], L["CHATPOST_ENABLE_DESC"], "enable")
+        notifications.chat.args.custommessage = API:createInput(L["CHATPOST_MESSAGE"],L["CHATPOST_MESSAGE_DESC"], "message", "full")
+        notifications.chat.args.messageDescription = API:createDescription(L["CHATPOST_MESSAGE_HELP"])
+        notifications.chat.args.submenuOutput = API:createGroup("Output")
+        notifications.chat.args.submenuOutput.inline = true
+        notifications.chat.args.submenuOutput.args.say           = API:createToggle(L["CHATPOST_LOCATION_SAY"], L["CHATPOST_LOCATION_DESC"], "say")
+        notifications.chat.args.submenuOutput.args.party         = API:createToggle(L["CHATPOST_LOCATION_PARTY"], L["CHATPOST_LOCATION_DESC"], "party")
+        notifications.chat.args.submenuOutput.args.raid          = API:createToggle(L["CHATPOST_LOCATION_RAID"], L["CHATPOST_LOCATION_DESC"], "raid")
+        notifications.chat.args.submenuOutput.args.guild         = API:createToggle(L["CHATPOST_LOCATION_GUILD"], L["CHATPOST_LOCATION_DESC"], "guild")
+        notifications.chat.args.submenuOutput.args.officer       = API:createToggle(L["CHATPOST_LOCATION_OFFICER"], L["CHATPOST_LOCATION_DESC"], "officer")
+        notifications.chat.args.submenuOutput.args.emote         = API:createToggle(L["CHATPOST_LOCATION_EMOTE"], L["CHATPOST_LOCATION_DESC"], "emote")
+        notifications.chat.args.submenuOutput.args.raidwarn      = API:createToggle(L["CHATPOST_LOCATION_RAIDWARN"], L["CHATPOST_LOCATION_DESC"], "raidwarn")
+        notifications.chat.args.submenuOutput.args.battleground  = API:createToggle(L["CHATPOST_LOCATION_BATTLEGROUND"], L["CHATPOST_LOCATION_DESC"], "battleground")
+        notifications.chat.args.submenuOutput.args.yell          = API:createToggle(L["CHATPOST_LOCATION_YELL"], L["CHATPOST_LOCATION_DESC"], "yell")
+        notifications.chat.args.submenuOutput.args.chatframe     = API:createToggle(L["CHATPOST_LOCATION_CHATFRAME"], L["CHATPOST_LOCATION_DESC"], "chatframe")
+        notifications.chat.args.submenuOutput.args.channelheader = API:createHeader(L["CHATPOST_LOCATION_CUSTOM_CHANNELS"])
+        notifications.chat.args.submenuOutput.args.channel5      = API:createToggle("", L["CHATPOST_LOCATION_DESC"], "channel5")
+        notifications.chat.args.submenuOutput.args.channel6      = API:createToggle("", L["CHATPOST_LOCATION_DESC"], "channel6")
+        notifications.chat.args.submenuOutput.args.channel7      = API:createToggle("", L["CHATPOST_LOCATION_DESC"], "channel7")
+        notifications.chat.args.submenuOutput.args.channel8      = API:createToggle("", L["CHATPOST_LOCATION_DESC"], "channel8")
+        notifications.chat.args.submenuOutput.args.channel9      = API:createToggle("", L["CHATPOST_LOCATION_DESC"], "channel9")
+        notifications.chat.args.submenuOutput.args.channel10     = API:createToggle("", L["CHATPOST_LOCATION_DESC"], "channel10")
 
-    self:RegisterEvent("CHANNEL_UI_UPDATE")
-    self:CHANNEL_UI_UPDATE()
+        local db = CDB.db.profile.notifications.chat
+        local function get(key) if key.type == "input" then return tostring(db[key.arg]) end return db[key.arg] end
+        local function set(key, value) if key.type == "input" then if not (tonumber(value) == nil) then value = tonumber(value) end end db[key.arg] = value end
+        local function getChannel(key) return db.targets[key.arg] end
+        local function setChannel(key, value) db.targets[key.arg] = value end
+        API:injectSetGet(notifications.chat, set, get) 
+        API:injectSetGet(notifications.chat.args.submenuOutput, setChannel, getChannel) 
+        
+        self:RegisterEvent("CHANNEL_UI_UPDATE")
+        self:CHANNEL_UI_UPDATE()
+    end
 end
 
 function CDB_Options:CHANNEL_UI_UPDATE()
-    local chanlist = self.options.args.announcements.args.chat.args.submenuOutput.args
+    local chanlist = self.options.args.notifications.args.chat.args.submenuOutput.args
     for i = 5, 10 do
         local channame = tostring(select(2,GetChannelName(i)))
         if channame ~= "nil" then

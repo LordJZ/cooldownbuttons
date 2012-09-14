@@ -39,7 +39,7 @@ function CDB_Options:Load()
     -- Set correct order
     options.args.bars.order = 1
     options.args.cooldowns.order = 2
-    options.args.announcements.order = 3
+    options.args.notifications.order = 3
     options.args.profiles.order = 4
 
 
@@ -48,7 +48,7 @@ end
 
 function CDB_Options:Open()
     if not self.loaded then self:Load() end
-    LibStub("AceConfigDialog-3.0"):SetDefaultSize("Cooldown Buttons", 620, 490)
+    LibStub("AceConfigDialog-3.0"):SetDefaultSize("Cooldown Buttons", 635, 490)
     LibStub("AceConfigDialog-3.0"):Open("Cooldown Buttons")
 end
 
