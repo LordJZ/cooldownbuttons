@@ -79,6 +79,7 @@ function CDB_Options:LoadAnnouncenentSettings()
 end
 
 function CDB_Options:CHANNEL_UI_UPDATE()
+    local db = CDB.db.profile.notifications.chat
     local chanlist = self.options.args.notifications.args.chat.args.submenuOutput.args
     for i = 5, 10 do
         local channame = tostring(select(2,GetChannelName(i)))
@@ -88,7 +89,7 @@ function CDB_Options:CHANNEL_UI_UPDATE()
         else 
             chanlist["channel"..i].name = string_format("(/%d) %s", i, "No Channel")
             chanlist["channel"..i].disabled = true
---            db.posttochats["channel"..i] = false -- Channel does not exist, so dont post here :P
+            db.targets["channel"..i] = false -- Channel does not exist, so dont post here :P
         end
     end
     LibStub("AceConfigRegistry-3.0"):NotifyChange("Cooldown Buttons")

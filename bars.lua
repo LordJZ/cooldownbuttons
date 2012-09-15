@@ -95,7 +95,6 @@ local function OnClick(self)
         local start, duration = cooldown:Timer()
         local time = engine:formatTime(start + duration - GetTime(), "00:00m")
         local message = db.message
-        message = gsub(message, "$icon", "|T"..cooldown.texture.."::|t")
         message = gsub(message, "$link", cooldown:Link())
         message = gsub(message, "$spell", cooldown.name)
         message = gsub(message, "$time", time)
@@ -108,17 +107,17 @@ local function OnClick(self)
             SendChatMessage(message, "SAY", GetDefaultLanguage("player"))
         end
         if targets["party"] then
-            if (GetNumGroupMembers() > 0 and not IsInRaid()) then
+            if GetNumGroupMembers() > 0 and not IsInRaid() then
                 SendChatMessage(message, "PARTY", GetDefaultLanguage("player"))
             end
         end
         if targets["raid"] then
-            if (GetNumGroupMembers() > 0 and IsInRaid()) then
+            if GetNumGroupMembers() > 0 and IsInRaid() then
                 SendChatMessage(message, "RAID", GetDefaultLanguage("player"))
             end
         end
         if targets["guild"] then
-            if (IsInGuild()) then
+            if IsInGuild() then
                 SendChatMessage(message, "GUILD", GetDefaultLanguage("player"))
             end
         end
@@ -130,7 +129,7 @@ local function OnClick(self)
             SendChatMessage(message, "EMOTE", GetDefaultLanguage("player"))
         end
         if targets["raidwarn"] then
-            if ((GetNumRaidMembers() > 0) and IsRaidOfficer()) then
+            if GetNumGroupMembers() > 0 and IsInRaid() and IsRaidOfficer() then
                 SendChatMessage(message, "RAID_WARNING", GetDefaultLanguage("player"))
             end
         end
