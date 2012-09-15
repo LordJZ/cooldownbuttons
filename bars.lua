@@ -371,7 +371,7 @@ function engine:UpdateConfig(name, db, option)
     elseif option == "limitMin" or option == "limitMinTime"
     or option == "limitMax" or option == "limitMaxTime" or option == "limitAfterMax" then
         self:Update()
-    elseif option == "type2bar" then
+    elseif option == "type2bar" or option == "hiddenCooldowns" then
         self:Update()
     -------------------
     --- todo: continue here !
@@ -382,30 +382,16 @@ end
 function engine:IsInBar(name, bar)
     local cooldown = self.cooldowns[name]
     local type2bar = self.db.profile.type2bar[cooldown.type][bar]
-    local cooldown2bar
-    local cooldown2bar_tmp = self.db.profile.cooldown2bar[name]
+    local hiddenCooldowns = self.db.profile.hiddenCooldowns[cooldown.type]
     
     -- if cooldown is a preview cooldown, then its in ALL bars :)
     if cooldown.preview then return true end
     
-    -- if cooldown2bar_tmp is a table ignore type2bar (by setting it to false)
-    -- and set cooldown2bar to cooldown2bar_tmp[bar] to have the value for this bar
-    -- if cooldown2bar_tmp is NOT a table set cooldown2bar to false
-    if type(cooldown2bar_tmp) == "table" then
-        type2bar = false
-        cooldown2bar = cooldown2bar_tmp[bar]
-    else
-        cooldown2bar = false
+    if hiddenCooldowns[name].hidden then
+        return false
     end
-
-    -- if cooldown2bar == true, we retrun true as its chosen to be shown on this bar
-    -- else we return the value of type2bar
-    --- possible values for type2bar for diffrent conditions:
-    -- true:  if cooldown2bar_tmp ~= table and the cooldown.type is assigned to this bar
-    -- false: if neither cooldown2bar_tmp is a table nor the cooldown.type is assigned to this bar
-    -- false: if cooldown2bar_tmp IS a table (what forced type2bar to false)
-    if cooldown2bar then return true
-    else return type2bar end
+    
+    return type2bar
 end
 
 function engine:CreateBar(name, db)

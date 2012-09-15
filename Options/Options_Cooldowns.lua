@@ -21,46 +21,59 @@ function CDB_Options:LoadCooldownSettings()
     cooldowns.type2bar = self:IniType2BarSettings()
     --cooldowns.groups = self:InitGroupSettings()
     --@debug@
-    cooldowns.fixedCooldowns = self:InitFixedCooldownSettings()
+    cooldowns.hiddenCooldowns = self:InitHiddenCooldownSettings()
     --@end-debug@
 end
 
-function CDB_Options:InitFixedCooldownSettings()
-    local parent = API:createGroup(L["COOLDOWN_SUB_FIXED"], L["COOLDOWN_SUB_FIXED_DESC"])
+function CDB_Options:InitHiddenCooldownSettings()
+    local parent = API:createGroup(L["COOLDOWN_SUB_HIDDEN"], L["COOLDOWN_SUB_HIDDEN_DESC"])
     local db = {
-        ["fixedCooldowns"] = CDB.db.profile.fixedCooldowns,
+        ["hiddenCooldowns"] = CDB.db.profile.hiddenCooldowns,
     }
     local subGroupId = 0
     
-    parent.args.spells = API:createGroup(L["COOLDOWN_FIXED_SPELLS"], L["COOLDOWN_FIXED_SPELLS_DESC"])
-    for name, data in pairs(CDB.spells.spellTable) do
-        if data.spellknownCD then
-           
-            local group = API:createGroup(name, "")
-            group.args.enabled = API:createToggle(L["BAR_USEMULTIROW"], L["BAR_USEMULTIROW_DESC"], "multirow")
-            
-            group.args.positionheader = API:createHeader(L["BAR_HEADER_POSITION"])
-            group.args.fixPosition = API:createToggle(L["BAR_USEMULTIROW"], L["BAR_USEMULTIROW_DESC"], "multirow")
-            group.args.anchor = API:createExecute(L["BAR_SHOW_ANCHOR"], L["BAR_SHOW_ANCHOR_DESC"], "", function()
---                local bar = CDB.engine.bars[name].anchor
---                if bar:IsShown() then
---                    bar:Hide()
---                    bars[name].args.anchor.name = L["BAR_SHOW_ANCHOR"]
---                    bars[name].args.anchor.desc = L["BAR_SHOW_ANCHOR_DESC"]
---                else
---                    bar:Show()
---                    bars[name].args.anchor.name = L["BAR_HIDE_ANCHOR"]
---                    bars[name].args.anchor.desc = L["BAR_HIDE_ANCHOR_DESC"]
---                end
-            end)
-            group.args.positionX = API:createInput(L["BAR_POSITION_X"], L["BAR_POSITION_X_DESC"], "posx")
-            group.args.positionY = API:createInput(L["BAR_POSITION_Y"], L["BAR_POSITION_Y_DESC"], "posy")
-            
-            parent.args.spells.args["spell_"..subGroupId] = group            
-            subGroupId = subGroupId + 1
+    local function notifyCfgChange(option) CDB.engine:UpdateConfig(name, db, option) end
+    local function setGroupLabel(key, hidden)
+        local color
+        if hidden then
+            color = "|cffff0000"
+        else
+            color = "|cff00ff00"
         end
+        key.arg.group.name = color..key.arg.name.."|r"
+    end
+    local function getHidden(key)
+        return db.hiddenCooldowns[key.arg.type][key.arg.name][key.arg.option]
+    end
+    local function setHidden(key, value)
+        db.hiddenCooldowns[key.arg.type][key.arg.name][key.arg.option] = value
+        setGroupLabel(key, value)
+        notifyCfgChange("hiddenCooldowns")
     end
     
+    do -- Spells
+        parent.args.spells = API:createGroup(L["COOLDOWN_HIDDEN_SPELLS"], L["COOLDOWN_HIDDEN_SPELLS_DESC"])
+        for name, data in pairs(CDB.spells.spellTable) do
+            if data.spellknownCD then
+                local groupName = "spell_"..subGroupId
+                subGroupId = subGroupId + 1
+                
+                parent.args.spells.args[groupName] = API:createGroup(name, "")
+                local group = parent.args.spells.args[groupName]
+                
+                local hiddenArg = {type = "Spell", name = name, group = group, option = "hidden"}
+
+                group.args.enabled = API:createToggle(L["COOLDOWN_HIDDEN_HIDE"], L["COOLDOWN_HIDDEN_HIDE_DESC"], hiddenArg)
+                
+                setGroupLabel({arg = hiddenArg}, getHidden({arg = hiddenArg}))            
+            end
+        end
+        API:injectSetGet(parent, setHidden, getHidden)
+    end
+    do -- Items
+        parent.args.items = API:createGroup(L["COOLDOWN_HIDDEN_ITEMS"], L["COOLDOWN_HIDDEN_ITEMS_DESC"])
+        parent.args.items.args.soon = API:createDescription("coming soon)")
+    end
     return parent
 end
 

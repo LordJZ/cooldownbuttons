@@ -94,14 +94,6 @@ function CDB:PLAYER_LOGIN(event, addon)
                     limitMinTime = 3,
                     limitMaxTime = 14400,
                     limitAfterMax = false,
-                    fixedCooldowns = {
-                        ["**"] = {
-                            enabled = true,
-                            customLocation = false,
-                            posx = 0,
-                            posy = 0,
-                        }
-                    }
                 },
                 ["Default"] = {
                     used = true,
@@ -110,12 +102,12 @@ function CDB:PLAYER_LOGIN(event, addon)
                 },
             },
             ["cooldownSets"] = self.InitDefaultCooldownSets(),
-            ["cooldown2bar"] = {
-                ["**"] = false,
---              ["**"] = { -- Cooldownname
---                  ["**"] = false, -- Barname
---                  ["Default"] = true,
---              },
+            ["hiddenCooldowns"] = {
+                ["**"] = { -- Spell / PetAction / Item
+                    ["**"] = {
+                        hidden = false,
+                    }
+                }
             },
             ["type2bar"] = {
                 ["**"] = { -- Spell / PetAction / Item
@@ -125,31 +117,31 @@ function CDB:PLAYER_LOGIN(event, addon)
             },
             ["notifications"] = {
                 ["sink"] = {
-                    ["message"] = L["DEFAULT_LIBSINK_MESSAGE"],
-                    ["showIcon"] = true,
-                    ["color"] = { Red = 1, Green = 1, Blue = 1, },
-                    ["sinkStorage"] = { sink20OutputSink = "Default" },
+                    message = L["DEFAULT_LIBSINK_MESSAGE"],
+                    showIcon = true,
+                    color = { Red = 1, Green = 1, Blue = 1, },
+                    sinkStorage = { sink20OutputSink = "Default" },
                 },
                 ["chat"] = {
-                    ["enable"] = true,
-                    ["message"] = L["DEFAULT_CHATPOST_MESSAGE"],
-                    ["targets"] = {
-                        ["chatframe"] = true,
-                        ["say"] = false,
-                        ["party"] = false,
-                        ["raid"] = false,
-                        ["guild"] = false,
-                        ["officer"] = false,
-                        ["emote"] = false,
-                        ["raidwarn"] = false,
-                        ["battleground"] = false,
-                        ["yell"] = false,
-                        ["channel5"] = false,
-                        ["channel6"] = false,
-                        ["channel7"] = false,
-                        ["channel8"] = false,
-                        ["channel9"] = false,
-                        ["channel10"] = false,
+                    enable = true,
+                    message = L["DEFAULT_CHATPOST_MESSAGE"],
+                    targets = {
+                        chatframe = true,
+                        say = false,
+                        party = false,
+                        raid = false,
+                        guild = false,
+                        officer = false,
+                        emote = false,
+                        raidwarn = false,
+                        battleground = false,
+                        yell = false,
+                        channel5 = false,
+                        channel6 = false,
+                        channel7 = false,
+                        channel8 = false,
+                        channel9 = false,
+                        channel10 = false,
                     },
                 },
             },
