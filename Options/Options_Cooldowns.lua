@@ -20,9 +20,7 @@ function CDB_Options:LoadCooldownSettings()
     
     cooldowns.type2bar = self:IniType2BarSettings()
     --cooldowns.groups = self:InitGroupSettings()
-    --@debug@
     cooldowns.hiddenCooldowns = self:InitHiddenCooldownSettings()
-    --@end-debug@
 end
 
 function CDB_Options:InitHiddenCooldownSettings()
