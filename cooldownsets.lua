@@ -34,8 +34,18 @@ function CDB:InitDefaultCooldownSets()
         sets["Summon Infernal/Doomguard"] = {
             ["icon"] = "Interface\\Icons\\warlock_summon_doomguard",
             ["ids"] = {
-                ["1122"] = true,
-                ["18540"] = true,
+                ["1122"]  = true, -- Infernal
+                ["18540"] = true, -- Doomguard
+            },
+        }
+    elseif class == "DRUID" then 
+        sets["Incarnation"] = {
+            ["icon"] = "Interface\\Icons\\spell_druid_incarnation",
+            ["ids"] = {
+                ["106731"] = true, -- Talent
+                ["102558"] = true, -- Guardian
+                ["102560"] = true, -- Moonkin
+                ["102543"] = true, -- Feral
             },
         }
     end
