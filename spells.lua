@@ -50,22 +50,23 @@ function spells:SPELL_UPDATE_COOLDOWN()
     local spellsToAdd = newList()
     local spellTreeTable = newList(newList(),newList(),newList(),newList())
     for _, spellData in pairs(self.spellTable) do
+        local spellID = spellData.spellID
         local spellName  = spellData.spellName
-        local spellIndex = spellData.spellIndex
-        local start, duration, enable = GetSpellCooldown(spellName)
+        local start, duration, enable = GetSpellCooldown(spellID)
         if enable == 1 and start > 0 and duration >= 3 then
             spellTreeTable[spellData.spellTree][start*duration] = 1 + (spellTreeTable[spellData.spellTree][start*duration] or 0)
-            spellsToAdd[spellName] = newList(self.spellTable[spellName].spellIndex, start, duration)
+            spellsToAdd[spellName] = newList(spellID, start, duration)
         end
     end
     for treeIndex = 1, 2 do -- General Tab and current Spec
         for time in pairs(spellTreeTable[treeIndex]) do
             if spellTreeTable[treeIndex][time] > 3 then
+                local spellID = nil
                 local spellIndex = nil
                 for spellName, spellData in pairs(spellsToAdd) do
                     if treeIndex == spellTable[spellName].spellTree then
                         if spellData[2] * spellData[3] == time then
-                            spellIndex = spellData[1]
+                            spellID = spellData[1]
                             spellsToAdd[spellName] = del(spellsToAdd[spellName])
                         end
                     end
@@ -73,17 +74,17 @@ function spells:SPELL_UPDATE_COOLDOWN()
                 local treeName    = treeTable[treeIndex].treeName
                 local treeTexture = treeTable[treeIndex].treeTexture
 
-                if CDB:AddCooldown("Spell", treeName, spellIndex, treeTexture) then
+                if CDB:AddCooldown("Spell", treeName, spellID, treeTexture) then
                     hasNewCooldown = true
                 end
             end
         end
     end
     for spellName in pairs(spellsToAdd) do
-        local spellIndex   = self.spellTable[spellName].spellIndex
+        local spellID   = self.spellTable[spellName].spellID
         local spellTexture = self.spellTable[spellName].spellTexture
         
-        if CDB:AddCooldown("Spell", spellName, spellIndex, spellTexture) then
+        if CDB:AddCooldown("Spell", spellName, spellID, spellTexture) then
             hasNewCooldown = true
         end
     end
@@ -105,8 +106,8 @@ function spells:PET_BAR_UPDATE_COOLDOWN()
             local start, duration, enable = GetPetActionCooldown(spellIndex)
             if enable == 1 and start > 0 and duration >= 3 then
                 local texture = select(3, GetSpellInfo(spellName)) or select(3, GetPetActionInfo(spellIndex))
-                
-                if CDB:AddCooldown("PetAction", spellName, spellIndex, texture) then
+                local spellID = select(3, string_find(GetSpellLink(spellName), "spell:(%d+)"))
+                if CDB:AddCooldown("PetAction", spellName, spellID, texture) then
                     hasNewCooldown = true
                 end
             end
@@ -130,7 +131,7 @@ function spells:SPELLS_CHANGED()
             local spellIndex = offset + j
             local spellName, spellID, texture = self:GetSpellInfo(spellIndex, BOOKTYPE_SPELL)
             if spellName ~= nil then
-            	self:insertSpell(spellName, spellID, texture, spellTree, spellIndex)
+            	self:insertSpell(spellName, spellID, texture, spellTree)
             else
                 local flyoutName, _, flyoutSlots, flyoutIsKnown = GetFlyoutInfo(spellID);
                 if flyoutIsKnown then
@@ -143,7 +144,7 @@ function spells:SPELLS_CHANGED()
                                     DEFAULT_CHAT_FRAME:AddMessage("Unknown SpellID "..spellID.." in Flyout #"..spellID.."("..flyoutName..") please report on http://www.wowace.com/addons/cooldownbuttons/")
                                 end
                             else
-                                self:insertSpell(spellName, spellID, texture, spellTree, nil)
+                                self:insertSpell(spellName, spellID, texture, spellTree)
                             end
                         end
                     end
@@ -153,17 +154,15 @@ function spells:SPELLS_CHANGED()
     end
 end
 
-function spells:insertSpell(spellName, spellID, texture, spellTree, spellIndex)
-	if not self.spellTable[spellName] or (self.spellTable[spellName] and (self.spellTable[spellName]["spellIndex"] ~= spellIndex) and (self.spellTable[spellName]["spellID"] == spellID)) then
-		if self.spellTable[spellName] then self.spellTable[spellName] = del(self.spellTable[spellName]) end
-			self.spellTable[spellName] = newDict(
-				"spellName"    , spellName,
-				"spellIndex"   , spellIndex,
-				"spellID"      , spellID,
-				"spellknownCD" , self:GetKnownCooldown(spellIndex, spellID),
-				"spellTexture" , texture,
-				"spellTree"    , spellTree
-			)
+function spells:insertSpell(spellName, spellID, texture, spellTree)
+	if not self.spellTable[spellName] then
+		self.spellTable[spellName] = newDict(
+			"spellName"    , spellName,
+			"spellID"      , spellID,
+			"spellknownCD" , self:GetKnownCooldown(spellID),
+			"spellTexture" , texture,
+			"spellTree"    , spellTree
+		)
 		local _, class = UnitClass("player")
 		if class == "DEATHKNIGHT" and self.spellTable[spellName].spellknownCD == nil then
 			self.spellTable[spellName] = del(self.spellTable[spellName])
@@ -171,15 +170,11 @@ function spells:insertSpell(spellName, spellID, texture, spellTree, spellIndex)
 	end
 end
 
-function spells:GetKnownCooldown(spellIndex, spellID)
+function spells:GetKnownCooldown( spellID)
     CDBTooltipTextRight2:SetText("")
     CDBTooltipTextRight3:SetText("")
     CDBTooltipTextRight4:SetText("")
-    if spellIndex == nil then
-    	CDBTooltip:SetSpellByID(spellID)
-    else
-    	CDBTooltip:SetSpellBookItem(spellIndex, BOOKTYPE_SPELL)
-    end
+    CDBTooltip:SetSpellByID(spellID)
     return (
             (
                 CDBTooltipTextRight2:GetText()

@@ -24,14 +24,12 @@ local string_find = string.find
 ------
 
 function items:Init()
-
     self.db = CDB.db
     self.spellTable = newList()
     self.treeTable  = newList()
 
     self:RegisterEvent("BAG_UPDATE_COOLDOWN")
     self:RegisterEvent("UNIT_INVENTORY_CHANGED")
-
 
     self:BAG_UPDATE_COOLDOWN()
 end

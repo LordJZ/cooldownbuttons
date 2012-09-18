@@ -199,29 +199,29 @@ do
         GetPetActionLink = _G.GetSpellLink,
         GetItemLink = function(arg) return select(2, GetItemInfo(arg)) end,
 
-        GetPreviewCooldown = function(_, _, self) return self.previewstart, self.previewduration end,
+        GetPreviewLink = function() return "[Preview]" end,
+        GetPreviewCooldown = function(_, self) return self.previewstart, self.previewduration end,
     }
-    function CDB:AddCooldown(type, name, index, texture, preview)
-        --ChatFrame3:AddMessage("AddCooldown("..name..")")
+    function CDB:AddCooldown(type, name, id, texture, preview)
         if not self.cooldowns[name] then
             self.cooldowns[name] = {
                 type = type,
+                id = id,
                 name = name,
-                index = index,
                 texture = texture,
                 active = true,
                 Link = function(self)
-                	 if type ~= "PetAction" then
-                	 	return funcs["Get"..type.."Link"](self.name)
+                	 if type == "Spell" or type == "PetAction" then
+                	 	return funcs["Get"..type.."Link"](self.id)
                 	 else
-                	 	return funcs["Get"..type.."Link"](self.index, BOOKTYPE_SPELL)
+                	 	return funcs["Get"..type.."Link"](self.name)
                 	 end
                 end,
                 Timer = function(self)
-                	 if type == "Spell" then
-                	 	return funcs["Get"..type.."Cooldown"](self.name, nil, self)
+                	 if type == "Spell" or type == "PetAction" then
+                	 	return funcs["GetSpellCooldown"](self.id)
                 	 else
-                	 	return funcs["Get"..type.."Cooldown"](self.index, BOOKTYPE_SPELL, self)
+                	 	return funcs["Get"..type.."Cooldown"](self.id, self)
                 	 end
                 end,
                 -- For preview mode
@@ -276,7 +276,7 @@ function CDB:AddPreviewCooldowns(duration)
         if data.count > count then
             for variable = 1, data.count, 1 do
                 count = count + 1
-                --ChatFrame3:AddMessage("PreviewCooldown_"..tostring(count))
+                --CDB:Print("PreviewCooldown_"..tostring(count))
                 self:AddCooldown("Preview", "PreviewCooldown_"..tostring(count), 0, "Interface\\Icons\\INV_Jewelcrafting_DragonsEye05", duration)
             end
         end

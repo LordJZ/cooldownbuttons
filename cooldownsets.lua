@@ -30,6 +30,15 @@ function CDB:InitDefaultCooldownSets()
             },
         }
     }
+    if class == "WARLOCK" then 
+        sets["Summon Infernal/Doomguard"] = {
+            ["icon"] = "Interface\\Icons\\warlock_summon_doomguard",
+            ["ids"] = {
+                ["1122"] = true,
+                ["18540"] = true,
+            },
+        }
+    end
   --[[  
     if class == "HUNTER" then 
         sets["Fire Traps"] = {
