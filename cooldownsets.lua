@@ -48,6 +48,14 @@ function CDB:InitDefaultCooldownSets()
                 ["102543"] = true, -- Feral
             },
         }
+    elseif class == "WARRIOR" then 
+        sets["Shouts"] = {
+            ["icon"] = "Interface\\Icons\\ability_warrior_battleshout",
+            ["ids"] = {
+                ["6673"] = true, -- Battle Shout
+                ["469"]  = true, -- Commanding Shout
+            },
+        }
     end
   --[[  
     if class == "HUNTER" then 
@@ -161,24 +169,6 @@ function CDB:InitDefaultCooldownSets()
                 ["20271"] = true,
                 -- Judgement of Wisdom
                 ["53408"] = true,
-            },
-        }
-    elseif class == "WARRIOR" then 
-        sets["Overpower/Revenge"] = {
-            ["icon"] = "Interface\\AddOns\\CooldownButtons\\Icons\\warrior_2spells.tga",
-            ["ids"] = {
-                -- Overpower
-                ["7384"] = true,
-                -- Revenge
-                ["6572"] = true,
-                ["6574"] = true,
-                ["7379"] = true,
-                ["11600"] = true,
-                ["11601"] = true,
-                ["25288"] = true,
-                ["25269"] = true,
-                ["30357"] = true,
-                ["57823"] = true,
             },
         }
     end
