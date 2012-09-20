@@ -95,7 +95,9 @@ local function OnClick(self)
         local start, duration = cooldown:Timer()
         local time = engine:formatTime(start + duration - GetTime(), "00:00m")
         local message = db.message
-        message = gsub(message, "$link", cooldown:Link())
+        local link = cooldown:Link()
+        if link == nil or link == "" then link = cooldown.name end
+        message = gsub(message, "$link", link)
         message = gsub(message, "$spell", cooldown.name)
         message = gsub(message, "$time", time)
         

@@ -22,6 +22,7 @@ CDB:SetScript("OnEvent", function(self, event, ...) if self[event] then return s
 CDB:RegisterEvent("ADDON_LOADED")
 
 local string_gsub = string.gsub
+local string_find = string.find
 local table_insert = table.insert
 local table_remove = table.remove
 local table_sort = table.sort
@@ -289,14 +290,7 @@ function CDB:SortCooldowns()
         if (not a) or (not b) then return true end -- security ! 
         local start1, duration1 = CDB.cooldowns[a]:Timer()
         local start2, duration2 = CDB.cooldowns[b]:Timer()
---@debug@
-        if start1 == nil or duration1 == nill or start2 == nill or duration2 == nil then
-            self:Print("--------------------------")
-            self:Print(a.." "..(start1 or "*nil*").." "..(duration1 or "*nil*"))
-            self:Print(b.." "..(start2 or "*nil*").." "..(duration2 or "*nil*"))
-            self:Print("--------------------------")
-        end
---@end-debug@
+
         if start1 == nil or duration1 == nill then
             return true
         elseif start2 == nill or duration2 == nil then
