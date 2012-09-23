@@ -21,7 +21,6 @@ function CDB_Options:LoadAnnouncenentSettings()
     local LS2 = LibStub("LibSink-2.0")
     if LS2 then
         local db = CDB.db.profile.notifications.sink
-        LS2.SetSinkStorage(CDB, CDB.db.profile.notifications.sink.sinkStorage)
         
         notifications.notifications = API:createGroup(L["NOTIFICATION_SUB_NOTIFICATIONS"], L["NOTIFICATION_SUB_NOTIFICATIONS_SUB"])
         notifications.notifications.args.message = API:createInput(L["NOTIFICATION_MESSAGE"], L["NOTIFICATION_MESSAGE_DESC"], "message", "full")

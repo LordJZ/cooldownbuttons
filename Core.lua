@@ -150,6 +150,11 @@ function CDB:PLAYER_LOGIN(event, addon)
     }
     self.db = LibStub("AceDB-3.0"):New("CooldownButtonsDB", defaults)
     
+    local LS2 = LibStub("LibSink-2.0")
+    if LS2 then
+        LS2.SetSinkStorage(self, self.db.profile.notifications.sink.sinkStorage)
+    end
+    
     self.cooldowns = {}
     self.cooldownsSort = {}
     
