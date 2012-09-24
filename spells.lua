@@ -105,8 +105,8 @@ function spells:PET_BAR_UPDATE_COOLDOWN()
         if spellName ~= nil then
             local start, duration, enable = GetPetActionCooldown(spellIndex)
             if enable == 1 and start > 0 and duration >= 3 then
-                local texture = select(3, GetSpellInfo(spellName)) or select(3, GetPetActionInfo(spellIndex))
-                local spellID = select(3, string_find(GetSpellLink(spellName), "spell:(%d+)"))
+                local texture = select(3, GetPetActionInfo(spellIndex))
+                local spellID = select(8, GetPetActionInfo(spellIndex))
                 if CDB:AddCooldown("PetAction", spellName, spellID, texture) then
                     hasNewCooldown = true
                 end
