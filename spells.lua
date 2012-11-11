@@ -27,7 +27,7 @@ function spells:Init()
     DF = LibStub("LibDeformat-3.0")
     
     self.tooltip = CreateFrame("GameTooltip", "CDBTooltip", UIParent, "GameTooltipTemplate")
-	self.tooltip:SetOwner(UIParent, "ANCHOR_NONE")
+    self.tooltip:SetOwner(UIParent, "ANCHOR_NONE")
 
     self.db = CDB.db
     self.spellTable = newList()
@@ -179,15 +179,18 @@ function spells:GetKnownCooldown( spellID)
             (
                 CDBTooltipTextRight2:GetText()
                 and (DF:Deformat(CDBTooltipTextRight2:GetText(), SPELL_RECAST_TIME_MIN)
-                or   DF:Deformat(CDBTooltipTextRight2:GetText(), SPELL_RECAST_TIME_SEC))
+                or   DF:Deformat(CDBTooltipTextRight2:GetText(), SPELL_RECAST_TIME_SEC)
+                or   DF:Deformat(CDBTooltipTextRight2:GetText(), SPELL_RECAST_TIME_HOURS))
             ) or (
                 CDBTooltipTextRight3:GetText()
                 and (DF:Deformat(CDBTooltipTextRight3:GetText(), SPELL_RECAST_TIME_MIN)
-                or   DF:Deformat(CDBTooltipTextRight3:GetText(), SPELL_RECAST_TIME_SEC))
+                or   DF:Deformat(CDBTooltipTextRight3:GetText(), SPELL_RECAST_TIME_SEC)
+                or   DF:Deformat(CDBTooltipTextRight3:GetText(), SPELL_RECAST_TIME_HOURS))
             ) or (
                 CDBTooltipTextRight4:GetText()
                 and (DF:Deformat(CDBTooltipTextRight4:GetText(), SPELL_RECAST_TIME_MIN)
-                or   DF:Deformat(CDBTooltipTextRight4:GetText(), SPELL_RECAST_TIME_SEC))
+                or   DF:Deformat(CDBTooltipTextRight4:GetText(), SPELL_RECAST_TIME_SEC)
+                or   DF:Deformat(CDBTooltipTextRight4:GetText(), SPELL_RECAST_TIME_HOURS))
             )
            )
 end

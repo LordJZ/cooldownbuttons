@@ -25,8 +25,7 @@ local string_find = string.find
 
 function items:Init()
     self.db = CDB.db
-    self.spellTable = newList()
-    self.treeTable  = newList()
+    self.itemCooldowns = {}
 
     self:RegisterEvent("BAG_UPDATE_COOLDOWN")
     self:RegisterEvent("UNIT_INVENTORY_CHANGED")
@@ -43,6 +42,7 @@ function items:BAG_UPDATE_COOLDOWN()
         if enable == 1 and start > 0 and duration > 3 then
             local itemName, itemID, itemTexture = self:GetItemInfo(GetInventoryItemLink("player",i))
             if CDB:AddCooldown("Item", itemName, itemID, itemTexture) then
+                self.itemCooldowns[itemID] = true
                 hasNewCooldown = true
             end
         end
@@ -56,7 +56,8 @@ function items:BAG_UPDATE_COOLDOWN()
                 local itemEquipLoc  = select(9, GetItemInfo(itemID))
                 if not (itemEquipLoc == "INVTYPE_TRINKET") then
                     if CDB:AddCooldown("Item", itemName, itemID, itemTexture) then
-                        hasNewCooldown = true
+                      self.itemCooldowns[itemID] = true
+                      hasNewCooldown = true
                     end
                 end
             end
@@ -65,7 +66,14 @@ function items:BAG_UPDATE_COOLDOWN()
 
     if hasNewCooldown == true then
         CDB:SortCooldowns()
+        self:notifyOptionsUpdate()
     end
+end
+
+function items:notifyOptionsUpdate()
+   if( CDB_Options ~= nil and CDB_Options.UpdateHiddenItemSettings ~= nil ) then
+      CDB_Options:UpdateHiddenItemSettings()
+   end
 end
 
 function items:GetItemInfo(itemlink)

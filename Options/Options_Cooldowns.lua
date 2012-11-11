@@ -21,58 +21,84 @@ function CDB_Options:LoadCooldownSettings()
     cooldowns.type2bar = self:IniType2BarSettings()
     --cooldowns.groups = self:InitGroupSettings()
     cooldowns.hiddenCooldowns = self:InitHiddenCooldownSettings()
-end
-
+end	
+    
 function CDB_Options:InitHiddenCooldownSettings()
-    local parent = API:createGroup(L["COOLDOWN_SUB_HIDDEN"], L["COOLDOWN_SUB_HIDDEN_DESC"])
-    local db = {
-        ["hiddenCooldowns"] = CDB.db.profile.hiddenCooldowns,
-    }
-    local subGroupId = 0
-    
-    local function notifyCfgChange(option) CDB.engine:UpdateConfig(name, db, option) end
-    local function setGroupLabel(key, hidden)
-        local color
-        if hidden then
-            color = "|cffff0000"
-        else
-            color = "|cff00ff00"
-        end
-        key.arg.group.name = color..key.arg.name.."|r"
-    end
-    local function getHidden(key)
-        return db.hiddenCooldowns[key.arg.type][key.arg.name][key.arg.option]
-    end
-    local function setHidden(key, value)
-        db.hiddenCooldowns[key.arg.type][key.arg.name][key.arg.option] = value
-        setGroupLabel(key, value)
-        notifyCfgChange("hiddenCooldowns")
-    end
-    
-    do -- Spells
-        parent.args.spells = API:createGroup(L["COOLDOWN_HIDDEN_SPELLS"], L["COOLDOWN_HIDDEN_SPELLS_DESC"])
-        for name, data in pairs(CDB.spells.spellTable) do
-            if data.spellknownCD then
-                local groupName = "spell_"..subGroupId
-                subGroupId = subGroupId + 1
-                
-                parent.args.spells.args[groupName] = API:createGroup(name, "")
-                local group = parent.args.spells.args[groupName]
-                
-                local hiddenArg = {type = "Spell", name = name, group = group, option = "hidden"}
+	local parent = API:createGroup(L["COOLDOWN_SUB_HIDDEN"], L["COOLDOWN_SUB_HIDDEN_DESC"])
+	local db = {
+		["hiddenCooldowns"] = CDB.db.profile.hiddenCooldowns,
+	}
+	local function notifyCfgChange(option) CDB.engine:UpdateConfig(name, db, option) end
+	local function setGroupLabel(key, hidden)
+		local color
+		if hidden then
+			color = "|cffff0000"
+		else
+			color = "|cff00ff00"
+		end
+		key.arg.group.name = color..key.arg.name.."|r"
+	end
+	local function getHidden(key)
+		return db.hiddenCooldowns[key.arg.type][key.arg.name].hidden
+	end
+	local function setHidden(key, value)
+		if( value == true ) then
+			db.hiddenCooldowns[key.arg.type][key.arg.name].hidden = value
+		else
+			db.hiddenCooldowns[key.arg.type][key.arg.name] = nil
+		end
+		setGroupLabel(key, value)
+		notifyCfgChange("hiddenCooldowns")
+	end
+			
+	local translation = {["Item"] = "items", ["Spell"] = "spells"}
+	local function addEntry(type, groupName, entryName)
+		local path = translation[type]
+		if (parent.args[path].args[groupName] == nil) then
+			parent.args[path].args[groupName] = API:createGroup(entryName, "")
+			local group = parent.args[path].args[groupName]
+			
+			local hiddenArg = {type = type, name = entryName, group = group}
 
-                group.args.enabled = API:createToggle(L["COOLDOWN_HIDDEN_HIDE"], L["COOLDOWN_HIDDEN_HIDE_DESC"], hiddenArg)
-                
-                setGroupLabel({arg = hiddenArg}, getHidden({arg = hiddenArg}))            
-            end
-        end
-        API:injectSetGet(parent, setHidden, getHidden)
-    end
-    do -- Items
-        parent.args.items = API:createGroup(L["COOLDOWN_HIDDEN_ITEMS"], L["COOLDOWN_HIDDEN_ITEMS_DESC"])
-        parent.args.items.args.soon = API:createDescription("coming soon)")
-    end
-    return parent
+			group.args.enabled = API:createToggle(L["COOLDOWN_HIDDEN_HIDE"], L["COOLDOWN_HIDDEN_HIDE_DESC"], hiddenArg)
+			
+			setGroupLabel({arg = hiddenArg}, getHidden({arg = hiddenArg}))            
+		end
+	end
+	do -- Spells
+		parent.args.spells = API:createGroup(L["COOLDOWN_HIDDEN_SPELLS"], L["COOLDOWN_HIDDEN_SPELLS_DESC"])
+		for name, data in pairs(CDB.spells.spellTable) do
+			if data.spellknownCD then
+				local groupName = "spell_byId_"..data.spellID
+				
+				addEntry("Spell", groupName, name)
+			end
+		end
+	end
+	function CDB_Options:UpdateHiddenItemSettings()
+		parent.args.items.args = {}    
+
+		parent.args.items.args.guide = API:createDescription(L["COOLDOWN_HIDDEN_ITEMS_GUIDE"])
+		
+		for itemName, active in pairs(db.hiddenCooldowns.Item) do
+			local groupName = "item_byName_"..itemName
+			addEntry("Item", groupName, itemName)
+		end
+		for itemId, active in pairs(CDB.items.itemCooldowns) do
+			local name = GetItemInfo(itemId)
+			local groupName = "item_byName_"..name
+			addEntry("Item", groupName, name)
+		end
+		LibStub("AceConfigRegistry-3.0"):NotifyChange("Cooldown Buttons")
+	end
+	
+	do -- Items
+		parent.args.items = API:createGroup(L["COOLDOWN_HIDDEN_ITEMS"], L["COOLDOWN_HIDDEN_ITEMS_DESC"])
+		self:UpdateHiddenItemSettings()
+	end
+	
+	API:injectSetGet(parent, setHidden, getHidden)
+	return parent
 end
 
 function CDB_Options:InitGroupSettings()
