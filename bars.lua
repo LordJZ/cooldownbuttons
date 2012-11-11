@@ -294,29 +294,35 @@ function engine:Update()
         end
         do
             if db.center then
-                local used = i
-                if not db.multirow then
+                local used = i - 1
+                local button = buttons[1]
+                button:ClearAllPoints()
+                
+                --if not db.multirow then
                     local offsetx, offsety
                     if db.direction == "left" or db.direction == "right" then
-                        offsetx = ((((buttons[1]:GetWidth() + db.spacing) * used)) / 2) - buttons[1]:GetWidth() - db.spacing
-                        if db.direction == "left" then
-                            offsetx = db.posx + offsetx
-                        else
-                            offsetx = db.posx - offsetx
+                        local width = button:GetWidth() * db.scale
+
+                        offsety = 0
+                        offsetx = ((((width + db.spacing) * used)) / 2) - ((width + db.spacing) / 2)
+                        if db.direction == "right" then
+                            offsetx = offsetx * -1
                         end
-                        offsety = db.posy
                     elseif db.direction == "up" or db.direction == "down" then 
-                        offsety = ((((buttons[1]:GetHeight() + db.spacing) * used)) / 2) - buttons[1]:GetHeight() - db.spacing
-                        if db.direction == "down" then
-                            offsety = db.posy + offsety
-                        else
-                            offsety = db.posy - offsety 
+                        local height = button:GetHeight() * db.scale
+
+                        offsetx = 0
+                        offsety = ((((height + db.spacing) * used)) / 2) - ((height + db.spacing) / 2)
+                        if db.direction == "up" then
+                            offsety = offsety * -1
                         end
-                        offsetx = db.posx
                     end
-                    buttons[1]:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", offsetx, offsety)                    
-                else
-                end
+                    offsetx = offsetx / db.scale
+                    offsety = offsety / db.scale
+                    button:SetPoint("CENTER", barData.anchor, "CENTER", offsetx, offsety)                    
+                --else
+                    -- TODO: multirow + center
+                --end
             end
         end
         -- Hide Other Buttons! :)
@@ -535,7 +541,7 @@ do
             button:SetAlpha(db.alpha)
             button:SetScale(db.scale)
             bar.anchor:SetScale(db.scale)
-            
+
             if not db.multirow then
                 if k == 1 then -- set anchor
                     local xOffset = db.posx / db.scale
@@ -614,7 +620,7 @@ do
                     xOffset = xOffset / db.scale
                     yOffset = yOffset / db.scale
                     button:SetPoint(point, relativeTo, relativePoint, xOffset, yOffset)
-                end        
+                end    
             end
         end
         do
